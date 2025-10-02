@@ -27,3 +27,10 @@ MonoBehaviour:
     isAsset: 1
     _typeString: UnityEditor.SceneAsset, UnityEditor.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  - _obj: {fileID: 102900000, guid: 72ab2cf903e120b4bac1bc3c5d1ec58a, type: 3}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-1-72ab2cf903e120b4bac1bc3c5d1ec58a-102900000-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: UnityEditor.SceneAsset, UnityEditor.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
