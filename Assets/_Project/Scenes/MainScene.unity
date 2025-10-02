@@ -584,7 +584,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6064801525321721345, guid: a3a751c3ff9cf31489769e2f5e3a4f51, type: 3}
       propertyPath: m_Name
-      value: PF_PolygonPlayer
+      value: PolygonPlayer
       objectReference: {fileID: 0}
     - target: {fileID: 7307585007880187538, guid: a3a751c3ff9cf31489769e2f5e3a4f51, type: 3}
       propertyPath: _hideCursor
