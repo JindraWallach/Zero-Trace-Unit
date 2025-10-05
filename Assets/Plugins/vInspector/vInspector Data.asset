@@ -13,13 +13,6 @@ MonoBehaviour:
   m_Name: vInspector Data
   m_EditorClassIdentifier: VInspector::VInspector.VInspectorData
   bookmarks:
-  - _obj: {fileID: 102900000, guid: 20f2a6c7d3c499343bef88a45386caac, type: 3}
-    globalId:
-      globalObjectIdString: GlobalObjectId_V1-1-20f2a6c7d3c499343bef88a45386caac-102900000-0
-    isSceneGameObject: 0
-    isAsset: 1
-    _typeString: UnityEditor.SceneAsset, UnityEditor.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   - _obj: {fileID: 102900000, guid: 60bc4c0d7fa81944290d3eaf8d44a851, type: 3}
     globalId:
       globalObjectIdString: GlobalObjectId_V1-1-60bc4c0d7fa81944290d3eaf8d44a851-102900000-0
@@ -30,6 +23,20 @@ MonoBehaviour:
   - _obj: {fileID: 102900000, guid: 72ab2cf903e120b4bac1bc3c5d1ec58a, type: 3}
     globalId:
       globalObjectIdString: GlobalObjectId_V1-1-72ab2cf903e120b4bac1bc3c5d1ec58a-102900000-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: UnityEditor.SceneAsset, UnityEditor.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - _obj: {fileID: 102900000, guid: 1d90cc08bcf7ced479bd8087e4dcf55c, type: 3}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-1-1d90cc08bcf7ced479bd8087e4dcf55c-102900000-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: UnityEditor.SceneAsset, UnityEditor.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - _obj: {fileID: 102900000, guid: 20f2a6c7d3c499343bef88a45386caac, type: 3}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-1-20f2a6c7d3c499343bef88a45386caac-102900000-0
     isSceneGameObject: 0
     isAsset: 1
     _typeString: UnityEditor.SceneAsset, UnityEditor.CoreModule, Version=0.0.0.0,
