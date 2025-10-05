@@ -15,6 +15,7 @@ MonoBehaviour:
   sceneDatas_byGuid:
     keys:
     - 60bc4c0d7fa81944290d3eaf8d44a851
+    - 20f2a6c7d3c499343bef88a45386caac
     values:
     - goDatas_byGlobalId:
         keys:
@@ -27,6 +28,19 @@ MonoBehaviour:
           isColorRecursive: 0
         - colorIndex: 0
           iconNameOrGuid: Settings Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+    - goDatas_byGlobalId:
+        keys:
+        - globalObjectIdString: GlobalObjectId_V1-2-20f2a6c7d3c499343bef88a45386caac-818518901-0
+        - globalObjectIdString: GlobalObjectId_V1-2-20f2a6c7d3c499343bef88a45386caac-6064801525713160674-0
+        values:
+        - colorIndex: 0
+          iconNameOrGuid: StandaloneInputModule Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 0
+          iconNameOrGuid: Rigidbody Icon
           isIconRecursive: 0
           isColorRecursive: 0
   bookmarks: []
