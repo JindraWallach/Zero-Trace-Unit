@@ -36,6 +36,7 @@ MonoBehaviour:
         keys:
         - globalObjectIdString: GlobalObjectId_V1-2-20f2a6c7d3c499343bef88a45386caac-818518901-0
         - globalObjectIdString: GlobalObjectId_V1-2-20f2a6c7d3c499343bef88a45386caac-6064801525713160674-0
+        - globalObjectIdString: GlobalObjectId_V1-2-20f2a6c7d3c499343bef88a45386caac-36559937-0
         values:
         - colorIndex: 0
           iconNameOrGuid: StandaloneInputModule Icon
@@ -43,6 +44,10 @@ MonoBehaviour:
           isColorRecursive: 0
         - colorIndex: 0
           iconNameOrGuid: Rigidbody Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon
           isIconRecursive: 0
           isColorRecursive: 0
     - goDatas_byGlobalId:
@@ -62,6 +67,7 @@ MonoBehaviour:
         keys:
         - globalObjectIdString: GlobalObjectId_V1-2-ac904fc1013308047b7ba6077b608295-818518901-0
         - globalObjectIdString: GlobalObjectId_V1-2-ac904fc1013308047b7ba6077b608295-6064801525713160674-0
+        - globalObjectIdString: GlobalObjectId_V1-2-ac904fc1013308047b7ba6077b608295-1457233893-0
         values:
         - colorIndex: 0
           iconNameOrGuid: StandaloneInputModule Icon
@@ -69,6 +75,10 @@ MonoBehaviour:
           isColorRecursive: 0
         - colorIndex: 0
           iconNameOrGuid: Rigidbody Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 0
+          iconNameOrGuid: Settings Icon
           isIconRecursive: 0
           isColorRecursive: 0
   bookmarks: []
