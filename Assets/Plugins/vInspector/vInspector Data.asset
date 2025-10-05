@@ -27,9 +27,9 @@ MonoBehaviour:
     isAsset: 1
     _typeString: UnityEditor.SceneAsset, UnityEditor.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - _obj: {fileID: 102900000, guid: ac904fc1013308047b7ba6077b608295, type: 3}
+  - _obj: {fileID: 102900000, guid: bc122b0486f55ef4693dc2a171f56da5, type: 3}
     globalId:
-      globalObjectIdString: GlobalObjectId_V1-1-ac904fc1013308047b7ba6077b608295-102900000-0
+      globalObjectIdString: GlobalObjectId_V1-1-bc122b0486f55ef4693dc2a171f56da5-102900000-0
     isSceneGameObject: 0
     isAsset: 1
     _typeString: UnityEditor.SceneAsset, UnityEditor.CoreModule, Version=0.0.0.0,
@@ -40,4 +40,11 @@ MonoBehaviour:
     isSceneGameObject: 0
     isAsset: 1
     _typeString: UnityEditor.SceneAsset, UnityEditor.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - _obj: {fileID: -944628639613478452, guid: a7f8d78e4def66b45b53cbfc404ab4b4, type: 3}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-1-a7f8d78e4def66b45b53cbfc404ab4b4-17502115434096073164-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: UnityEngine.InputSystem.InputActionAsset, Unity.InputSystem, Version=1.14.2.0,
       Culture=neutral, PublicKeyToken=null
