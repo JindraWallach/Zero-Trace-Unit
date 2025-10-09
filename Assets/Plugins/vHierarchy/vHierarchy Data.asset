@@ -20,6 +20,7 @@ MonoBehaviour:
     - ac904fc1013308047b7ba6077b608295
     - bc122b0486f55ef4693dc2a171f56da5
     - 31bc9631cfaa2ae4391a5b3f88e196a5
+    - 24ac7a82bb9dfdb43a785bae85ff6691
     values:
     - goDatas_byGlobalId:
         keys:
@@ -88,17 +89,22 @@ MonoBehaviour:
         - globalObjectIdString: GlobalObjectId_V1-2-bc122b0486f55ef4693dc2a171f56da5-818518901-0
         - globalObjectIdString: GlobalObjectId_V1-2-bc122b0486f55ef4693dc2a171f56da5-6064801525713160674-0
         - globalObjectIdString: GlobalObjectId_V1-2-bc122b0486f55ef4693dc2a171f56da5-36559937-0
+        - globalObjectIdString: GlobalObjectId_V1-2-bc122b0486f55ef4693dc2a171f56da5-300282151-0
         values:
-        - colorIndex: 0
+        - colorIndex: 7
           iconNameOrGuid: StandaloneInputModule Icon
           isIconRecursive: 0
           isColorRecursive: 0
-        - colorIndex: 0
+        - colorIndex: 7
           iconNameOrGuid: Rigidbody Icon
           isIconRecursive: 0
           isColorRecursive: 0
-        - colorIndex: 0
+        - colorIndex: 1
           iconNameOrGuid: Settings Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 7
+          iconNameOrGuid: Canvas Icon
           isIconRecursive: 0
           isColorRecursive: 0
     - goDatas_byGlobalId:
@@ -117,6 +123,29 @@ MonoBehaviour:
           isColorRecursive: 0
         - colorIndex: 0
           iconNameOrGuid: Settings Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+    - goDatas_byGlobalId:
+        keys:
+        - globalObjectIdString: GlobalObjectId_V1-2-24ac7a82bb9dfdb43a785bae85ff6691-818518901-0
+        - globalObjectIdString: GlobalObjectId_V1-2-24ac7a82bb9dfdb43a785bae85ff6691-6064801525713160674-0
+        - globalObjectIdString: GlobalObjectId_V1-2-24ac7a82bb9dfdb43a785bae85ff6691-36559937-0
+        - globalObjectIdString: GlobalObjectId_V1-2-24ac7a82bb9dfdb43a785bae85ff6691-300282151-0
+        values:
+        - colorIndex: 7
+          iconNameOrGuid: StandaloneInputModule Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 7
+          iconNameOrGuid: Rigidbody Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 1
+          iconNameOrGuid: Settings Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 7
+          iconNameOrGuid: Canvas Icon
           isIconRecursive: 0
           isColorRecursive: 0
   bookmarks: []
