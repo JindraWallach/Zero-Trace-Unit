@@ -1,4 +1,4 @@
-// Copyright (c) 2024 Synty Studios Limited. All rights reserved.
+﻿// Copyright (c) 2024 Synty Studios Limited. All rights reserved.
 //
 // Use of this software is subject to the terms and conditions of the Synty Studios End User Licence Agreement (EULA)
 // available at: https://syntystore.com/pages/end-user-licence-agreement
@@ -17,6 +17,11 @@ namespace Synty.AnimationBaseLocomotion.Samples
         [Tooltip("The character game object")]
         [SerializeField]
         private GameObject _syntyCharacter;
+
+        [Tooltip("Camera Collider Settings")]
+        [SerializeField] private LayerMask _collisionLayers;
+        [SerializeField] private float _cameraRadius = 0.5f;
+
         [Tooltip("Main camera used for player perspective")]
         [SerializeField]
         private Camera _mainCamera;
@@ -91,8 +96,8 @@ namespace Synty.AnimationBaseLocomotion.Samples
             _syntyCamera.localEulerAngles = new Vector3(_cameraTiltOffset, 0f, 0f);
         }
 
-        /// <inheritdoc cref="Update" />
-        private void Update()
+        /// <inheritdoc cref="LateUpdate" />
+        private void LateUpdate()
         {
             float positionalFollowSpeed = 1 / (_positionalCameraLag / _LAG_DELTA_TIME_ADJUSTMENT);
             float rotationalFollowSpeed = 1 / (_rotationalCameraLag / _LAG_DELTA_TIME_ADJUSTMENT);
@@ -130,6 +135,27 @@ namespace Synty.AnimationBaseLocomotion.Samples
             _lastPosition = _newPosition;
             _lastAngleX = _newAngleX;
             _lastAngleY = _newAngleY;
+
+            HandleCameraCollision();
+        }
+
+
+        private void HandleCameraCollision()
+        {
+            Vector3 desiredLocalPos = new Vector3(_cameraHorizontalOffset, _cameraHeightOffset, -_cameraDistance);
+            Vector3 desiredWorldPos = _playerTarget.position + transform.rotation * desiredLocalPos;
+
+            Vector3 direction = desiredWorldPos - _playerTarget.position;
+            float distance = direction.magnitude;
+
+            if (Physics.SphereCast(_playerTarget.position, _cameraRadius, direction.normalized, out RaycastHit hit, distance, _collisionLayers))
+            {
+                desiredWorldPos = hit.point + hit.normal * _cameraRadius;
+            }
+
+            Vector3 correctedLocalPos = transform.InverseTransformPoint(desiredWorldPos);
+
+            _syntyCamera.localPosition = Vector3.Lerp(_syntyCamera.localPosition, correctedLocalPos, Time.deltaTime * _positionalCameraLag);
         }
 
         /// <summary>
