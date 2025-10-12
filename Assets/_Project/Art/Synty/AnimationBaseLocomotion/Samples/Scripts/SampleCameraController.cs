@@ -139,24 +139,57 @@ namespace Synty.AnimationBaseLocomotion.Samples
             HandleCameraCollision();
         }
 
+#if UNITY_EDITOR
+        private void OnDrawGizmos()
+        {
+            if (_playerTarget == null)
+                return;
+
+            Vector3 desiredLocalPos = new Vector3(_cameraHorizontalOffset, _cameraHeightOffset, -_cameraDistance);
+            Vector3 desiredWorldPos = _playerTarget.position + transform.rotation * desiredLocalPos;
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawLine(_playerTarget.position, desiredWorldPos);
+
+            if (transform.childCount > 0)
+            {
+                Transform cameraTransform = transform.GetChild(0);
+                Gizmos.color = Color.cyan;
+                Gizmos.DrawWireSphere(cameraTransform.position, _cameraRadius);
+            }
+        }
+#endif
+
+
+
 
         private void HandleCameraCollision()
         {
+            if (_syntyCamera == null || _playerTarget == null)
+                return;
+
             Vector3 desiredLocalPos = new Vector3(_cameraHorizontalOffset, _cameraHeightOffset, -_cameraDistance);
             Vector3 desiredWorldPos = _playerTarget.position + transform.rotation * desiredLocalPos;
 
-            Vector3 direction = desiredWorldPos - _playerTarget.position;
+            Vector3 cameraOrigin = _syntyCamera.position;
+
+            Vector3 direction = desiredWorldPos - cameraOrigin;
             float distance = direction.magnitude;
 
-            if (Physics.SphereCast(_playerTarget.position, _cameraRadius, direction.normalized, out RaycastHit hit, distance, _collisionLayers))
+            if (Physics.SphereCast(cameraOrigin, _cameraRadius, direction.normalized, out RaycastHit hit, distance, _collisionLayers))
             {
                 desiredWorldPos = hit.point + hit.normal * _cameraRadius;
             }
 
+
             Vector3 correctedLocalPos = transform.InverseTransformPoint(desiredWorldPos);
 
-            _syntyCamera.localPosition = Vector3.Lerp(_syntyCamera.localPosition, correctedLocalPos, Time.deltaTime * _positionalCameraLag);
+            _syntyCamera.localPosition = Vector3.Lerp(
+                _syntyCamera.localPosition,
+                correctedLocalPos,
+                Time.deltaTime * _positionalCameraLag
+            );
         }
+
 
         /// <summary>
         ///     Locks the camera to aim at a specified target.
