@@ -7,6 +7,7 @@
 
 using Synty.AnimationBaseLocomotion.Samples.InputSystem;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Synty.AnimationBaseLocomotion.Samples
 {
@@ -21,6 +22,7 @@ namespace Synty.AnimationBaseLocomotion.Samples
         [Tooltip("Camera Collider Settings")]
         [SerializeField] private LayerMask _collisionLayers;
         [SerializeField] private float _cameraRadius = 0.5f;
+        [SerializeField] private float _smoothTime = 0.05f;
 
         [Tooltip("Main camera used for player perspective")]
         [SerializeField]
@@ -60,6 +62,8 @@ namespace Synty.AnimationBaseLocomotion.Samples
         private float _lastAngleY;
 
         private Vector3 _lastPosition;
+        private Vector3 _cameraVelocity = Vector3.zero;
+
 
         private float _newAngleX;
 
@@ -81,8 +85,8 @@ namespace Synty.AnimationBaseLocomotion.Samples
 
             if (_hideCursor)
             {
-                Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
+                UnityEngine.Cursor.visible = false;
+                UnityEngine.Cursor.lockState = CursorLockMode.Locked;
             }
 
             _cameraInversion = _invertCamera ? 1 : -1;
@@ -139,56 +143,38 @@ namespace Synty.AnimationBaseLocomotion.Samples
             HandleCameraCollision();
         }
 
-#if UNITY_EDITOR
-        private void OnDrawGizmos()
-        {
-            if (_playerTarget == null)
-                return;
-
-            Vector3 desiredLocalPos = new Vector3(_cameraHorizontalOffset, _cameraHeightOffset, -_cameraDistance);
-            Vector3 desiredWorldPos = _playerTarget.position + transform.rotation * desiredLocalPos;
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawLine(_playerTarget.position, desiredWorldPos);
-
-            if (transform.childCount > 0)
-            {
-                Transform cameraTransform = transform.GetChild(0);
-                Gizmos.color = Color.cyan;
-                Gizmos.DrawWireSphere(cameraTransform.position, _cameraRadius);
-            }
-        }
-#endif
-
-
-
-
         private void HandleCameraCollision()
         {
-            if (_syntyCamera == null || _playerTarget == null)
-                return;
+            Vector3 desiredLocalPos = new Vector3(0f, 0f, -_cameraDistance);
+            Vector3 desiredWorldPos = transform.TransformPoint(desiredLocalPos);
 
-            Vector3 desiredLocalPos = new Vector3(_cameraHorizontalOffset, _cameraHeightOffset, -_cameraDistance);
-            Vector3 desiredWorldPos = _playerTarget.position + transform.rotation * desiredLocalPos;
+            Vector3 direction = desiredWorldPos - transform.position;
+            float sqrDistance = direction.sqrMagnitude;
 
-            Vector3 cameraOrigin = _syntyCamera.position;
-
-            Vector3 direction = desiredWorldPos - cameraOrigin;
-            float distance = direction.magnitude;
-
-            if (Physics.SphereCast(cameraOrigin, _cameraRadius, direction.normalized, out RaycastHit hit, distance, _collisionLayers))
+            float distance = Mathf.Sqrt(sqrDistance);
+            if (Physics.SphereCast(transform.position, _cameraRadius, direction.normalized, out RaycastHit hit, distance, _collisionLayers))
             {
+
                 desiredWorldPos = hit.point + hit.normal * _cameraRadius;
+                //Debug.DrawRay(hit.point, hit.normal * _cameraRadius, Color.red, 1f);
             }
 
+            MoveCameraToDesiredPos(desiredWorldPos);
+        }
 
+        private void MoveCameraToDesiredPos(Vector3 desiredWorldPos)
+        {
             Vector3 correctedLocalPos = transform.InverseTransformPoint(desiredWorldPos);
 
-            _syntyCamera.localPosition = Vector3.Lerp(
+            _syntyCamera.localPosition = Vector3.SmoothDamp(
                 _syntyCamera.localPosition,
                 correctedLocalPos,
-                Time.deltaTime * _positionalCameraLag
+                ref _cameraVelocity,
+                _smoothTime
             );
         }
+
+
 
 
         /// <summary>
