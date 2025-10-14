@@ -39,6 +39,8 @@ namespace Synty.AnimationBaseLocomotion.Samples.InputSystem
 
         public Action onFlashlightToggled;
 
+        public Action onInteract;
+
         /// <inheritdoc cref="OnEnable" />
         private void OnEnable()
         {
@@ -174,6 +176,14 @@ namespace Synty.AnimationBaseLocomotion.Samples.InputSystem
                 return;
 
             onFlashlightToggled?.Invoke();
+        }
+
+        public void OnInteract(InputAction.CallbackContext context)
+        {
+            if (!context.performed)
+                return;
+
+            onInteract?.Invoke();
         }
     }
 }

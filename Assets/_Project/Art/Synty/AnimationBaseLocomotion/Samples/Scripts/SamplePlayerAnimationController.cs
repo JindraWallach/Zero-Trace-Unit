@@ -1576,6 +1576,5 @@ namespace Synty.AnimationBaseLocomotion.Samples
         }
 
         #endregion
-
     }
 }
