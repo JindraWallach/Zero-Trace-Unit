@@ -275,6 +275,15 @@ namespace Synty.AnimationBaseLocomotion.Samples
 
         #endregion
 
+        #region Flashlight Settings
+
+        [Header("Flashlight Settings")]
+        [Tooltip("Flashlight GO")]
+        [SerializeField]
+        private GameObject _flashlight;
+
+        #endregion
+
         #endregion
 
         #region Runtime Properties
@@ -347,6 +356,7 @@ namespace Synty.AnimationBaseLocomotion.Samples
             _inputReader.onCrouchDeactivated += DeactivateCrouch;
             _inputReader.onAimActivated += ActivateAim;
             _inputReader.onAimDeactivated += DeactivateAim;
+            _inputReader.onFlashlightToggled += ToggleFlashlight;
 
             _isStrafing = _alwaysStrafe;
 
@@ -1548,5 +1558,24 @@ namespace Synty.AnimationBaseLocomotion.Samples
         }
 
         #endregion
+
+        #region ToggleFlashlight
+
+        private bool _flashlightOn = false;
+
+        private void ToggleFlashlight()
+        {
+            _flashlightOn = !_flashlightOn;
+
+            if (_flashlight != null)
+            {
+                _flashlight.SetActive(_flashlightOn);
+            }
+
+            Debug.Log($"Flashlight toggled: {(_flashlightOn ? "ON" : "OFF")}");
+        }
+
+        #endregion
+
     }
 }

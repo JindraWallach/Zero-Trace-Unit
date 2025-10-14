@@ -1,4 +1,4 @@
-// Copyright (c) 2024 Synty Studios Limited. All rights reserved.
+﻿// Copyright (c) 2024 Synty Studios Limited. All rights reserved.
 //
 // Use of this software is subject to the terms and conditions of the Synty Studios End User Licence Agreement (EULA)
 // available at: https://syntystore.com/pages/end-user-licence-agreement
@@ -36,6 +36,8 @@ namespace Synty.AnimationBaseLocomotion.Samples.InputSystem
         public Action onSprintDeactivated;
 
         public Action onWalkToggled;
+
+        public Action onFlashlightToggled;
 
         /// <inheritdoc cref="OnEnable" />
         private void OnEnable()
@@ -164,6 +166,14 @@ namespace Synty.AnimationBaseLocomotion.Samples.InputSystem
 
             onLockOnToggled?.Invoke();
             onSprintDeactivated?.Invoke();
+        }
+
+        public void OnToggleFlashlight(InputAction.CallbackContext context)
+        {
+            if (!context.performed)
+                return;
+
+            onFlashlightToggled?.Invoke();
         }
     }
 }
