@@ -7369,6 +7369,7 @@ GameObject:
   - component: {fileID: 730311589}
   - component: {fileID: 730311590}
   - component: {fileID: 730311591}
+  - component: {fileID: 730311592}
   m_Layer: 6
   m_Name: InteractibleCollider
   m_TagString: Untagged
@@ -7404,9 +7405,9 @@ SphereCollider:
     m_Bits: 64
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 183
+    m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -7424,11 +7425,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 527965d55c52c4b47b60587f35a19580, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInteractionDetector
-  detectionRadius: 2.5
   promptUI: {fileID: 0}
   interactableLayers:
     serializedVersion: 2
     m_Bits: 64
+--- !u!54 &730311592
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 730311588}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 183
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1001 &732276102
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22830,7 +22857,7 @@ GameObject:
   - component: {fileID: 33012279308869113}
   - component: {fileID: 23755735647486119}
   - component: {fileID: 64585780035200067}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: SM_Bld_Wall_Door_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22851,7 +22878,7 @@ GameObject:
   - component: {fileID: 64522215039866951}
   - component: {fileID: 64949967700005813}
   - component: {fileID: 64949967700005814}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: SM_Bld_Wall_Doorframe_02 (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23423,7 +23450,7 @@ MonoBehaviour:
   _syntyCharacter: {fileID: 7851300971499092592}
   _collisionLayers:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 192
   _cameraRadius: 0.165
   _smoothTime: 0
   _mainCamera: {fileID: 3777643569748310893}

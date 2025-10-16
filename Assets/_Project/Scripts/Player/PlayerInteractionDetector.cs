@@ -5,10 +5,6 @@ using System.Collections.Generic;
 [RequireComponent(typeof(SphereCollider))]
 public class PlayerInteractionDetector : MonoBehaviour
 {
-
-    [Header("Settings")]
-    [SerializeField] private float detectionRadius = 2.5f;
-
     [Header("References")] 
     [SerializeField] private InteractionPromptUI promptUI;
     [SerializeField] private LayerMask interactableLayers;
@@ -16,20 +12,17 @@ public class PlayerInteractionDetector : MonoBehaviour
     private readonly List<IInteractable> interactablesInRange = new();
     private IInteractable currentTarget;
 
-    private void Awake()
-    {
-        var col = GetComponent<SphereCollider>();
-        col.isTrigger = true;
-        col.radius = detectionRadius;
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent(out IInteractable interactable))
         {
+            Debug.Log("Entered interaction range of " + other.name);
             interactable.OnEnterRange();
             interactablesInRange.Add(interactable);
             UpdateCurrentTarget();
+        } else
+        {
+            Debug.Log("Collider entered trigger but is not interactable: " + other.name);
         }
     }
 
@@ -40,6 +33,9 @@ public class PlayerInteractionDetector : MonoBehaviour
             interactable.OnExitRange();
             interactablesInRange.Remove(interactable);
             UpdateCurrentTarget();
+        } else
+        {
+            Debug.Log("Collider exited trigger but is not interactable: " + other.name);
         }
     }
 
