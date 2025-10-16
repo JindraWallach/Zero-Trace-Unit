@@ -1,14 +1,31 @@
+using Synty.AnimationBaseLocomotion.Samples.InputSystem;
 using UnityEngine;
 
 public class DoorInteractable : InteractableObject
 {
-    [SerializeField] private Animator doorAnimator;
-    private bool isOpen;
+    [SerializeField] private Animator animator;
+
+    public void Initialize(InputReader reader, InteractionPromptUI ui)
+    {
+        promptUI = ui; 
+        reader.onInteract += Interact;
+    }
+
+    public override void OnEnterRange()
+    {
+        promptUI.Show("Open Door");
+    }
+
+    public override void OnExitRange()
+    {
+        promptUI.Hide();
+    }
 
     public override void Interact()
     {
-        isOpen = !isOpen;
-        //doorAnimator.SetBool("Open", isOpen);
-        Debug.Log($"[Door] {(isOpen ? "Opened" : "Closed")} {gameObject.name}");
+        //animator.SetTrigger("Open");
+        //TODO: make an animation
+
+        Debug.Log("Door opened");
     }
 }

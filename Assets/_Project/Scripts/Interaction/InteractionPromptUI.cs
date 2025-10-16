@@ -3,8 +3,12 @@ using TMPro;
 
 public class InteractionPromptUI : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI promptText;
-    [SerializeField] private string text = "Interact";
+    [Header("UI References")]
+    [SerializeField] private TextMeshProUGUI promptText;  
+    [SerializeField] private CanvasGroup canvasGroup; 
+
+    [Header("Settings")]
+    [SerializeField] private string defaultText = "Interact";
 
     private void Awake()
     {
@@ -13,12 +17,17 @@ public class InteractionPromptUI : MonoBehaviour
 
     public void Show(string customText = null)
     {
-        gameObject.SetActive(true);
-        promptText.text = $"[E] {customText ?? text}";
+        canvasGroup.alpha = 1f;
+        canvasGroup.interactable = true;
+        canvasGroup.blocksRaycasts = true;
+
+        promptText.text = $"[E] {customText ?? defaultText}";
     }
 
     public void Hide()
     {
-        gameObject.SetActive(false);
+        canvasGroup.alpha = 0f;
+        canvasGroup.interactable = false;
+        canvasGroup.blocksRaycasts = false;
     }
 }

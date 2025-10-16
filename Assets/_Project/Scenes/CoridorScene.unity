@@ -3427,7 +3427,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DependencyInjector
   inputReader: {fileID: 7899819685120886278}
+  interactionPromptUI: {fileID: 0}
   interactionDetector: {fileID: 730311591}
+  doors: []
 --- !u!1001 &312965478
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11722,6 +11724,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1096621094}
+  - component: {fileID: 1096621095}
   m_Layer: 5
   m_Name: HackFeedback
   m_TagString: Untagged
@@ -11749,6 +11752,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 50}
   m_SizeDelta: {x: 0, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &1096621095
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1096621093}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1001 &1105622992
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15836,7 +15851,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 150, y: 150}
+  m_SizeDelta: {x: 250, y: 250}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1481743809
 MonoBehaviour:
@@ -23293,7 +23308,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorInteractable
   interactText: Use
-  doorAnimator: {fileID: 0}
+  animator: {fileID: 0}
 --- !u!114 &64949967700005815
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23307,7 +23322,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteractionPromptUI
   promptText: {fileID: 1481743809}
-  text: Hack
+  canvasGroup: {fileID: 1096621095}
+  defaultText: Interact
 --- !u!4 &596975528181773704
 Transform:
   m_ObjectHideFlags: 0
