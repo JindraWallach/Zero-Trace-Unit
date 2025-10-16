@@ -1572,7 +1572,7 @@ namespace Synty.AnimationBaseLocomotion.Samples
                 _flashlight.SetActive(_flashlightOn);
             }
 
-            Debug.Log($"Flashlight toggled: {(_flashlightOn ? "ON" : "OFF")}");
+            //Debug.Log($"Flashlight toggled: {(_flashlightOn ? "ON" : "OFF")}");
         }
 
         #endregion

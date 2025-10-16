@@ -22,6 +22,7 @@ MonoBehaviour:
     - 31bc9631cfaa2ae4391a5b3f88e196a5
     - 24ac7a82bb9dfdb43a785bae85ff6691
     - baa9a1c212b5aea4c813f0b84bcc7707
+    - 9253f80fc2f07b2419779996f230ba6b
     values:
     - goDatas_byGlobalId:
         keys:
@@ -155,6 +156,29 @@ MonoBehaviour:
         - globalObjectIdString: GlobalObjectId_V1-2-baa9a1c212b5aea4c813f0b84bcc7707-6064801525713160674-0
         - globalObjectIdString: GlobalObjectId_V1-2-baa9a1c212b5aea4c813f0b84bcc7707-36559937-0
         - globalObjectIdString: GlobalObjectId_V1-2-baa9a1c212b5aea4c813f0b84bcc7707-300282151-0
+        values:
+        - colorIndex: 7
+          iconNameOrGuid: StandaloneInputModule Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 7
+          iconNameOrGuid: Rigidbody Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 1
+          iconNameOrGuid: Settings Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 7
+          iconNameOrGuid: Canvas Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+    - goDatas_byGlobalId:
+        keys:
+        - globalObjectIdString: GlobalObjectId_V1-2-9253f80fc2f07b2419779996f230ba6b-818518901-0
+        - globalObjectIdString: GlobalObjectId_V1-2-9253f80fc2f07b2419779996f230ba6b-6064801525713160674-0
+        - globalObjectIdString: GlobalObjectId_V1-2-9253f80fc2f07b2419779996f230ba6b-36559937-0
+        - globalObjectIdString: GlobalObjectId_V1-2-9253f80fc2f07b2419779996f230ba6b-300282151-0
         values:
         - colorIndex: 7
           iconNameOrGuid: StandaloneInputModule Icon

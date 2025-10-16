@@ -5,8 +5,13 @@ using System.Collections.Generic;
 [RequireComponent(typeof(SphereCollider))]
 public class PlayerInteractionDetector : MonoBehaviour
 {
-    [SerializeField] private InteractionPromptUI promptUI;
+
+    [Header("Settings")]
     [SerializeField] private float detectionRadius = 2.5f;
+
+    [Header("References")] 
+    [SerializeField] private InteractionPromptUI promptUI;
+    [SerializeField] private LayerMask interactableLayers;
 
     private readonly List<IInteractable> interactablesInRange = new();
     private IInteractable currentTarget;
