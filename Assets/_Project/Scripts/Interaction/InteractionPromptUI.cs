@@ -3,29 +3,22 @@ using TMPro;
 
 public class InteractionPromptUI : MonoBehaviour
 {
-    [Header("Interactable Settings")]
-
-    [Tooltip("Root GO")]
-    [SerializeField] private GameObject root;
-    [Tooltip("Text component for the prompt")]
     [SerializeField] private TextMeshProUGUI promptText;
-    [Tooltip("Shown text")]
-    [SerializeField] private string text = "Hello";
+    [SerializeField] private string text = "Interact";
 
-
-    public void SetUp()
+    private void Awake()
     {
-        root.SetActive(true);
-        promptText.text = $"[E] {text}";
+        Hide();
+    }
+
+    public void Show(string customText = null)
+    {
+        gameObject.SetActive(true);
+        promptText.text = $"[E] {customText ?? text}";
     }
 
     public void Hide()
     {
-        root.SetActive(false);
-    }
-
-    public void Show()
-    {
-        root.SetActive(true);
+        gameObject.SetActive(false);
     }
 }

@@ -1,63 +1,84 @@
-using UnityEngine;
-using UnityEngine.InputSystem;
+using Synty.AnimationBaseLocomotion.Samples.InputSystem;
 using System.Collections.Generic;
+using UnityEngine;
 
 [RequireComponent(typeof(SphereCollider))]
 public class PlayerInteractionDetector : MonoBehaviour
 {
-    [Header("References")] 
-    [SerializeField] private InteractionPromptUI promptUI;
+    [Header("References")]
     [SerializeField] private LayerMask interactableLayers;
 
     private readonly List<IInteractable> interactablesInRange = new();
     private IInteractable currentTarget;
+    private InputReader inputReader;
+
+    private void OnEnable()
+    {
+        inputReader.onInteract += TryInteract;
+    }
+
+    private void OnDisable()
+    {
+        inputReader.onInteract -= TryInteract;
+    }
+
+    private void Start()
+    {
+        inputReader = FindFirstObjectByType<InputReader>();
+        //TODO: dependency injection
+    }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent(out IInteractable interactable))
-        {
-            Debug.Log("Entered interaction range of " + other.name);
-            interactable.OnEnterRange();
-            interactablesInRange.Add(interactable);
-            UpdateCurrentTarget();
-        } else
-        {
-            Debug.Log("Collider entered trigger but is not interactable: " + other.name);
-        }
+        if (!IsInLayerMask(other.gameObject.layer, interactableLayers)) return;
+        if (!other.TryGetComponent(out IInteractable interactable)) return;
+
+        interactable.OnEnterRange();
+        interactablesInRange.Add(interactable);
+        UpdateCurrentTarget();
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.TryGetComponent(out IInteractable interactable))
-        {
-            interactable.OnExitRange();
-            interactablesInRange.Remove(interactable);
-            UpdateCurrentTarget();
-        } else
-        {
-            Debug.Log("Collider exited trigger but is not interactable: " + other.name);
-        }
+        if (!other.TryGetComponent(out IInteractable interactable)) return;
+
+        interactable.OnExitRange();
+        interactablesInRange.Remove(interactable);
+        UpdateCurrentTarget();
     }
 
     private void UpdateCurrentTarget()
     {
-        if (interactablesInRange.Count > 0)
-        {
-            currentTarget = interactablesInRange[^1]; // poslední vstoupený
-            //promptUI.SetUp(currentTarget.GetInteractText()); TODO: implementovat text
-        }
-        else
+        if (interactablesInRange.Count == 0)
         {
             currentTarget = null;
-            promptUI.Hide();
+            return;
         }
+
+        // vezmi nejbližší
+        float minDist = float.MaxValue;
+        IInteractable nearest = null;
+
+        foreach (var i in interactablesInRange)
+        {
+            float dist = Vector3.Distance(transform.position, ((MonoBehaviour)i).transform.position);
+            if (dist < minDist)
+            {
+                minDist = dist;
+                nearest = i;
+            }
+        }
+
+        currentTarget = nearest;
     }
 
-    public void OnInteract(InputAction.CallbackContext context)
+    private void TryInteract()
     {
-        if (!context.performed || currentTarget == null)
-            return;
+        currentTarget?.Interact();
+    }
 
-        currentTarget.Interact();
+    private bool IsInLayerMask(int layer, LayerMask mask)
+    {
+        return mask == (mask | (1 << layer));
     }
 }

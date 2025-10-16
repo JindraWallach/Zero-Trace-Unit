@@ -1,23 +1,27 @@
-using UnityEngine;
+﻿using UnityEngine;
 
-public class InteractableObject : MonoBehaviour, IInteractable
+[RequireComponent(typeof(InteractionPromptUI))]
+public abstract class InteractableObject : MonoBehaviour, IInteractable
 {
-    [SerializeField] private string interactText = "Interact";
+    [SerializeField] private string interactText = "Use";
+    protected InteractionPromptUI promptUI;
 
-    public string GetInteractText() => interactText;
-
-    public void Interact()
+    protected virtual void Awake()
     {
-        Debug.Log($"[Interact] {gameObject.name}");
+        promptUI = GetComponent<InteractionPromptUI>();
     }
 
-    public void OnEnterRange()
+    public virtual string GetInteractText() => interactText;
+
+    public abstract void Interact();
+
+    public virtual void OnEnterRange()
     {
-        Debug.Log($"[Range Enter] {gameObject.name}");
+        promptUI.Show(interactText);
     }
 
-    public void OnExitRange()
+    public virtual void OnExitRange()
     {
-        Debug.Log($"[Range Exit] {gameObject.name}");
+        promptUI.Hide();
     }
 }
