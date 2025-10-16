@@ -12,20 +12,16 @@ public class PlayerInteractionDetector : MonoBehaviour
     private IInteractable currentTarget;
     private InputReader inputReader;
 
-    private void OnEnable()
-    {
-        inputReader.onInteract += TryInteract;
-    }
-
     private void OnDisable()
     {
-        inputReader.onInteract -= TryInteract;
+        if (inputReader != null)
+            inputReader.onInteract -= TryInteract;
     }
 
-    private void Start()
+    public void Initialize(InputReader reader)
     {
-        inputReader = FindFirstObjectByType<InputReader>();
-        //TODO: dependency injection
+        inputReader = reader;
+        inputReader.onInteract += TryInteract;
     }
 
     private void OnTriggerEnter(Collider other)
