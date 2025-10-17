@@ -6,6 +6,8 @@ public class DoorInteractable : InteractableObject
 {
     [SerializeField] private Animator animator;
 
+    public float offset = 1.25f;
+
     private bool isOpen;
     private bool isChanging;
     private string booleanAnimName = "IsOpen";
@@ -28,23 +30,21 @@ public class DoorInteractable : InteractableObject
 
     public override void Interact()
     {
-        if (isChanging) return; 
+        if (isChanging) return;
 
-        isChanging = true;
-        StartCoroutine(ChangeStateWithDelay(() =>
-        {
-            isOpen = !isOpen;
-            animator.SetBool(booleanAnimName, isOpen);
-            promptUI.Show(isOpen ? "Close Door" : "Open Door");
+        isOpen = !isOpen;
+        animator.SetBool(booleanAnimName, isOpen);
+        promptUI.Show(isOpen ? "Close Door" : "Open Door");
+        Debug.Log(isOpen ? "Door opened" : "Door closed");
 
-            Debug.Log(isOpen ? "Door opened" : "Door closed");
-            isChanging = false;
-        }));
+
+        StartCoroutine(InteractionCooldown());
     }
 
-    private IEnumerator ChangeStateWithDelay(System.Action onComplete)
+    private IEnumerator InteractionCooldown()
     {
-        yield return new WaitForSeconds(0.25f);
-        onComplete?.Invoke(); //callbackujeme () => po start courotine
+        isChanging = true;
+        yield return new WaitForSeconds(offset);
+        isChanging = false;
     }
 }
