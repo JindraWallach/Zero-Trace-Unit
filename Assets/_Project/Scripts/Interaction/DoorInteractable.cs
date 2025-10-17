@@ -1,9 +1,14 @@
-using Synty.AnimationBaseLocomotion.Samples.InputSystem;
+﻿using Synty.AnimationBaseLocomotion.Samples.InputSystem;
+using System.Collections;
 using UnityEngine;
 
 public class DoorInteractable : InteractableObject
 {
     [SerializeField] private Animator animator;
+
+    private bool isOpen;
+    private bool isChanging;
+    private string booleanAnimName = "IsOpen";
 
     public void Initialize(InputReader reader, InteractionPromptUI ui)
     {
@@ -13,7 +18,7 @@ public class DoorInteractable : InteractableObject
 
     public override void OnEnterRange()
     {
-        promptUI.Show("Open Door");
+        promptUI.Show(isOpen ? "Close Door" : "Open Door");
     }
 
     public override void OnExitRange()
@@ -23,9 +28,23 @@ public class DoorInteractable : InteractableObject
 
     public override void Interact()
     {
-        //animator.SetTrigger("Open");
-        //TODO: make an animation
+        if (isChanging) return; 
 
-        Debug.Log("Door opened");
+        isChanging = true;
+        StartCoroutine(ChangeStateWithDelay(() =>
+        {
+            isOpen = !isOpen;
+            animator.SetBool(booleanAnimName, isOpen);
+            promptUI.Show(isOpen ? "Close Door" : "Open Door");
+
+            Debug.Log(isOpen ? "Door opened" : "Door closed");
+            isChanging = false;
+        }));
+    }
+
+    private IEnumerator ChangeStateWithDelay(System.Action onComplete)
+    {
+        yield return new WaitForSeconds(0.25f);
+        onComplete?.Invoke(); //callbackujeme () => po start courotine
     }
 }
