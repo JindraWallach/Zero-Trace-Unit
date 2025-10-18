@@ -5,7 +5,6 @@ public class DependencyInjector : MonoBehaviour
 {
     [Header("Services")]
     [SerializeField] private InputReader inputReader;
-    [SerializeField] private InteractionPromptUI interactionPromptUI;
 
     [Header("Player Components")]
     [SerializeField] private PlayerInteractionDetector interactionDetector;
@@ -21,7 +20,7 @@ public class DependencyInjector : MonoBehaviour
         // Inicializace dveří
         foreach (var door in doors)
         {
-            door.Initialize(inputReader, interactionPromptUI);
+            door.Initialize(inputReader);
         }
     }
 }

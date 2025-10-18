@@ -5,27 +5,15 @@ using UnityEngine;
 public class DoorInteractable : InteractableObject
 {
     [SerializeField] private Animator animator;
-
     public float offset = 1.25f;
 
     private bool isOpen;
     private bool isChanging;
     private string booleanAnimName = "IsOpen";
 
-    public void Initialize(InputReader reader, InteractionPromptUI ui)
+    public void Initialize(InputReader reader)
     {
-        promptUI = ui; 
         reader.onInteract += Interact;
-    }
-
-    public override void OnEnterRange()
-    {
-        promptUI.Show(isOpen ? "Close Door" : "Open Door");
-    }
-
-    public override void OnExitRange()
-    {
-        promptUI.Hide();
     }
 
     public override void Interact()
@@ -34,9 +22,7 @@ public class DoorInteractable : InteractableObject
 
         isOpen = !isOpen;
         animator.SetBool(booleanAnimName, isOpen);
-        promptUI.Show(isOpen ? "Close Door" : "Open Door");
-        Debug.Log(isOpen ? "Door opened" : "Door closed");
-
+        //Debug.Log(isOpen ? "Door opened" : "Door closed");
 
         StartCoroutine(InteractionCooldown());
     }

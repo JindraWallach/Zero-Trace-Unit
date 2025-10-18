@@ -3,25 +3,18 @@ using TMPro;
 
 public class InteractionPromptUI : MonoBehaviour
 {
-    [Header("UI References")]
-    [SerializeField] private TextMeshProUGUI promptText;  
-    [SerializeField] private CanvasGroup canvasGroup; 
+    [SerializeField] private TextMeshProUGUI promptText;
+    [SerializeField] private CanvasGroup canvasGroup;
 
-    [Header("Settings")]
-    [SerializeField] private string defaultText = "Interact";
+    private void Awake() => Hide();
 
-    private void Awake()
-    {
-        Hide();
-    }
-
-    public void Show(string customText = null)
+    public void Show(string text)
     {
         canvasGroup.alpha = 1f;
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
 
-        promptText.text = $"[E] {customText ?? defaultText}";
+        promptText.text = $"[E] {text}";
     }
 
     public void Hide()
