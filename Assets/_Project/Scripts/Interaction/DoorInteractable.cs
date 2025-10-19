@@ -4,13 +4,11 @@ using UnityEngine;
 
 public class DoorInteractable : InteractableObject
 {
-
     [Header("References")]
     [SerializeField] private Animator animator;
     [SerializeField] private InteractionPromptUI promptFront;
     [SerializeField] private InteractionPromptUI promptBack;
     [SerializeField] private Transform player;
-
 
     [Header("Settings")]
     [SerializeField] private float interactionCooldown = 1.25f;
@@ -38,17 +36,18 @@ public class DoorInteractable : InteractableObject
         inputReader.onInteract += Interact;
     }
 
-    public override void OnEnterRange()
-    {
-        playerInRange = true;
-        if (!isOpen && !isChanging)
-            ShowPromptForSide();
-    }
-
     private void OnDestroy()
     {
         if (inputReader != null)
             inputReader.onInteract -= Interact;
+    }
+
+    public override void OnEnterRange()
+    {
+        playerInRange = true;
+        if (!isOpen && !isChanging)
+            Debug.Log($"volam 49");
+            ShowPromptForSide();
     }
 
     public override void OnExitRange()
@@ -85,13 +84,21 @@ public class DoorInteractable : InteractableObject
 
     private void ShowPromptForSide()
     {
-        Vector3 toPlayer = (player.position - transform.position).normalized;
-        float dot = Vector3.Dot(transform.forward, toPlayer);
+        // Použití lokální Z souřadnice hráče
+        Vector3 localPlayerPos = transform.InverseTransformPoint(player.position);
 
-        if (dot >= 0)
+        if (localPlayerPos.z >= 0)
+        {
             promptFront.Show(interactText);
+            promptBack.Hide();
+            Debug.Log($"Door: {name} | Local Z: {localPlayerPos.z} | Showing Front Prompt");
+        }
         else
+        {
             promptBack.Show(interactText);
+            promptFront.Hide();
+            Debug.Log($"Door: {name} | Local Z: {localPlayerPos.z} | Showing Back Prompt");
+        }
     }
 
     private void HideBothPrompts()
@@ -106,8 +113,7 @@ public class DoorInteractable : InteractableObject
         yield return new WaitForSeconds(interactionCooldown);
         isChanging = false;
 
-        if (!isOpen && playerInRange)
-            ShowPromptForSide();
+        if (!isOpen && playerInRange) Debug.Log($"volam 115"); ShowPromptForSide();
     }
 
     private IEnumerator AutoClose()
@@ -119,6 +125,7 @@ public class DoorInteractable : InteractableObject
         animator.SetBool(booleanAnimName, false);
 
         if (playerInRange)
-            ShowPromptForSide();
+        Debug.Log($"volam 127");
+        ShowPromptForSide();
     }
 }

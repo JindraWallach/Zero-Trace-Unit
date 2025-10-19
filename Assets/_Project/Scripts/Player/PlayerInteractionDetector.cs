@@ -29,6 +29,7 @@ public class PlayerInteractionDetector : MonoBehaviour
         if (!IsInLayerMask(other.gameObject.layer, interactableLayers)) return;
         if (!other.TryGetComponent(out IInteractable interactable)) return;
 
+        Debug.Log($"Entering interaction range of {((MonoBehaviour)interactable).name}");
         interactable.OnEnterRange();
         interactablesInRange.Add(interactable);
         UpdateCurrentTarget();
