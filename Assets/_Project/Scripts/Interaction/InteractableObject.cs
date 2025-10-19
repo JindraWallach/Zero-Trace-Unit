@@ -3,7 +3,7 @@
 [RequireComponent(typeof(InteractionPromptUI))]
 public abstract class InteractableObject : MonoBehaviour, IInteractable
 {
-    [SerializeField] private string interactText = "Use";
+    [SerializeField] protected string interactText = "Use";
     protected InteractionPromptUI promptUI;
 
     protected virtual void Awake()
