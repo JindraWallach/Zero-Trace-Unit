@@ -46,7 +46,6 @@ public class DoorInteractable : InteractableObject
     {
         playerInRange = true;
         if (!isOpen && !isChanging)
-            Debug.Log($"volam 49");
             ShowPromptForSide();
     }
 
@@ -89,15 +88,16 @@ public class DoorInteractable : InteractableObject
 
         if (localPlayerPos.z >= 0)
         {
-            promptFront.Show(interactText);
-            promptBack.Hide();
-            Debug.Log($"Door: {name} | Local Z: {localPlayerPos.z} | Showing Front Prompt");
-        }
-        else
-        {
             promptBack.Show(interactText);
             promptFront.Hide();
             Debug.Log($"Door: {name} | Local Z: {localPlayerPos.z} | Showing Back Prompt");
+        }
+        else
+        {
+
+            promptFront.Show(interactText);
+            promptBack.Hide();
+            Debug.Log($"Door: {name} | Local Z: {localPlayerPos.z} | Showing Front Prompt");
         }
     }
 
@@ -113,7 +113,7 @@ public class DoorInteractable : InteractableObject
         yield return new WaitForSeconds(interactionCooldown);
         isChanging = false;
 
-        if (!isOpen && playerInRange) Debug.Log($"volam 115"); ShowPromptForSide();
+        if (!isOpen && playerInRange) ShowPromptForSide();
     }
 
     private IEnumerator AutoClose()
@@ -125,7 +125,6 @@ public class DoorInteractable : InteractableObject
         animator.SetBool(booleanAnimName, false);
 
         if (playerInRange)
-        Debug.Log($"volam 127");
         ShowPromptForSide();
     }
 }

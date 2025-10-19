@@ -24028,7 +24028,7 @@ MonoBehaviour:
   animator: {fileID: 64949967700005816}
   promptFront: {fileID: 652966337}
   promptBack: {fileID: 246501325}
-  player: {fileID: 7790563198676851893}
+  player: {fileID: 7853577938338958500}
   interactionCooldown: 1.25
   autoCloseDelay: 10
 --- !u!114 &64949967700005815
