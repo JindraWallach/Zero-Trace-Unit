@@ -13,12 +13,12 @@ public class DoorInteractable : InteractableObject
     [Header("Settings")]
     [SerializeField] private float interactionCooldown = 1.25f;
     [SerializeField] private float autoCloseDelay = 3f;
+    [SerializeField] private bool invertSideLogic = false; // Pro obrácené dveře
 
     private InputReader inputReader;
     private bool isOpen = false;
     private bool isChanging = false;
     private bool playerInRange = false;
-
     private Coroutine autoCloseCoroutine;
     private Coroutine interactionCooldownCoroutine;
 
@@ -30,16 +30,16 @@ public class DoorInteractable : InteractableObject
         HideBothPrompts();
     }
 
-    public void Initialize(InputReader reader)
-    {
-        inputReader = reader;
-        inputReader.onInteract += Interact;
-    }
-
     private void OnDestroy()
     {
         if (inputReader != null)
             inputReader.onInteract -= Interact;
+    }
+
+    public void Initialize(InputReader reader)
+    {
+        inputReader = reader;
+        inputReader.onInteract += Interact;
     }
 
     public override void OnEnterRange()
@@ -59,21 +59,9 @@ public class DoorInteractable : InteractableObject
     {
         if (isChanging) return;
 
-        isOpen = !isOpen;
-        animator.SetBool(booleanAnimName, isOpen);
+        ToggleDoor();
         HideBothPrompts();
-
-        // Přeruš pouze relevantní coroutiny
-        if (autoCloseCoroutine != null)
-        {
-            StopCoroutine(autoCloseCoroutine);
-            autoCloseCoroutine = null;
-        }
-        if (interactionCooldownCoroutine != null)
-        {
-            StopCoroutine(interactionCooldownCoroutine);
-            interactionCooldownCoroutine = null;
-        }
+        StopActiveCoroutines();
 
         interactionCooldownCoroutine = StartCoroutine(InteractionCooldown());
 
@@ -81,23 +69,47 @@ public class DoorInteractable : InteractableObject
             autoCloseCoroutine = StartCoroutine(AutoClose());
     }
 
+    private void ToggleDoor()
+    {
+        isOpen = !isOpen;
+        animator.SetBool(booleanAnimName, isOpen);
+    }
+
+    private void StopActiveCoroutines()
+    {
+        if (autoCloseCoroutine != null)
+        {
+            StopCoroutine(autoCloseCoroutine);
+            autoCloseCoroutine = null;
+        }
+
+        if (interactionCooldownCoroutine != null)
+        {
+            StopCoroutine(interactionCooldownCoroutine);
+            interactionCooldownCoroutine = null;
+        }
+    }
+
     private void ShowPromptForSide()
     {
-        // Použití lokální Z souřadnice hráče
         Vector3 localPlayerPos = transform.InverseTransformPoint(player.position);
+        bool shouldShowBack = localPlayerPos.z >= 0;
 
-        if (localPlayerPos.z >= 0)
+        // Invertuj logiku pokud je to potřeba
+        if (invertSideLogic)
+            shouldShowBack = !shouldShowBack;
+
+        if (shouldShowBack)
         {
             promptBack.Show(interactText);
             promptFront.Hide();
-            Debug.Log($"Door: {name} | Local Z: {localPlayerPos.z} | Showing Back Prompt");
+            Debug.Log($"Door: {name} | Local Z: {localPlayerPos.z} | Showing Back Prompt | Inverted: {invertSideLogic}");
         }
         else
         {
-
             promptFront.Show(interactText);
             promptBack.Hide();
-            Debug.Log($"Door: {name} | Local Z: {localPlayerPos.z} | Showing Front Prompt");
+            Debug.Log($"Door: {name} | Local Z: {localPlayerPos.z} | Showing Front Prompt | Inverted: {invertSideLogic}");
         }
     }
 
@@ -113,7 +125,8 @@ public class DoorInteractable : InteractableObject
         yield return new WaitForSeconds(interactionCooldown);
         isChanging = false;
 
-        if (!isOpen && playerInRange) ShowPromptForSide();
+        if (!isOpen && playerInRange)
+            ShowPromptForSide();
     }
 
     private IEnumerator AutoClose()
@@ -121,10 +134,11 @@ public class DoorInteractable : InteractableObject
         yield return new WaitForSeconds(autoCloseDelay);
 
         if (!isOpen) yield break;
+
         isOpen = false;
         animator.SetBool(booleanAnimName, false);
 
         if (playerInRange)
-        ShowPromptForSide();
+            ShowPromptForSide();
     }
 }
