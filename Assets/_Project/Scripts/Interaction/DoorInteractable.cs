@@ -95,7 +95,6 @@ public class DoorInteractable : InteractableObject
         Vector3 localPlayerPos = transform.InverseTransformPoint(player.position);
         bool shouldShowBack = localPlayerPos.z >= 0;
 
-        // Invertuj logiku pokud je to potřeba
         if (invertSideLogic)
             shouldShowBack = !shouldShowBack;
 
@@ -103,13 +102,13 @@ public class DoorInteractable : InteractableObject
         {
             promptBack.Show(interactText);
             promptFront.Hide();
-            Debug.Log($"Door: {name} | Local Z: {localPlayerPos.z} | Showing Back Prompt | Inverted: {invertSideLogic}");
+            //Debug.Log($"Door: {name} | Local Z: {localPlayerPos.z} | Showing Back Prompt | Inverted: {invertSideLogic}");
         }
         else
         {
             promptFront.Show(interactText);
             promptBack.Hide();
-            Debug.Log($"Door: {name} | Local Z: {localPlayerPos.z} | Showing Front Prompt | Inverted: {invertSideLogic}");
+            //Debug.Log($"Door: {name} | Local Z: {localPlayerPos.z} | Showing Front Prompt | Inverted: {invertSideLogic}");
         }
     }
 
