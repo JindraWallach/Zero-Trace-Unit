@@ -24034,7 +24034,7 @@ MonoBehaviour:
   invertSideLogic: 0
   autoCloseDelay: 3
   startLocked: 1
-  lockTimeout: 30
+  lockTimeout: 5
 --- !u!114 &64949967700005815
 MonoBehaviour:
   m_ObjectHideFlags: 0

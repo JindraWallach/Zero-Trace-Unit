@@ -2,14 +2,17 @@ using UnityEngine;
 
 public class DoorOpenState : DoorState
 {
-    private float timer;
     public DoorOpenState(DoorInteractable door) : base(door) { }
 
     public override void Enter()
     {
-        Debug.Log("Door is now in OpenState.");
         door.SetAnimatorBool(true);
-        timer = door.AutoCloseDelay;
+        door.StartAutoLock();
+    }
+
+    public override void Exit()
+    {
+        door.StopAutoLock();
     }
 
     public override void Interact()

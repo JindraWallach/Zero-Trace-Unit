@@ -20,10 +20,13 @@ public class DoorInteractable : InteractableObject
     [SerializeField] private float lockTimeout = 30f; // seconds until door re-locks when idle
 
     private DoorState currentState;
-    private Coroutine autoCloseCoroutine;
     private Coroutine autoLockCoroutine;
     private bool isActive = true;
     private bool isLocked;
+
+    // When autolock triggers while the door is open (or in other transient states),
+    // schedule an actual locking to happen after the door reaches ClosedState.
+    private bool pendingLockAfterClose;
 
     public float Cooldown => interactionCooldown;
     public float AutoCloseDelay => autoCloseDelay;
@@ -65,6 +68,7 @@ public class DoorInteractable : InteractableObject
 
     public void SetState(DoorState newState)
     {
+        // Stop auto-lock timer when state changes; states decide whether to restart it.
         StopAutoLock();
 
         currentState?.Exit();
@@ -119,6 +123,7 @@ public class DoorInteractable : InteractableObject
     {
         if (isLocked) return;
         isLocked = true;
+        pendingLockAfterClose = false; // consume any pending flag
         SetState(new DoorLockedState(this));
     }
 
@@ -135,37 +140,7 @@ public class DoorInteractable : InteractableObject
         Unlock();
     }
 
-    // Auto-close logic (existing)
-    public void AutoClose()
-    {
-        if (autoCloseCoroutine != null)
-            StopCoroutine(autoCloseCoroutine);
-
-        autoCloseCoroutine = StartCoroutine(AutoCloseCoroutine());
-    }
-
-    private IEnumerator AutoCloseCoroutine()
-    {
-        Debug.Log("Auto-close timer started.");
-        yield return new WaitForSeconds(autoCloseDelay);
-        if (currentState is DoorOpenState)
-        {
-            SetState(new DoorClosingState(this));
-        }
-        autoCloseCoroutine = null;
-        Debug.Log("Auto-close executed.");
-    }
-
-    public void StopAutoClose()
-    {
-        if (autoCloseCoroutine != null)
-        {
-            StopCoroutine(autoCloseCoroutine);
-            autoCloseCoroutine = null;
-        }
-    }
-
-    // Auto-lock logic: when the door is in ClosedState, you can start this timer to re-lock the door after inactivity
+    // --- Auto-lock (primary behavior). Replaced the old auto-close-centric logic.
     public void StartAutoLock()
     {
         StopAutoLock();
@@ -179,20 +154,57 @@ public class DoorInteractable : InteractableObject
             StopCoroutine(autoLockCoroutine);
             autoLockCoroutine = null;
         }
+        //pendingLockAfterClose = false;
     }
 
     private IEnumerator AutoLockCoroutine()
     {
         yield return new WaitForSeconds(lockTimeout);
 
-        // Only lock if we're currently in closed state and not already locked
-        if (!isLocked && currentState is DoorClosedState)
+        if (isLocked)
+        {
+            autoLockCoroutine = null;
+            yield break;
+        }
+
+        // If door is open, schedule a lock after it closes and initiate closing now.
+        if (currentState is DoorOpenState)
+        {
+            pendingLockAfterClose = true;
+            // trigger closing; DoorClosingState -> DoorClosedState.Enter will consume pending flag
+            SetState(new DoorClosingState(this));
+            Debug.Log("Auto-lock: door was open — started closing and scheduled lock after close.");
+        }
+        // If door is already closed, lock immediately.
+        else if (currentState is DoorClosedState)
         {
             SetState(new DoorLockedState(this));
             isLocked = true;
+            Debug.Log("Auto-lock: door was closed — locked immediately.");
         }
-        Debug.Log("Door has auto-locked due to inactivity.");
+        else
+        {
+            // For other transient states (opening/closing), just schedule a lock after we reach ClosedState.
+            pendingLockAfterClose = true;
+            Debug.Log("Auto-lock: scheduled lock after door reaches ClosedState.");
+        }
+
+        Debug.Log("Door has auto-locked due to inactivity (pendingLockAfterClose=" + pendingLockAfterClose + ").");
         autoLockCoroutine = null;
+    }
+
+    // Called by DoorClosedState when it enters; returns true if a pending auto-lock was scheduled and consumes it.
+    public bool ConsumePendingLock()
+    {
+        if (!pendingLockAfterClose) return false;
+        pendingLockAfterClose = false;
+        return true;
+    }
+
+    // add this method to DoorInteractable (near ConsumePendingLock or public API)
+    public void CancelPendingLock()
+    {
+        pendingLockAfterClose = false;
     }
 
     public void HidePrompts()
