@@ -13,7 +13,6 @@ public class DoorInteractable : InteractableObject
     [Header("Settings")]
     [SerializeField] private float interactionCooldown = 1.25f;
     [SerializeField] private bool invertSideLogic = false;
-    [SerializeField] private float autoCloseDelay = 3f;
 
     [Header("Lock")]
     [SerializeField] private bool startLocked = true;
@@ -29,7 +28,6 @@ public class DoorInteractable : InteractableObject
     private bool pendingLockAfterClose;
 
     public float Cooldown => interactionCooldown;
-    public float AutoCloseDelay => autoCloseDelay;
     public bool IsLocked => isLocked;
 
     public void Initialize(InputReader reader)
