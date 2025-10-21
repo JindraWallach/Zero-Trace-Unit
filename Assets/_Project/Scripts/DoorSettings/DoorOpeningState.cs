@@ -10,7 +10,7 @@ public class DoorOpeningState : DoorState
     {
         // If the player opens the door, cancel any scheduled auto-lock.
         door.CancelPendingLock();
-
+        Debug.Log("Door is now in OpeningState.");
         door.SetAnimatorBool(true);
         timer = door.Cooldown;
     }

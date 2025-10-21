@@ -129,7 +129,7 @@ public class DoorInteractable : InteractableObject
     {
         if (!isLocked) return;
         isLocked = false;
-        SetState(new DoorClosedState(this));
+        SetState(new DoorOpeningState(this));
     }
 
     // Called by the hack system (or DoorLockedState.Interact simulation) to indicate hack success
