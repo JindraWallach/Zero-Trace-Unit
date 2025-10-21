@@ -20,7 +20,7 @@ public class DoorInteractable : InteractableObject
 
     private DoorState currentState;
     private Coroutine autoLockCoroutine;
-    private bool isActive = true;
+    private bool isActive = false;
     private bool isLocked;
 
     // When autolock triggers while the door is open (or in other transient states),
