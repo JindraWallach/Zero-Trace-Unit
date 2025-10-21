@@ -171,23 +171,23 @@ public class DoorInteractable : InteractableObject
             pendingLockAfterClose = true;
             // trigger closing; DoorClosingState -> DoorClosedState.Enter will consume pending flag
             SetState(new DoorClosingState(this));
-            Debug.Log("Auto-lock: door was open — started closing and scheduled lock after close.");
+            Debug.Log("Auto-lock: started closing and scheduled lock after close.");
         }
         // If door is already closed, lock immediately.
         else if (currentState is DoorClosedState)
         {
             SetState(new DoorLockedState(this));
             isLocked = true;
-            Debug.Log("Auto-lock: door was closed — locked immediately.");
+            Debug.Log("Auto-lock: door locked immediately.");
         }
         else
         {
             // For other transient states (opening/closing), just schedule a lock after we reach ClosedState.
             pendingLockAfterClose = true;
-            Debug.Log("Auto-lock: scheduled lock after door reaches ClosedState.");
+            Debug.LogWarning("Auto-lock: else, not good.");
         }
 
-        Debug.Log("Door has auto-locked due to inactivity (pendingLockAfterClose=" + pendingLockAfterClose + ").");
+        //Debug.Log("Door has auto-locked due to inactivity (pendingLockAfterClose=" + pendingLockAfterClose + ").");
         autoLockCoroutine = null;
     }
 

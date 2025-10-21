@@ -8,7 +8,7 @@ public class DoorLockedState : DoorState
     {
         // Ensure door appears closed and show locked prompt
         door.SetAnimatorBool(false);
-        Debug.Log("DoorLockedState: Door is now locked.");
+        Debug.Log("Door is now in LockedState.");
         door.ShowPromptForSide(door.GetLockedText());
     }
 

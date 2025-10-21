@@ -6,7 +6,7 @@ public class DoorOpenState : DoorState
 
     public override void Enter()
     {
-        Debug.Log("DoorOpenState: Door is now open.");
+        Debug.Log("Door is now in OpenState.");
         door.SetAnimatorBool(true);
         door.StartAutoLock();
     }

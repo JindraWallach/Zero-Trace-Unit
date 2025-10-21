@@ -7,13 +7,13 @@ public class DoorClosedState : DoorState
     public override void Enter()
     {
         door.SetAnimatorBool(false);
-        Debug.Log("DoorClosedState: Door is now closed.");
+        Debug.Log("Door is now in ClosedState.");
         // If an auto-lock was scheduled to happen after close, consume it and immediately lock.
         if (door.ConsumePendingLock())
         {
             // consume and transition to locked state
             door.Lock();
-            Debug.Log("DoorClosedState: consumed pending auto-lock and transitioned to LockedState.");
+            Debug.Log("DoorClosedState: consumed pending auto-lock");
             return;
         }
 
