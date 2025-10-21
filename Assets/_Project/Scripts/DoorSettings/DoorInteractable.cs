@@ -54,9 +54,7 @@ public class DoorInteractable : InteractableObject
     public override void OnEnterRange()
     {
         isActive = true;
-        // only show prompt if closed (locked will show its own)
-        if (currentState is DoorClosedState)
-            ShowPromptForSide();
+        ShowPromptForCurrentState();
     }
 
     public override void OnExitRange()
@@ -67,7 +65,6 @@ public class DoorInteractable : InteractableObject
 
     public void SetState(DoorState newState)
     {
-        // stop any pending auto-lock when changing states; a state may restart it if desired
         StopAutoLock();
 
         currentState?.Exit();
@@ -80,13 +77,6 @@ public class DoorInteractable : InteractableObject
         animator.SetBool("IsOpen", isOpen);
     }
 
-    // existing API kept for backward compatibility
-    public void ShowPromptForSide()
-    {
-        ShowPromptForSide(GetInteractText());
-    }
-
-    // overload to show arbitrary text (locked/interact)
     public void ShowPromptForSide(string text)
     {
         Vector3 localPlayerPos = transform.InverseTransformPoint(player.position);
@@ -104,6 +94,23 @@ public class DoorInteractable : InteractableObject
         {
             promptFront.Show(text);
             promptBack.Hide();
+        }
+    }
+
+    public void ShowPromptForCurrentState()
+    {
+        if (currentState is DoorLockedState)
+        {
+            ShowPromptForSide(GetLockedText());
+        }
+        else if (currentState is DoorClosedState)
+        {
+            ShowPromptForSide(GetInteractText());
+        }
+        else
+        {
+            // other states don't show an interaction prompt
+            HidePrompts();
         }
     }
 
@@ -139,12 +146,23 @@ public class DoorInteractable : InteractableObject
 
     private IEnumerator AutoCloseCoroutine()
     {
+        Debug.Log("Auto-close timer started.");
         yield return new WaitForSeconds(autoCloseDelay);
         if (currentState is DoorOpenState)
         {
             SetState(new DoorClosingState(this));
         }
         autoCloseCoroutine = null;
+        Debug.Log("Auto-close executed.");
+    }
+
+    public void StopAutoClose()
+    {
+        if (autoCloseCoroutine != null)
+        {
+            StopCoroutine(autoCloseCoroutine);
+            autoCloseCoroutine = null;
+        }
     }
 
     // Auto-lock logic: when the door is in ClosedState, you can start this timer to re-lock the door after inactivity
@@ -173,7 +191,7 @@ public class DoorInteractable : InteractableObject
             SetState(new DoorLockedState(this));
             isLocked = true;
         }
-
+        Debug.Log("Door has auto-locked due to inactivity.");
         autoLockCoroutine = null;
     }
 
