@@ -7,6 +7,7 @@ public class DoorOpenState : DoorState
 
     public override void Enter()
     {
+        Debug.Log("Door is now in OpenState.");
         door.SetAnimatorBool(true);
         timer = door.AutoCloseDelay;
     }

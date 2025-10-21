@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class DoorLockedState : DoorState
 {
@@ -6,6 +6,7 @@ public class DoorLockedState : DoorState
 
     public override void Enter()
     {
+        // Ensure door appears closed and show locked prompt
         door.SetAnimatorBool(false);
         door.ShowPromptForSide(door.GetLockedText());
     }
@@ -15,8 +16,13 @@ public class DoorLockedState : DoorState
         door.HidePrompts();
     }
 
+    // Simulate starting the hack mini‑game and immediately completing it (per your request).
+    // This will unlock the door and transition into ClosedState.
     public override void Interact()
     {
-        // Optionally trigger feedback or a hack flow here.
+        door.HidePrompts();
+        // Simulate hack success
+        Debug.Log("Hack successful! Door is now unlocked.");
+        door.OnHackSuccess();
     }
 }

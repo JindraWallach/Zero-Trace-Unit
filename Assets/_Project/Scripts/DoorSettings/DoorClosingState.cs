@@ -8,6 +8,7 @@ public class DoorClosingState : DoorState
 
     public override void Enter()
     {
+        Debug.Log("Door is now in ClosingState.");
         door.SetAnimatorBool(false);
         timer = door.Cooldown;
     }
