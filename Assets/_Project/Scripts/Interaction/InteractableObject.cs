@@ -4,6 +4,7 @@
 public abstract class InteractableObject : MonoBehaviour, IInteractable
 {
     [SerializeField] protected string interactText = "Use";
+    [SerializeField] protected string lockedText = "HACK";
     protected InteractionPromptUI promptUI;
 
     protected virtual void Awake()
@@ -12,6 +13,8 @@ public abstract class InteractableObject : MonoBehaviour, IInteractable
     }
 
     public virtual string GetInteractText() => interactText;
+
+    public virtual string GetLockedText() => lockedText;
 
     public abstract void Interact();
 

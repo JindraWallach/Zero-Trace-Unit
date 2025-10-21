@@ -7,7 +7,7 @@ public class DoorClosedState : DoorState
     public override void Enter()
     {
         door.SetAnimatorBool(false);
-        door.ShowPromptForSide();
+        door.ShowPromptForSide(door.GetInteractText());
     }
 
     public override void Interact()

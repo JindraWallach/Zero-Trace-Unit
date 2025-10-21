@@ -17,6 +17,7 @@ public class DoorInteractable : InteractableObject
 
     private DoorState currentState;
     private Coroutine autoCloseCoroutine;
+    private bool isActive = true;
 
     public float Cooldown => interactionCooldown;
     public float AutoCloseDelay => autoCloseDelay;
@@ -29,6 +30,7 @@ public class DoorInteractable : InteractableObject
 
     private void Update()
     {
+        if (!isActive) return;
         currentState?.Update();
     }
 
@@ -39,13 +41,14 @@ public class DoorInteractable : InteractableObject
 
     public override void OnEnterRange()
     {
-        if(currentState is DoorClosedState) ShowPromptForSide();
+        isActive = true;
+        if (currentState is DoorLockedState) ShowPromptForSide(lockedText);
     }
 
     public override void OnExitRange()
     {
-        promptFront.Hide();
-        promptBack.Hide();
+        isActive = false;
+        HidePrompts();
     }
 
     public void SetState(DoorState newState)
@@ -60,7 +63,7 @@ public class DoorInteractable : InteractableObject
         animator.SetBool("IsOpen", isOpen);
     }
 
-    public void ShowPromptForSide()
+    public void ShowPromptForSide(string prompText)
     {
         Vector3 localPlayerPos = transform.InverseTransformPoint(player.position);
         bool shouldShowBack = localPlayerPos.z >= 0;
@@ -70,12 +73,12 @@ public class DoorInteractable : InteractableObject
 
         if (shouldShowBack)
         {
-            promptBack.Show(interactText);
+            promptBack.Show(prompText);
             promptFront.Hide();
         }
         else
         {
-            promptFront.Show(interactText);
+            promptFront.Show(prompText);
             promptBack.Hide();
         }
     }
