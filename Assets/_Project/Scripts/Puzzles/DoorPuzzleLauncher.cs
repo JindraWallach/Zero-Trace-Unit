@@ -16,14 +16,16 @@ public class DoorPuzzleLauncher : MonoBehaviour, IInitializable
 
     private InputReader injectedInputReader;
     private SampleCameraController injectedCameraController;
+    private DependencyInjector dependencyInjector;
 
     private GameObject currentInstance;
     private IPuzzle currentPuzzle;
 
     public void Initialize(DependencyInjector dependencyInjector)
     {
-        injectedInputReader = dependencyInjector?.InputReader;
-        injectedCameraController = dependencyInjector?.CameraController;
+        this.dependencyInjector = dependencyInjector;
+        injectedInputReader = this.dependencyInjector.InputReader;
+        injectedCameraController = this.dependencyInjector.CameraController;
     }
 
     public bool TryStartPuzzle(Action onSuccess)
@@ -48,12 +50,21 @@ public class DoorPuzzleLauncher : MonoBehaviour, IInitializable
         var inputReaderToDisable = injectedInputReader;
         var cameraControllerToDisable = injectedCameraController;
 
-        // Unlock cursor and disable player input / camera / UI
+        // call Initialize only if the puzzle implements IInitializable
+        if (currentPuzzle is IInitializable initializablePuzzle)
+        {
+            initializablePuzzle.Initialize(dependencyInjector);
+        }
+
+        // Unlock cursor and disable player camera / UI
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
 
-        if (inputReaderToDisable != null)
-            inputReaderToDisable.enabled = false;
+        // Do NOT entirely disable the InputReader component here.
+        // Disabling it would stop it from raising onEscapePressed and similar events
+        // which puzzles (like MathRowsPuzzle) subscribe to for cancellation.
+        // if (inputReaderToDisable != null)
+        //     inputReaderToDisable.enabled = false;
 
         if (cameraControllerToDisable != null)
             cameraControllerToDisable.enabled = false;
@@ -78,9 +89,10 @@ public class DoorPuzzleLauncher : MonoBehaviour, IInitializable
             currentInstance = null;
             currentPuzzle = null;
 
-            // restore input/camera/UI/cursor
-            if (inputReaderToDisable != null)
-                inputReaderToDisable.enabled = true;
+            // restore camera/UI/cursor
+            // Do not touch inputReader here either.
+            // if (inputReaderToDisable != null)
+            //     inputReaderToDisable.enabled = true;
 
             if (cameraControllerToDisable != null)
                 cameraControllerToDisable.enabled = true;
@@ -108,8 +120,9 @@ public class DoorPuzzleLauncher : MonoBehaviour, IInitializable
             currentInstance = null;
             currentPuzzle = null;
 
-            if (inputReaderToDisable != null)
-                inputReaderToDisable.enabled = true;
+            // Do not re-enable inputReader here because we never disabled it.
+            // if (inputReaderToDisable != null)
+            //     inputReaderToDisable.enabled = true;
 
             if (cameraControllerToDisable != null)
                 cameraControllerToDisable.enabled = true;

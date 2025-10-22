@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MathRowsPuzzle : MonoBehaviour, IPuzzle
+public class MathRowsPuzzle : MonoBehaviour, IPuzzle, IInitializable
 {
     [Header("Layout")]
     [Tooltip("Number of rows to generate (min 1)")]
@@ -37,9 +37,9 @@ public class MathRowsPuzzle : MonoBehaviour, IPuzzle
         if (generateOnStart) Generate();
     }
 
-    public void Initialize(InputReader reader)
+    public void Initialize(DependencyInjector dependencyInjector)
     {
-        inputReader = reader;
+        inputReader = dependencyInjector.InputReader;
         inputReader.onEscapePressed += CancelPuzzle;
     }
 
@@ -51,6 +51,7 @@ public class MathRowsPuzzle : MonoBehaviour, IPuzzle
 
     private void CancelPuzzle()
     {
+        Debug.Log("MathRowsPuzzle: Puzzle cancelled by player.");
         OnPuzzleCancelled?.Invoke();
     }
 
