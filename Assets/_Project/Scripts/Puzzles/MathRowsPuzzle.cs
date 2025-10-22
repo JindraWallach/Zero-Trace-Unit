@@ -87,10 +87,43 @@ public class MathRowsPuzzle : MonoBehaviour, IPuzzle, IInitializable
         if (expressions == null) expressions = new List<string>();
         while (expressions.Count < count)
         {
-            // some simple example expressions:
-            int idx = expressions.Count;
-            var examples = new[] { "5 + 2", "5 + 13", "|8 - 9|", "12 - 7", "7 % 4", "-3 + 8", "9 - 18", "15" };
-            expressions.Add(examples[idx % examples.Length]);
+            // generate a reasonable random expression (always an operation, no plain integers)
+            expressions.Add(GenerateRandomExpression());
+        }
+    }
+
+    // Generates expressions that the evaluator supports:
+    // - "a + b"  (allows negative operands)
+    // - "a - b"  (both operands non-negative to avoid parser edge-cases)
+    // - "a % b"  (b != 0)
+    // - "|a - b|" (absolute difference)
+    private string GenerateRandomExpression()
+    {
+        // select expression kind
+        int kind = UnityEngine.Random.Range(0, 4);
+        int a, b;
+
+        switch (kind)
+        {
+            case 0: // plus (possibly negative operand)
+                a = UnityEngine.Random.Range(-5, 21); // allow some negatives
+                b = UnityEngine.Random.Range(0, 21);
+                return $"{a} + {b}";
+
+            case 1: // minus (avoid leading negative literal which the simple parser can't handle)
+                a = UnityEngine.Random.Range(0, 21);
+                b = UnityEngine.Random.Range(0, 21);
+                return $"{a} - {b}";
+
+            case 2: // modulo (ensure divisor != 0)
+                a = UnityEngine.Random.Range(0, 50);
+                b = UnityEngine.Random.Range(1, 10);
+                return $"{a} % {b}";
+
+            default: // absolute difference
+                a = UnityEngine.Random.Range(0, 21);
+                b = UnityEngine.Random.Range(0, 21);
+                return $"|{a} - {b}|";
         }
     }
 
@@ -130,6 +163,7 @@ public class MathRowsPuzzle : MonoBehaviour, IPuzzle, IInitializable
     }
 
     // Very small evaluator supporting: +, -, %, single absolute patterns like |a - b| or plain ints.
+    // Modified: always take absolute value of the computed result before normalizing to a digit.
     private int EvaluateToDigit(string expr)
     {
         if (string.IsNullOrWhiteSpace(expr)) return 0;
@@ -137,16 +171,22 @@ public class MathRowsPuzzle : MonoBehaviour, IPuzzle, IInitializable
 
         try
         {
-            // absolute pattern: |a - b|
+            int result;
+
+            // If expression is an explicit absolute wrapper, evaluate inner and take abs (kept for clarity).
             if (expr.StartsWith("|") && expr.EndsWith("|"))
             {
                 string inner = expr.Substring(1, expr.Length - 2).Trim();
-                int val = EvaluateSimple(inner);
-                val = Math.Abs(val);
-                return NormalizeToDigit(val);
+                result = EvaluateSimple(inner);
+                result = Math.Abs(result);
+            }
+            else
+            {
+                result = EvaluateSimple(expr);
+                // Always use absolute value as requested.
+                result = Math.Abs(result);
             }
 
-            int result = EvaluateSimple(expr);
             return NormalizeToDigit(result);
         }
         catch
@@ -156,25 +196,47 @@ public class MathRowsPuzzle : MonoBehaviour, IPuzzle, IInitializable
     }
 
     // supports "a + b", "a - b", "a % b" or single int
+    // Improved minus parsing to correctly handle leading negative literals (e.g. "-3-2" or "-3")
     private int EvaluateSimple(string input)
     {
         input = input.Replace(" ", "");
+
         if (input.Contains("+"))
         {
-            var parts = input.Split('+');
+            var parts = input.Split(new[] { '+' }, 2);
             return int.Parse(parts[0]) + int.Parse(parts[1]);
         }
+
         if (input.Contains("%"))
         {
-            var parts = input.Split('%');
+            var parts = input.Split(new[] { '%' }, 2);
             return int.Parse(parts[0]) % int.Parse(parts[1]);
         }
+
         if (input.Contains("-"))
         {
-            // handle only binary minus, negative literal is allowed (very simple)
-            var parts = input.Split(new[] { '-' }, 2);
-            int a = int.Parse(parts[0]);
-            int b = int.Parse(parts[1]);
+            // Find the binary minus operator taking into account a possible leading negative sign.
+            int idx;
+            if (input.StartsWith("-"))
+            {
+                // look for next '-' after the leading one
+                idx = input.IndexOf('-', 1);
+                if (idx == -1)
+                {
+                    // no binary minus, it's a single negative number
+                    return int.Parse(input);
+                }
+            }
+            else
+            {
+                idx = input.IndexOf('-');
+            }
+
+            // left may include a leading '-' (negative literal), right is remainder after the operator
+            string left = input.Substring(0, idx);
+            string right = input.Substring(idx + 1);
+            int a = int.Parse(left);
+            int b = int.Parse(right);
             return a - b;
         }
 

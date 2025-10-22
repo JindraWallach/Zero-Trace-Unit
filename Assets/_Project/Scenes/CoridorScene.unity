@@ -22803,34 +22803,32 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: -0
       objectReference: {fileID: 0}
+    - target: {fileID: 4950033287718502, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4950033287718502, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4950033287718502, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4930989083550011045, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+      propertyPath: instantiateParent
+      value: 
+      objectReference: {fileID: 1393077298}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1543695114780030, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
-      insertIndex: 6
-      addedObject: {fileID: 2104556712}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
 --- !u!4 &2104556700 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4950033287718502, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
   m_PrefabInstance: {fileID: 2104556699}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2104556712
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 906790554}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a17c58e49df0e349bd412f8a4d1471f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DoorPuzzleLauncher
-  puzzleDefinition: {fileID: 11400000, guid: 4d189acc318cbb44f8f551920274ae0e, type: 2}
-  instantiateParent: {fileID: 1393077298}
-  objectsToDisable: []
 --- !u!1001 &2112622973
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -30353,6 +30351,17 @@ MonoBehaviour:
   _moveComposite: {x: 0, y: 0}
   _movementInputDuration: 0
   _movementInputDetected: 0
+  actionNames:
+  - Move
+  - Look
+  - Jump
+  - Sprint
+  - UseWatch
+  - Inventory
+  - Hotbar
+  - ScrollHotbar
+  - Interact
+  - Exit
 --- !u!143 &7899819685120886279
 CharacterController:
   m_ObjectHideFlags: 0

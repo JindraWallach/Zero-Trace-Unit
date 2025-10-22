@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 64522215438127986}
   - component: {fileID: 5145990446593160846}
   - component: {fileID: 2963774249556382902}
+  - component: {fileID: 4930989083550011045}
   - component: {fileID: 8352087749016847735}
   m_Layer: 6
   m_Name: SM_Bld_Wall_Doorframe_02
@@ -152,7 +153,22 @@ MonoBehaviour:
   interactionCooldown: 1.25
   invertSideLogic: 0
   startLocked: 1
-  lockTimeout: 5
+  lockTimeout: 30
+--- !u!114 &4930989083550011045
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1543695114780030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a17c58e49df0e349bd412f8a4d1471f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DoorPuzzleLauncher
+  puzzleDefinition: {fileID: 11400000, guid: 4d189acc318cbb44f8f551920274ae0e, type: 2}
+  instantiateParent: {fileID: 0}
+  objectsToDisable: []
 --- !u!95 &8352087749016847735
 Animator:
   serializedVersion: 7
