@@ -40,6 +40,8 @@ public class DoorInteractable : InteractableObject
             SetState(new DoorLockedState(this));
         else
             SetState(new DoorClosedState(this));
+
+        HidePrompts();
     }
 
     private void Update()
