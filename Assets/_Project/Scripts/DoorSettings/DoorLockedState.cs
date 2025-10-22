@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 
 public class DoorLockedState : DoorState
 {
@@ -17,13 +18,26 @@ public class DoorLockedState : DoorState
         door.HidePrompts();
     }
 
-    // Simulate starting the hack mini‑game and immediately completing it (per your request).
-    // This will unlock the door and transition into ClosedState.
+    // When interacting, try to launch the per-door puzzle (via DoorPuzzleLauncher).
+    // If none configured, fallback to simulated hack success.
     public override void Interact()
     {
         door.HidePrompts();
-        // Simulate hack success
-        Debug.Log("Hack successful! Door is now unlocked.");
+
+        var launcher = (door as Component)?.GetComponent<DoorPuzzleLauncher>();
+        if (launcher != null)
+        {
+            bool started = launcher.TryStartPuzzle(() =>
+            {
+                Debug.Log("Hack successful via puzzle! Door is now unlocked.");
+                door.OnHackSuccess();
+            });
+
+            if (started) return;
+        }
+
+        // fallback: no configured puzzle -> simulate hack success
+        Debug.Log("No puzzle configured on this door; simulating hack success.");
         door.OnHackSuccess();
     }
 }
