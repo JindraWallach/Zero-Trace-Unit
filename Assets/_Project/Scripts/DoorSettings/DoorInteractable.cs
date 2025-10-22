@@ -8,7 +8,7 @@ public class DoorInteractable : InteractableObject
     [SerializeField] private Animator animator;
     [SerializeField] private InteractionPromptUI promptFront;
     [SerializeField] private InteractionPromptUI promptBack;
-    [SerializeField] private Transform player;
+
 
     [Header("Settings")]
     [SerializeField] private float interactionCooldown = 1.25f;
@@ -20,6 +20,7 @@ public class DoorInteractable : InteractableObject
 
     private DoorState currentState;
     private Coroutine autoLockCoroutine;
+    private Transform player;
     private bool isActive = false;
     private bool isLocked;
 
@@ -30,9 +31,9 @@ public class DoorInteractable : InteractableObject
     public float Cooldown => interactionCooldown;
     public bool IsLocked => isLocked;
 
-    public void Initialize(InputReader reader)
+    public void Initialize(Transform playerPosition)
     {
-        reader.onInteract += Interact;
+        player = playerPosition;
 
         isLocked = startLocked;
         if (isLocked)

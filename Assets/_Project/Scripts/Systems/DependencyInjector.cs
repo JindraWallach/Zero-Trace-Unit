@@ -7,6 +7,7 @@ public class DependencyInjector : MonoBehaviour
     [SerializeField] private InputReader inputReader;
 
     [Header("Player Components")]
+    [SerializeField] private Transform playerPosition;
     [SerializeField] private PlayerInteractionDetector interactionDetector;
 
     [Header("Interactable Objects")]
@@ -20,7 +21,7 @@ public class DependencyInjector : MonoBehaviour
         // Inicializace dveří
         foreach (var door in doors)
         {
-            door.Initialize(inputReader);
+            door.Initialize(playerPosition);
         }
     }
 }
