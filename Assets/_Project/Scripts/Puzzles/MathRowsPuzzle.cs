@@ -1,3 +1,4 @@
+using Synty.AnimationBaseLocomotion.Samples.InputSystem;
 using System;
 using System.Collections.Generic;
 using TMPro;
@@ -21,9 +22,11 @@ public class MathRowsPuzzle : MonoBehaviour, IPuzzle
 
     // Public event consumers can subscribe to:
     public event Action OnPuzzleSuccess;
+    public event Action OnPuzzleCancelled;
 
     private List<int> targets = new List<int>();    
     private List<MathRowUI> cells = new List<MathRowUI>();
+    private InputReader inputReader;
     private bool[] solved;
 
     [Header("Behaviour")]
@@ -34,10 +37,21 @@ public class MathRowsPuzzle : MonoBehaviour, IPuzzle
         if (generateOnStart) Generate();
     }
 
+    public void Initialize(InputReader reader)
+    {
+        inputReader = reader;
+        inputReader.onEscapePressed += CancelPuzzle;
+    }
+
     private void OnValidate()
     {
         // ensure rows is at least 1 even if user types 0 or negative in Inspector
         if (rows < 1) rows = 1;
+    }
+
+    private void CancelPuzzle()
+    {
+        OnPuzzleCancelled?.Invoke();
     }
 
     // Create rows (previously grid). Count equals rows now.

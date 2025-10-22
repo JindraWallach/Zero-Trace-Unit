@@ -2,7 +2,7 @@
 using Synty.AnimationBaseLocomotion.Samples.InputSystem;
 using System.Collections;
 
-public class DoorInteractable : InteractableObject
+public class DoorInteractable : InteractableObject, IInitializable
 {
     [Header("References")]
     [SerializeField] private Animator animator;
@@ -31,9 +31,9 @@ public class DoorInteractable : InteractableObject
     public float Cooldown => interactionCooldown;
     public bool IsLocked => isLocked;
 
-    public void Initialize(Transform playerPosition)
+    public void Initialize(DependencyInjector dependencyInjector)
     {
-        player = playerPosition;
+        player = dependencyInjector.PlayerPosition;
 
         isLocked = startLocked;
         if (isLocked)

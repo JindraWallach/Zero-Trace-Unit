@@ -3707,13 +3707,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DependencyInjector
   inputReader: {fileID: 7899819685120886278}
+  cameraController: {fileID: 0}
   playerPosition: {fileID: 7853577938338958500}
   interactionDetector: {fileID: 730311591}
-  doors:
-  - {fileID: 479771440}
-  - {fileID: 1073657490}
-  - {fileID: 64949967700005814}
-  - {fileID: 2104556706}
+  objectsToInitialize:
+  - {fileID: 686794069}
+  - {fileID: 2135896837}
+  - {fileID: 1543695772431947}
+  - {fileID: 906790554}
 --- !u!1001 &312965478
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5371,17 +5372,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4950033287718502, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
   m_PrefabInstance: {fileID: 479771433}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &479771440 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2963774249556382902, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
-  m_PrefabInstance: {fileID: 479771433}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42308a05fcd841d45b8bf5ce54723334, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DoorInteractable
 --- !u!1 &484656154
 GameObject:
   m_ObjectHideFlags: 0
@@ -7461,6 +7451,11 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
+--- !u!1 &686794069 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1543695114780030, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+  m_PrefabInstance: {fileID: 479771433}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &694209266
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11559,17 +11554,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4903925096741902, guid: 13659d6e95862dc49829ce81098db40f, type: 3}
   m_PrefabInstance: {fileID: 1073472504}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1073657490 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2963774249556382902, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
-  m_PrefabInstance: {fileID: 563948530}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42308a05fcd841d45b8bf5ce54723334, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DoorInteractable
 --- !u!1001 &1076772480
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22832,17 +22816,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4950033287718502, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
   m_PrefabInstance: {fileID: 2104556699}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2104556706 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2963774249556382902, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
-  m_PrefabInstance: {fileID: 2104556699}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 906790554}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42308a05fcd841d45b8bf5ce54723334, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DoorInteractable
 --- !u!114 &2104556712
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22857,6 +22830,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DoorPuzzleLauncher
   puzzleDefinition: {fileID: 11400000, guid: 4d189acc318cbb44f8f551920274ae0e, type: 2}
   instantiateParent: {fileID: 1393077298}
+  objectsToDisable: []
 --- !u!1001 &2112622973
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23255,6 +23229,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 4995380617274390, guid: 5083e3debd9f4b84fa38c513bd3bd09a, type: 3}
   m_PrefabInstance: {fileID: 2121645116}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2135896837 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1543695114780030, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+  m_PrefabInstance: {fileID: 563948530}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2140322562
 PrefabInstance:
@@ -24452,7 +24431,7 @@ MonoBehaviour:
   _playerTarget: {fileID: 0}
   _lockOnTarget: {fileID: 0}
   _invertCamera: 0
-  _hideCursor: 0
+  _hideCursor: 1
   _isLockedOn: 0
   _mouseSensitivity: 0.3
   _cameraDistance: 2.5

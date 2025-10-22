@@ -41,6 +41,8 @@ namespace Synty.AnimationBaseLocomotion.Samples.InputSystem
 
         public Action onInteract;
 
+        public Action onEscapePressed;
+
         /// <inheritdoc cref="OnEnable" />
         private void OnEnable()
         {
@@ -184,6 +186,14 @@ namespace Synty.AnimationBaseLocomotion.Samples.InputSystem
                 return;
 
             onInteract?.Invoke();
+        }
+
+        public void OnExit(InputAction.CallbackContext context)
+        {
+            if (!context.performed)
+                return;
+
+            onEscapePressed?.Invoke();
         }
     }
 }
