@@ -55,15 +55,28 @@ public class DoorInteractable : InteractableObject
         currentState?.Interact();
     }
 
+    // OnEnterRange/OnExitRange now only control isActive; prompt visibility
+    // is handled by ShowPromptForPlayer/HidePromptForPlayer called by the detector.
     public override void OnEnterRange()
     {
         isActive = true;
-        ShowPromptForCurrentState();
     }
 
     public override void OnExitRange()
     {
         isActive = false;
+        HidePrompts();
+    }
+
+    public override void ShowPromptForPlayer(Transform player)
+    {
+        // store player for existing ShowPromptForSide logic, then show proper prompt
+        this.player = player;
+        ShowPromptForCurrentState();
+    }
+
+    public override void HidePromptForPlayer()
+    {
         HidePrompts();
     }
 

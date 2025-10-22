@@ -7,6 +7,9 @@ public abstract class InteractableObject : MonoBehaviour, IInteractable
     [SerializeField] protected string lockedText = "HACK";
     protected InteractionPromptUI promptUI;
 
+    // track whether this object is currently in range of a player (set by detector)
+    protected bool isInRange;
+
     protected virtual void Awake()
     {
         promptUI = GetComponent<InteractionPromptUI>();
@@ -18,13 +21,30 @@ public abstract class InteractableObject : MonoBehaviour, IInteractable
 
     public abstract void Interact();
 
+    // keep these so objects can react to being in range, but DO NOT show UI here anymore
     public virtual void OnEnterRange()
     {
-        promptUI.Show(interactText);
+        isInRange = true;
     }
 
     public virtual void OnExitRange()
     {
-        promptUI.Hide();
+        isInRange = false;
+        // ensure prompt hidden when truly leaving range
+        HidePromptForPlayer();
+    }
+
+    // New API: show/hide prompt for a specific player (player Transform provided
+    // so interactables like DoorInteractable can choose front/back)
+    public virtual void ShowPromptForPlayer(Transform player)
+    {
+        if (promptUI != null)
+            promptUI.Show(GetInteractText());
+    }
+
+    public virtual void HidePromptForPlayer()
+    {
+        if (promptUI != null)
+            promptUI.Hide();
     }
 }

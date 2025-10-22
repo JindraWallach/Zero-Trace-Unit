@@ -12,18 +12,6 @@ public class PlayerInteractionDetector : MonoBehaviour
     private IInteractable currentTarget;
     private InputReader inputReader;
 
-    private void Awake()
-    {
-        var sc = GetComponent<SphereCollider>();
-        if (sc == null)
-            Debug.LogError("PlayerInteractionDetector: Missing SphereCollider (RequireComponent should ensure it).");
-        else if (!sc.isTrigger)
-            Debug.LogWarning("PlayerInteractionDetector: SphereCollider.isTrigger is false. Trigger events require a trigger collider. Set isTrigger = true in the inspector.");
-
-        if (GetComponent<Rigidbody>() == null)
-            Debug.LogWarning("PlayerInteractionDetector: No Rigidbody found on this GameObject. For trigger events at least one collider in the pair must have a Rigidbody (kinematic is OK).");
-    }
-
     private void OnDisable()
     {
         if (inputReader != null)
@@ -38,41 +26,24 @@ public class PlayerInteractionDetector : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log($"OnTriggerEnter: {other.gameObject.name} (layer {other.gameObject.layer})");
-        if (!IsInLayerMask(other.gameObject.layer, interactableLayers))
-        {
-            Debug.LogWarning($"OnTriggerEnter: {other.gameObject.name} is not in interactableLayers.");
-            return;
-        }
+        if (!IsInLayerMask(other.gameObject.layer, interactableLayers)) return;
+        if (!other.TryGetComponent(out IInteractable interactable)) return;
 
-        if (!other.TryGetComponent(out IInteractable interactable))
-        {
-            Debug.LogWarning($"OnTriggerEnter: {other.gameObject.name} does not implement IInteractable.");
-            return;
-        }
+        // notify object it's in range (used for logic like isActive) but do NOT show its UI here
+        interactable.OnEnterRange();
 
         if (!interactablesInRange.Contains(interactable))
         {
-            interactable.OnEnterRange();
             interactablesInRange.Add(interactable);
             UpdateCurrentTarget();
-        }
-        else
-        {
-            Debug.LogWarning($"OnTriggerEnter: {other.gameObject.name} already in range list.");
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        Debug.Log($"OnTriggerEnter: {other.name} layer = {LayerMask.LayerToName(other.gameObject.layer)}");
+        if (!other.TryGetComponent(out IInteractable interactable)) return;
 
-        if (!other.TryGetComponent(out IInteractable interactable))
-        {
-            Debug.Log($"OnTriggerExit: {other.gameObject.name} does not implement IInteractable.");
-            return;
-        }
-
+        // notify object left range (also ensures prompt hidden)
         interactable.OnExitRange();
         interactablesInRange.Remove(interactable);
         UpdateCurrentTarget();
@@ -83,22 +54,29 @@ public class PlayerInteractionDetector : MonoBehaviour
         // remove destroyed/null entries
         interactablesInRange.RemoveAll(i => i == null);
 
-        Debug.Log($"Updating current interactable target. Count = {interactablesInRange.Count}");
-
         if (interactablesInRange.Count == 0)
         {
-            currentTarget = null;
-            Debug.Log("No interactables in range -> currentTarget cleared.");
+            // hide prompt on previous target
+            if (currentTarget != null)
+            {
+                if (currentTarget is InteractableObject ioPrev)
+                    ioPrev.HidePromptForPlayer();
+                else
+                    currentTarget.OnExitRange();
+
+                currentTarget = null;
+            }
             return;
         }
 
+        // find nearest
         float minDist = float.MaxValue;
         IInteractable nearest = null;
 
         foreach (var i in interactablesInRange)
         {
             var mb = i as MonoBehaviour;
-            if (mb == null) continue; // safety
+            if (mb == null) continue;
 
             float dist = Vector3.Distance(transform.position, mb.transform.position);
             if (dist < minDist)
@@ -108,20 +86,35 @@ public class PlayerInteractionDetector : MonoBehaviour
             }
         }
 
-        currentTarget = nearest;
-        Debug.Log($"Selected currentTarget = {(nearest as MonoBehaviour)?.gameObject.name ?? "null"} at distance {minDist}");
+        // if nearest changed, update prompts
+        if (nearest != currentTarget)
+        {
+            // hide previous
+            if (currentTarget != null)
+            {
+                if (currentTarget is InteractableObject ioPrev)
+                    ioPrev.HidePromptForPlayer();
+                else
+                    currentTarget.OnExitRange();
+            }
+
+            currentTarget = nearest;
+
+            // show prompt for new nearest
+            if (currentTarget != null)
+            {
+                if (currentTarget is InteractableObject ioNew)
+                    ioNew.ShowPromptForPlayer(transform);
+                else
+                    currentTarget.OnEnterRange();
+            }
+        }
     }
 
     private void TryInteract()
     {
         Debug.Log($"Trying to interact with current target {currentTarget}");
-        if (currentTarget == null)
-        {
-            Debug.Log("TryInteract: currentTarget is null. No interaction performed.");
-            return;
-        }
-
-        currentTarget.Interact();
+        currentTarget?.Interact();
     }
 
     private bool IsInLayerMask(int layer, LayerMask mask)
