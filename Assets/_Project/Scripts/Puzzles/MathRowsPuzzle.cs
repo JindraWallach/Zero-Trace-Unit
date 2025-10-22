@@ -7,14 +7,16 @@ using UnityEngine.UI;
 public class MathRowsPuzzle : MonoBehaviour, IPuzzle
 {
     [Header("Layout")]
-    public int rows = 2;
-    public int cols = 2;
+    [Tooltip("Number of rows to generate (min 1)")]
+    [Min(1)]
+    public int rows = 5;
+
     public RectTransform gridParent; // parent for cell instances
     public GameObject cellPrefab;    // prefab with MathRowUI component
     public GameObject digitButtonPrefab; // prefab for single digit Button (with TMP child)
 
     [Header("Expressions (optional)")]
-    // If empty, example expressions will be generated to fill rows*cols.
+    // If empty, example expressions will be generated to fill rows.
     public List<string> expressions = new List<string>();
 
     // Public event consumers can subscribe to:
@@ -32,12 +34,18 @@ public class MathRowsPuzzle : MonoBehaviour, IPuzzle
         if (generateOnStart) Generate();
     }
 
-    // Create grid and cells
+    private void OnValidate()
+    {
+        // ensure rows is at least 1 even if user types 0 or negative in Inspector
+        if (rows < 1) rows = 1;
+    }
+
+    // Create rows (previously grid). Count equals rows now.
     public void Generate()
     {
         ClearExisting();
 
-        int count = rows * cols;
+        int count = rows; // generate rows-only (not rows * cols)
         EnsureExpressions(count);
         solved = new bool[count];
         targets.Clear();

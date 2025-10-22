@@ -124,8 +124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85e7ff4efed28b347953fd13eff92026, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MathRowsPuzzle
-  rows: 2
-  cols: 2
+  rows: 8
   gridParent: {fileID: 5475042891306505908}
   cellPrefab: {fileID: 6125685624902048240, guid: 1c753933d941a894699d44e35decc126, type: 3}
   digitButtonPrefab: {fileID: 8880249601076346761, guid: b0c88400700b4b94e9c7a648a34ba2e2, type: 3}
