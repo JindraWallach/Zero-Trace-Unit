@@ -41,13 +41,13 @@ public class PlayerInteractionDetector : MonoBehaviour
         Debug.Log($"OnTriggerEnter: {other.gameObject.name} (layer {other.gameObject.layer})");
         if (!IsInLayerMask(other.gameObject.layer, interactableLayers))
         {
-            Debug.Log($"OnTriggerEnter: {other.gameObject.name} is not in interactableLayers.");
+            Debug.LogWarning($"OnTriggerEnter: {other.gameObject.name} is not in interactableLayers.");
             return;
         }
 
         if (!other.TryGetComponent(out IInteractable interactable))
         {
-            Debug.Log($"OnTriggerEnter: {other.gameObject.name} does not implement IInteractable.");
+            Debug.LogWarning($"OnTriggerEnter: {other.gameObject.name} does not implement IInteractable.");
             return;
         }
 
@@ -59,7 +59,7 @@ public class PlayerInteractionDetector : MonoBehaviour
         }
         else
         {
-            Debug.Log($"OnTriggerEnter: {other.gameObject.name} already in range list.");
+            Debug.LogWarning($"OnTriggerEnter: {other.gameObject.name} already in range list.");
         }
     }
 
