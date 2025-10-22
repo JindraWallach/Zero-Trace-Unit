@@ -56,10 +56,10 @@ MonoBehaviour:
   m_ChildAlignment: 4
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 50, y: 50}
+  m_CellSize: {x: 80, y: 400}
   m_Spacing: {x: 20, y: 20}
-  m_Constraint: 0
-  m_ConstraintCount: 2
+  m_Constraint: 2
+  m_ConstraintCount: 1
 --- !u!1 &5618843779435604823
 GameObject:
   m_ObjectHideFlags: 0
@@ -115,4 +115,4 @@ MonoBehaviour:
   cellPrefab: {fileID: 6125685624902048240, guid: 1c753933d941a894699d44e35decc126, type: 3}
   digitButtonPrefab: {fileID: 8880249601076346761, guid: b0c88400700b4b94e9c7a648a34ba2e2, type: 3}
   expressions: []
-  generateOnStart: 0
+  generateOnStart: 1

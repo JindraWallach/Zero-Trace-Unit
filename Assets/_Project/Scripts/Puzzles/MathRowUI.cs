@@ -40,6 +40,7 @@ public class MathRowUI : MonoBehaviour
 
     private void OnButtonClicked(int digit)
     {
+        Debug.Log($"MathRowUI index {index} submitted digit {digit}");
         submitCallback?.Invoke(index, digit);
     }
 
