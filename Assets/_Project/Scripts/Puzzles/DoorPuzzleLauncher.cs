@@ -60,11 +60,9 @@ public class DoorPuzzleLauncher : MonoBehaviour, IInitializable
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
 
-        // Do NOT entirely disable the InputReader component here.
-        // Disabling it would stop it from raising onEscapePressed and similar events
-        // which puzzles (like MathRowsPuzzle) subscribe to for cancellation.
-        // if (inputReaderToDisable != null)
-        //     inputReaderToDisable.enabled = false;
+        // Block gameplay input but keep Exit (Escape) active
+        if (inputReaderToDisable != null)
+            inputReaderToDisable.DisableInputs(new[] { "Exit" });
 
         if (cameraControllerToDisable != null)
             cameraControllerToDisable.enabled = false;
@@ -89,10 +87,9 @@ public class DoorPuzzleLauncher : MonoBehaviour, IInitializable
             currentInstance = null;
             currentPuzzle = null;
 
-            // restore camera/UI/cursor
-            // Do not touch inputReader here either.
-            // if (inputReaderToDisable != null)
-            //     inputReaderToDisable.enabled = true;
+            // restore input/camera/UI/cursor
+            if (inputReaderToDisable != null)
+                inputReaderToDisable.EnableAllInputs();
 
             if (cameraControllerToDisable != null)
                 cameraControllerToDisable.enabled = true;
@@ -113,16 +110,19 @@ public class DoorPuzzleLauncher : MonoBehaviour, IInitializable
         Action cancelHandler = null;
         cancelHandler = () =>
         {
+            // unsubscribe both handlers to avoid leaks / unexpected callbacks
             try { currentPuzzle.OnPuzzleCancelled -= cancelHandler; } catch { }
+            try { currentPuzzle.OnPuzzleSuccess -= handler; } catch { }
+
             // cleanup without calling success callback (treat as failure/cancel)
             try { currentPuzzle.Hide(); } catch { }
             Destroy(currentInstance);
             currentInstance = null;
             currentPuzzle = null;
 
-            // Do not re-enable inputReader here because we never disabled it.
-            // if (inputReaderToDisable != null)
-            //     inputReaderToDisable.enabled = true;
+            // restore input/camera/UI/cursor (re-enable inputs that were disabled)
+            if (inputReaderToDisable != null)
+                inputReaderToDisable.EnableAllInputs();
 
             if (cameraControllerToDisable != null)
                 cameraControllerToDisable.enabled = true;

@@ -6,6 +6,8 @@
 // Sample scripts are included only as examples and are not intended as production-ready.
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
@@ -21,6 +23,13 @@ namespace Synty.AnimationBaseLocomotion.Samples.InputSystem
         public bool _movementInputDetected;
 
         private Controls _controls;
+
+        // Per-action access
+        private readonly Dictionary<string, InputAction> actions = new Dictionary<string, InputAction>(StringComparer.OrdinalIgnoreCase);
+
+        // Optional override; if empty, we will read names from the map at runtime
+        [SerializeField]
+        private string[] actionNames = Array.Empty<string>();
 
         public Action onAimActivated;
         public Action onAimDeactivated;
@@ -52,6 +61,10 @@ namespace Synty.AnimationBaseLocomotion.Samples.InputSystem
                 _controls.Player.SetCallbacks(this);
             }
 
+            // ensure action dictionary is populated
+            PopulateActionDictionary();
+
+            // enable player map
             _controls.Player.Enable();
         }
 
@@ -61,138 +74,207 @@ namespace Synty.AnimationBaseLocomotion.Samples.InputSystem
             _controls.Player.Disable();
         }
 
-        /// <summary>
-        ///     Defines the action to perform when the OnLook callback is called.
-        /// </summary>
-        /// <param name="context">The context of the callback.</param>
+        // Call this from the Inspector context menu or at runtime to refresh actionNames from the Player map
+        [ContextMenu("Refresh Action Names from Player Map")]
+        private void RefreshActionNames()
+        {
+            if (_controls == null) _controls = new Controls();
+            var map = _controls.Player.Get();
+            if (map == null)
+            {
+                actionNames = Array.Empty<string>();
+                return;
+            }
+
+            actionNames = map.actions
+                             .Where(a => a != null)
+                             .Select(a => a.name)
+                             .ToArray();
+
+            // keep dictionary in sync
+            PopulateActionDictionary();
+        }
+
+        // Expose current resolved names for other systems (optional)
+        public IReadOnlyList<string> GetResolvedActionNames()
+            => actionNames ?? Array.Empty<string>();
+
+        // Build dictionary by looking up actions in the generated Player action map.
+        // This lets the launcher selectively Enable/Disable individual InputAction instances
+        // while still using SetCallbacks(this) to receive callbacks.
+        private void PopulateActionDictionary()
+        {
+            actions.Clear();
+
+            try
+            {
+                var map = _controls.Player.Get();
+                if (map == null) return;
+
+                if (actionNames != null && actionNames.Length > 0)
+                {
+                    foreach (var name in actionNames.Where(n => !string.IsNullOrWhiteSpace(n)))
+                    {
+                        var a = map.FindAction(name, false);
+                        if (a != null && !actions.ContainsKey(name))
+                            actions[name] = a;
+                    }
+                }
+                else
+                {
+                    foreach (var a in map.actions)
+                    {
+                        if (a == null) continue;
+                        if (!actions.ContainsKey(a.name))
+                            actions[a.name] = a;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                // safe no-op
+                Debug.LogWarning("InputReader: Failed to populate action dictionary.");
+            }
+        }
+
+        // Use: inputReader.DisableInputs(new[] { "Exit" });
+        public void DisableInputs(IEnumerable<string> excludedActions = null)
+        {
+            if (actions.Count == 0) PopulateActionDictionary();
+
+            var excluded = excludedActions == null
+                ? Array.Empty<string>()
+                : excludedActions.Select(e => e ?? string.Empty).ToArray();
+
+            foreach (var kv in actions)
+            {
+                if (excluded.Contains(kv.Key, StringComparer.OrdinalIgnoreCase))
+                    continue;
+
+                try { kv.Value.Disable(); }
+                catch { /* ignore invalid state */ }
+            }
+        }
+
+        public void EnableInputs(IEnumerable<string> onlyThese = null)
+        {
+            if (actions.Count == 0) PopulateActionDictionary();
+
+            if (onlyThese == null)
+            {
+                foreach (var a in actions.Values)
+                {
+                    try { a.Enable(); } catch { }
+                }
+
+                return;
+            }
+
+            var only = onlyThese.Select(e => e ?? string.Empty).ToArray();
+            foreach (var kv in actions)
+            {
+                if (only.Contains(kv.Key, StringComparer.OrdinalIgnoreCase))
+                {
+                    try { kv.Value.Enable(); } catch { }
+                }
+                else
+                {
+                    try { kv.Value.Disable(); } catch { }
+                }
+            }
+        }
+
+        public void DisableAllExcept(IEnumerable<string> allowed)
+        {
+            if (actions.Count == 0) PopulateActionDictionary();
+            var allow = allowed?.Select(a => a ?? string.Empty).ToArray() ?? Array.Empty<string>();
+
+            foreach (var kv in actions)
+            {
+                if (allow.Contains(kv.Key, StringComparer.OrdinalIgnoreCase))
+                {
+                    try { kv.Value.Enable(); } catch { }
+                }
+                else
+                {
+                    try { kv.Value.Disable(); } catch { }
+                }
+            }
+        }
+
+        public void EnableAllInputs()
+        {
+            if (actions.Count == 0) PopulateActionDictionary();
+            foreach (var a in actions.Values)
+            {
+                try { a.Enable(); } catch { }
+            }
+        }
+
+        // Existing callback implementations (unchanged logic)
         public void OnLook(InputAction.CallbackContext context)
         {
             _mouseDelta = context.ReadValue<Vector2>();
         }
 
-        /// <summary>
-        ///     Defines the action to perform when the OnMove callback is called.
-        /// </summary>
-        /// <param name="context">The context of the callback.</param>
         public void OnMove(InputAction.CallbackContext context)
         {
             _moveComposite = context.ReadValue<Vector2>();
             _movementInputDetected = _moveComposite.magnitude > 0;
         }
 
-        /// <summary>
-        ///     Defines the action to perform when the OnJump callback is called.
-        /// </summary>
-        /// <param name="context">The context of the callback.</param>
         public void OnJump(InputAction.CallbackContext context)
         {
-            if (!context.performed)
-            {
-                return;
-            }
-
+            if (!context.performed) return;
             onJumpPerformed?.Invoke();
         }
 
-        /// <summary>
-        ///     Defines the action to perform when the OnToggleWalk callback is called.
-        /// </summary>
-        /// <param name="context">The context of the callback.</param>
         public void OnToggleWalk(InputAction.CallbackContext context)
         {
-            if (!context.performed)
-            {
-                return;
-            }
-
+            if (!context.performed) return;
             onWalkToggled?.Invoke();
         }
 
-        /// <summary>
-        ///     Defines the action to perform when the OnSprint callback is called.
-        /// </summary>
-        /// <param name="context">The context of the callback.</param>
         public void OnSprint(InputAction.CallbackContext context)
         {
-            if (context.started)
-            {
-                onSprintActivated?.Invoke();
-            }
-            else if (context.canceled)
-            {
-                onSprintDeactivated?.Invoke();
-            }
+            if (context.started) onSprintActivated?.Invoke();
+            else if (context.canceled) onSprintDeactivated?.Invoke();
         }
 
-        /// <summary>
-        ///     Defines the action to perform when the OnCrouch callback is called.
-        /// </summary>
-        /// <param name="context">The context of the callback.</param>
         public void OnCrouch(InputAction.CallbackContext context)
         {
-            if (context.started)
-            {
-                onCrouchActivated?.Invoke();
-            }
-            else if (context.canceled)
-            {
-                onCrouchDeactivated?.Invoke();
-            }
+            if (context.started) onCrouchActivated?.Invoke();
+            else if (context.canceled) onCrouchDeactivated?.Invoke();
         }
 
-        /// <summary>
-        ///     Defines the action to perform when the OnAim callback is called.
-        /// </summary>
-        /// <param name="context">The context of the callback.</param>
         public void OnAim(InputAction.CallbackContext context)
         {
-            if (context.started)
-            {
-                onAimActivated?.Invoke();
-            }
-
-            if (context.canceled)
-            {
-                onAimDeactivated?.Invoke();
-            }
+            if (context.started) onAimActivated?.Invoke();
+            if (context.canceled) onAimDeactivated?.Invoke();
         }
 
-        /// <summary>
-        ///     Defines the action to perform when the OnLockOn callback is called.
-        /// </summary>
-        /// <param name="context">The context of the callback.</param>
         public void OnLockOn(InputAction.CallbackContext context)
         {
-            if (!context.performed)
-            {
-                return;
-            }
-
+            if (!context.performed) return;
             onLockOnToggled?.Invoke();
             onSprintDeactivated?.Invoke();
         }
 
         public void OnToggleFlashlight(InputAction.CallbackContext context)
         {
-            if (!context.performed)
-                return;
-
+            if (!context.performed) return;
             onFlashlightToggled?.Invoke();
         }
 
         public void OnInteract(InputAction.CallbackContext context)
         {
-            if (!context.performed)
-                return;
-
+            if (!context.performed) return;
             onInteract?.Invoke();
         }
 
         public void OnExit(InputAction.CallbackContext context)
         {
-            if (!context.performed)
-                return;
-
+            if (!context.performed) return;
             onEscapePressed?.Invoke();
         }
     }
