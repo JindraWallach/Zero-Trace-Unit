@@ -2963,7 +2963,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1869086931}
+  - {fileID: 1393077298}
   m_Father: {fileID: 547193375}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -9890,6 +9890,11 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &906790554 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1543695114780030, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+  m_PrefabInstance: {fileID: 2104556699}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &907452363
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11693,66 +11698,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4638214938860756, guid: e328a56effc821a4db02309cf510e998, type: 3}
   m_PrefabInstance: {fileID: 1078631960}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1080616202
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1080616203}
-  - component: {fileID: 1080616204}
-  m_Layer: 5
-  m_Name: GridParent
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1080616203
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1080616202}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1869086931}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1080616204
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1080616202}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.GridLayoutGroup
-  m_Padding:
-    m_Left: 0
-    m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
-  m_ChildAlignment: 4
-  m_StartCorner: 0
-  m_StartAxis: 0
-  m_CellSize: {x: 50, y: 50}
-  m_Spacing: {x: 20, y: 20}
-  m_Constraint: 0
-  m_ConstraintCount: 2
 --- !u!1001 &1080788822
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15090,6 +15035,41 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4336258481357848, guid: 7cf2eb63fa2d99243b2fa1a263c7081b, type: 3}
   m_PrefabInstance: {fileID: 1369878275}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1393077297
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1393077298}
+  m_Layer: 5
+  m_Name: Puzzles
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1393077298
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1393077297}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 232486519}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &1393560434
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19855,62 +19835,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4171445653160714, guid: 7eecc3884fdf1a54796bc19d450d5ec3, type: 3}
   m_PrefabInstance: {fileID: 1865575450}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1869086930
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1869086931}
-  - component: {fileID: 1869086932}
-  m_Layer: 5
-  m_Name: VovPuzzle
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1869086931
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1869086930}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1080616203}
-  m_Father: {fileID: 232486519}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 800, y: 600}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1869086932
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1869086930}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85e7ff4efed28b347953fd13eff92026, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MathRowsPuzzle
-  rows: 2
-  cols: 2
-  gridParent: {fileID: 1080616203}
-  cellPrefab: {fileID: 6125685624902048240, guid: 1c753933d941a894699d44e35decc126, type: 3}
-  digitButtonPrefab: {fileID: 8880249601076346761, guid: b0c88400700b4b94e9c7a648a34ba2e2, type: 3}
-  expressions: []
-  generateOnStart: 0
 --- !u!1001 &1869347369
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22898,7 +22822,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1543695114780030, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+      insertIndex: 6
+      addedObject: {fileID: 2104556712}
   m_SourcePrefab: {fileID: 100100000, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
 --- !u!4 &2104556700 stripped
 Transform:
@@ -22910,12 +22837,26 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2963774249556382902, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
   m_PrefabInstance: {fileID: 2104556699}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 906790554}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 42308a05fcd841d45b8bf5ce54723334, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorInteractable
+--- !u!114 &2104556712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 906790554}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a17c58e49df0e349bd412f8a4d1471f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DoorPuzzleLauncher
+  puzzleDefinition: {fileID: 11400000, guid: 4d189acc318cbb44f8f551920274ae0e, type: 2}
+  instantiateParent: {fileID: 1393077298}
 --- !u!1001 &2112622973
 PrefabInstance:
   m_ObjectHideFlags: 0
