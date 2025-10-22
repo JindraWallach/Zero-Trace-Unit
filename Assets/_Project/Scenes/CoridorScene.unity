@@ -24452,7 +24452,7 @@ MonoBehaviour:
   _playerTarget: {fileID: 0}
   _lockOnTarget: {fileID: 0}
   _invertCamera: 0
-  _hideCursor: 1
+  _hideCursor: 0
   _isLockedOn: 0
   _mouseSensitivity: 0.3
   _cameraDistance: 2.5

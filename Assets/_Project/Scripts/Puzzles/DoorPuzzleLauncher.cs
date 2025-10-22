@@ -1,19 +1,14 @@
 using System;
 using UnityEngine;
-
-// Attach this to the same GameObject as DoorInteractable.
-// Configure the PuzzleDefinition in the inspector per-door.
 public class DoorPuzzleLauncher : MonoBehaviour
 {
     [Header("Puzzle")]
     public PuzzleDefinition puzzleDefinition;
-    // optional parent for instantiated puzzle (e.g., a UI canvas). Leave null to instantiate at root.
     public Transform instantiateParent;
 
     private GameObject currentInstance;
     private IPuzzle currentPuzzle;
 
-    // Returns true if a puzzle was started.
     public bool TryStartPuzzle(Action onSuccess)
     {
         if (puzzleDefinition == null || puzzleDefinition.puzzlePrefab == null)
