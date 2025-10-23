@@ -108,17 +108,17 @@ public class MathRowsPuzzle : MonoBehaviour, IPuzzle, IInitializable
             case 0: // plus (possibly negative operand)
                 a = UnityEngine.Random.Range(-5, 21); // allow some negatives
                 b = UnityEngine.Random.Range(0, 21);
-                return $"{a} + {b}";
+                return $"|{a} + {b}|";
 
             case 1: // minus (avoid leading negative literal which the simple parser can't handle)
                 a = UnityEngine.Random.Range(0, 21);
                 b = UnityEngine.Random.Range(0, 21);
-                return $"{a} - {b}";
+                return $"|{a} - {b}|";
 
             case 2: // modulo (ensure divisor != 0)
                 a = UnityEngine.Random.Range(0, 50);
                 b = UnityEngine.Random.Range(1, 10);
-                return $"{a} % {b}";
+                return $"|{a} % {b}|";
 
             default: // absolute difference
                 a = UnityEngine.Random.Range(0, 21);
@@ -151,8 +151,7 @@ public class MathRowsPuzzle : MonoBehaviour, IPuzzle, IInitializable
         }
         else
         {
-            // wrong answer — reset row or give feedback
-            cells[index].FlashWrong(); // visual feedback method (optional)
+            CancelPuzzle();
         }
     }
 
