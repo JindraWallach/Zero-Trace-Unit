@@ -521,7 +521,38 @@ MonoBehaviour:
   items:
   - name: 'Fog: Hex: 7CB1CF'
     done: 0
+  - name: "Zm\u011Bna bohuzel celeho hack sys (Hlavne UI ale i UX) + Zlep\u0161en\xED
+      nestatickeho designu hack tabulky?"
+    done: 0
+  - name: "Opraven\xED textu hacku, pokud pot\u0159eba? Hack bude nejsp\xED\u0161e
+      anim + prefab + spojen\xED?"
+    done: 0
+  - name: "Zlep\u0161en\xED z\xE1bavnosti hran\xED (ka\u017Ed\xFD dve\u0159e hack?),
+      Spr\xE1vn\xFD lock sys, co dve\u0159e ktere nemaj\xED mit autolock?"
+    done: 0
+  - name: "Indikator UI Locker dve\u0159\xED? Red Color? Blender"
+    done: 0
+  - name: "Spr\xE1vn\xE1 implementace lock systemu, co dve\u0159e ktere nemaj\xED
+      mit autolock?"
+    done: 0
+  - name: SRP
+    done: 0
+  - name: "1. P\u0159id\xE1n\xED minim\xE1ln\u011B jednoho nep\u0159\xEDtele s patrolling
+      logikou"
+    done: 0
+  - name: "1.1. nastaven\xED 1 patroll trasy a vytvo\u0159en\xED state machine patternu
+      pro nep\u0159\xE1tel\xE9"
+    done: 0
+  - name: "1.2. POV detekce hr\xE1\u010De nep\u0159\xEDtelem"
+    done: 0
+  - name: "2. Implementace kamery (vlastn\xED POV, detekce hr\xE1\u010De, indik\xE1tor)"
+    done: 0
+  - name: "3. Implementace menu a nastaven\xED (Start Game, Settings, Exit)"
+    done: 0
   - name: 
+    done: 0
+  - name: "Vy\u0159e\u0161en\xED baterky na UI hr\xE1\u010Di (pro\u010D m\xE1m baterku,
+      kter\xE1 nen\xED videt na charakteru?)"
     done: 0
 --- !u!4 &36559939
 Transform:
@@ -9474,7 +9505,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 9.099976, y: -28.684998}
+  m_AnchoredPosition: {x: 9.100098, y: -28.684937}
   m_SizeDelta: {x: 1208.4, y: 112.39005}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &884664537
