@@ -151,6 +151,7 @@ public class DoorInteractable : InteractableObject, IInitializable
     // Called by the hack system (or DoorLockedState.Interact simulation) to indicate hack success
     public void OnHackSuccess()
     {
+
         Unlock();
     }
 
@@ -223,6 +224,7 @@ public class DoorInteractable : InteractableObject, IInitializable
 
     public void HidePrompts()
     {
+        Debug.Log("Hiding door prompts.");
         promptFront.Hide();
         promptBack.Hide();
     }

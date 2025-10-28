@@ -139,6 +139,8 @@ public class DoorPuzzleLauncher : MonoBehaviour, IInitializable
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
 
+
+
             Debug.Log("Puzzle cancelled via ESC.");
         };
 

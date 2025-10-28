@@ -18,8 +18,7 @@ public class DoorLockedState : DoorState
         door.HidePrompts();
     }
 
-    // When interacting, try to launch the per-door puzzle (via DoorPuzzleLauncher).
-    // If none configured, fallback to simulated hack success.
+
     public override void Interact()
     {
         door.HidePrompts();
@@ -36,7 +35,6 @@ public class DoorLockedState : DoorState
             if (started) return;
         }
 
-        // fallback: no configured puzzle -> simulate hack success
         Debug.Log("No puzzle configured on this door; simulating hack success.");
         door.OnHackSuccess();
     }
