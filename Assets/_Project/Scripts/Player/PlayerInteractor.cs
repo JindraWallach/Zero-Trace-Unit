@@ -1,80 +1,124 @@
-using UnityEngine;
+using Synty.AnimationBaseLocomotion.Samples.InputSystem;
 using System.Collections.Generic;
+using UnityEngine;
 
-public class PlayerInteractor : MonoBehaviour, IInitializable
+[RequireComponent(typeof(SphereCollider))]
+public class PlayerInteractor : MonoBehaviour
 {
-    [Header("Detection")]
-    public LayerMask interactableLayerMask = -1;
-    public float maxInteractDistance = 3f;
+    [Header("References")]
+    [SerializeField] private LayerMask interactableLayers;
 
-    private List<IInteractable> inRangeTargets = new List<IInteractable>();
-    private DependencyInjector di;
+    private readonly List<IInteractable> interactablesInRange = new();
+    private IInteractable currentTarget;
+    private InputReader inputReader;
 
-    public void Initialize(DependencyInjector dependencyInjector)
+    private void OnDisable()
     {
-        di = dependencyInjector;
+        if (inputReader != null)
+            inputReader.onInteract -= TryInteract;
+    }
+
+    public void Initialize(InputReader reader)
+    {
+        inputReader = reader;
+        inputReader.onInteract += TryInteract;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (IsOnLayer(other.gameObject.layer))
+        if (!IsInLayerMask(other.gameObject.layer, interactableLayers)) return;
+        if (!other.TryGetComponent(out IInteractable interactable)) return;
+
+        // notify object it's in range (used for logic like isActive) but do NOT show its UI here
+        interactable.OnEnterRange();
+
+        if (!interactablesInRange.Contains(interactable))
         {
-            var interactable = other.GetComponent<IInteractable>();
-            if (interactable != null && !inRangeTargets.Contains(interactable))
-            {
-                inRangeTargets.Add(interactable);
-                interactable.OnEnterRange(gameObject);
-            }
+            interactablesInRange.Add(interactable);
+            UpdateCurrentTarget();
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (IsOnLayer(other.gameObject.layer))
+        if (!other.TryGetComponent(out IInteractable interactable)) return;
+
+        // notify object left range (also ensures prompt hidden)
+        interactable.OnExitRange();
+        interactablesInRange.Remove(interactable);
+        UpdateCurrentTarget();
+    }
+
+    private void UpdateCurrentTarget()
+    {
+        // remove destroyed/null entries
+        interactablesInRange.RemoveAll(i => i == null);
+
+        if (interactablesInRange.Count == 0)
         {
-            var interactable = other.GetComponent<IInteractable>();
-            if (interactable != null && inRangeTargets.Contains(interactable))
+            // hide prompt on previous target
+            if (currentTarget != null)
             {
-                inRangeTargets.Remove(interactable);
-                interactable.OnExitRange(gameObject);
+                if (currentTarget is InteractableObject ioPrev)
+                    ioPrev.HidePromptForPlayer();
+                else
+                    currentTarget.OnExitRange();
+
+                currentTarget = null;
             }
+            return;
         }
-    }
 
-    public void TryInteract()
-    {
-        var target = GetNearestTarget();
-        if (target != null)
-        {
-            target.Interact(gameObject);
-        }
-    }
-
-    private IInteractable GetNearestTarget()
-    {
-        if (inRangeTargets.Count == 0) return null;
-
+        // find nearest
+        float minDist = float.MaxValue;
         IInteractable nearest = null;
-        float nearestDistance = float.MaxValue;
 
-        foreach (var target in inRangeTargets)
+        foreach (var i in interactablesInRange)
         {
-            var targetTransform = (target as Component)?.transform;
-            if (targetTransform == null) continue;
+            var mb = i as MonoBehaviour;
+            if (mb == null) continue;
 
-            float distance = Vector3.Distance(transform.position, targetTransform.position);
-            if (distance < nearestDistance && distance <= maxInteractDistance)
+            float dist = Vector3.Distance(transform.position, mb.transform.position);
+            if (dist < minDist)
             {
-                nearestDistance = distance;
-                nearest = target;
+                minDist = dist;
+                nearest = i;
             }
         }
 
-        return nearest;
+        // if nearest changed, update prompts
+        if (nearest != currentTarget)
+        {
+            // hide previous
+            if (currentTarget != null)
+            {
+                if (currentTarget is InteractableObject ioPrev)
+                    ioPrev.HidePromptForPlayer();
+                else
+                    currentTarget.OnExitRange();
+            }
+
+            currentTarget = nearest;
+
+            // show prompt for new nearest
+            if (currentTarget != null)
+            {
+                if (currentTarget is InteractableObject ioNew)
+                    ioNew.ShowPromptForPlayer(transform);
+                else
+                    currentTarget.OnEnterRange();
+            }
+        }
     }
 
-    private bool IsOnLayer(int layer)
+    private void TryInteract()
     {
-        return (interactableLayerMask.value & (1 << layer)) != 0;
+        Debug.Log($"Trying to interact with current target {currentTarget}");
+        currentTarget?.Interact();
+    }
+
+    private bool IsInLayerMask(int layer, LayerMask mask)
+    {
+        return (mask & (1 << layer)) != 0;
     }
 }

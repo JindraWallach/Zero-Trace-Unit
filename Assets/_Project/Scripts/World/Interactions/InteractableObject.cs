@@ -19,15 +19,15 @@ public abstract class InteractableObject : MonoBehaviour, IInteractable
 
     public virtual string GetLockedText() => lockedText;
 
-    public abstract void Interact(GameObject player);
+    public abstract void Interact();
 
     // keep these so objects can react to being in range, but DO NOT show UI here anymore
-    public virtual void OnEnterRange(GameObject player)
+    public virtual void OnEnterRange()
     {
         isInRange = true;
     }
 
-    public virtual void OnExitRange(GameObject player)
+    public virtual void OnExitRange()
     {
         isInRange = false;
         // ensure prompt hidden when truly leaving range
