@@ -8,6 +8,7 @@ public class HackModeController : MonoBehaviour
 {
     [Header("Visual Effects")]
     [SerializeField] private GameObject hackModePostProcess;
+    [Tooltip("IF needed 2nd Camera")]
     [SerializeField] private Camera hackCamera;
 
     private bool isActive;

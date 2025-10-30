@@ -33,9 +33,10 @@ public class HackableDoor : InteractableBase, IHackTarget, IInitializable
         HackManager.Instance?.RegisterTarget(this);
     }
 
-    private void OnDestroy()
+    protected override void OnDestroy()
     {
         HackManager.Instance?.UnregisterTarget(this);
+        base.OnDestroy();
     }
 
     public override void Interact()

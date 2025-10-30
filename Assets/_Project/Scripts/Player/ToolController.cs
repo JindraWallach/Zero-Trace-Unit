@@ -13,6 +13,7 @@ public class ToolController : MonoBehaviour
 
     [Header("Scan Settings")]
     [SerializeField] private float scanRadius = 15f;
+    [Tooltip("Currently Interactible layer")]
     [SerializeField] private LayerMask hackableLayer;
 
     private readonly List<IHackTarget> scannedTargets = new();

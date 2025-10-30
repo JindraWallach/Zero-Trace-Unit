@@ -12,9 +12,11 @@ GameObject:
   - component: {fileID: 33357041334664418}
   - component: {fileID: 23240524022881482}
   - component: {fileID: 64522215438127986}
-  - component: {fileID: 5145990446593160846}
   - component: {fileID: 2963774249556382902}
+  - component: {fileID: -3455294810283630252}
+  - component: {fileID: 7371815972592028288}
   - component: {fileID: 4930989083550011045}
+  - component: {fileID: 5784717074846145434}
   - component: {fileID: 8352087749016847735}
   m_Layer: 6
   m_Name: SM_Bld_Wall_Doorframe_02
@@ -119,20 +121,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: d15e6ce658984be4dba714b6201bc4d3, type: 3}
---- !u!114 &5145990446593160846
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1543695114780030}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b43e2fd9e76d23c40ac2db1485bb3197, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::InteractionPromptUI
-  promptText: {fileID: 3574064523588542249}
-  canvasGroup: {fileID: 8043132842639782958}
 --- !u!114 &2963774249556382902
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -145,15 +133,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42308a05fcd841d45b8bf5ce54723334, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorInteractable
-  interactText: Open
-  lockedText: Hack
   animator: {fileID: 8352087749016847735}
-  promptFront: {fileID: 7340959424808602246}
-  promptBack: {fileID: 7625917837863780273}
-  interactionCooldown: 1.25
-  invertSideLogic: 0
+  openBoolName: IsOpen
+  audioSource: {fileID: 0}
+  openSound: {fileID: 0}
+  closeSound: {fileID: 0}
+  animationDuration: 1.25
+--- !u!114 &-3455294810283630252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1543695114780030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 499c254f043bbbc4ba134870e76a7374, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DoorStateMachine
+  doorController: {fileID: 2963774249556382902}
+  lockSystem: {fileID: 7371815972592028288}
+--- !u!114 &7371815972592028288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1543695114780030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c476fa80542c59148b5b3c20098dab00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LockSystem
   startLocked: 1
-  lockTimeout: 30
+  autoLockDelay: 30
 --- !u!114 &4930989083550011045
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -166,9 +179,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a17c58e49df0e349bd412f8a4d1471f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorPuzzleLauncher
+  interactText: Open
+  lockedText: HACK
   puzzleDefinition: {fileID: 11400000, guid: 4d189acc318cbb44f8f551920274ae0e, type: 2}
-  instantiateParent: {fileID: 0}
-  objectsToDisable: []
+  targetID: 
+--- !u!114 &5784717074846145434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1543695114780030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b43e2fd9e76d23c40ac2db1485bb3197, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIPromptController
+  promptText: {fileID: 1316817142401104847}
+  canvasGroup: {fileID: 8623665895798852523}
 --- !u!95 &8352087749016847735
 Animator:
   serializedVersion: 7
