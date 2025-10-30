@@ -50,19 +50,19 @@ public class DoorController : InteractableObject, IInitializable
         currentState?.Update();
     }
 
-    public override void Interact()
+    public override void Interact(GameObject player)
     {
         currentState?.Interact();
     }
 
     // OnEnterRange/OnExitRange now only control isActive; prompt visibility
     // is handled by ShowPromptForPlayer/HidePromptForPlayer called by the detector.
-    public override void OnEnterRange()
+    public override void OnEnterRange(GameObject player)
     {
         isActive = true;
     }
 
-    public override void OnExitRange()
+    public override void OnExitRange(GameObject player)
     {
         isActive = false;
         HidePrompts();

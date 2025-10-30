@@ -1,33 +1,27 @@
-﻿using Synty.AnimationBaseLocomotion.Samples;
-using Synty.AnimationBaseLocomotion.Samples.InputSystem;
-using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class DependencyInjector : MonoBehaviour
 {
-    [Header("Services")]
-    [SerializeField] private InputReader inputReader;
-    [SerializeField] private SampleCameraController cameraController;
-
-    [Header("Player Components")]
-    [SerializeField] private Transform playerPosition;
-    [SerializeField] private PlayerInteractor interactionDetector;
-
-    [Header("Objects to Initialize")]
-    [SerializeField] private GameObject[] objectsToInitialize;
-
-    public InputReader InputReader => inputReader;
-    public SampleCameraController CameraController => cameraController;
-    public Transform PlayerPosition => playerPosition;
+    [Header("Scene References")]
+    public Camera mainCamera;
+    public Transform playerTransform;
+    public PlayerInteractor playerInteractor;
 
     private void Awake()
     {
-        interactionDetector.Initialize(inputReader);
+        if (mainCamera == null)
+            mainCamera = Camera.main;
 
-        foreach (var go in objectsToInitialize)
+        if (playerTransform == null && playerInteractor != null)
+            playerTransform = playerInteractor.transform;
+    }
+
+    private void Start()
+    {
+        var initializables = FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None);
+        foreach (var mb in initializables)
         {
-            var initializables = go.GetComponents<IInitializable>();
-            foreach (var init in initializables)
+            if (mb is IInitializable init)
             {
                 init.Initialize(this);
             }
