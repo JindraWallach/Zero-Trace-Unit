@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(SphereCollider))]
-public class PlayerInteractionDetector : MonoBehaviour
+public class PlayerInteractor : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private LayerMask interactableLayers;

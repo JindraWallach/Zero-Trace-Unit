@@ -2,7 +2,7 @@
 using Synty.AnimationBaseLocomotion.Samples.InputSystem;
 using System.Collections;
 
-public class DoorInteractable : InteractableObject, IInitializable
+public class DoorController : InteractableObject, IInitializable
 {
     [Header("References")]
     [SerializeField] private Animator animator;

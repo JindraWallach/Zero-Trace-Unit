@@ -11,7 +11,7 @@ public class DependencyInjector : MonoBehaviour
 
     [Header("Player Components")]
     [SerializeField] private Transform playerPosition;
-    [SerializeField] private PlayerInteractionDetector interactionDetector;
+    [SerializeField] private PlayerInteractor interactionDetector;
 
     [Header("Objects to Initialize")]
     [SerializeField] private GameObject[] objectsToInitialize;

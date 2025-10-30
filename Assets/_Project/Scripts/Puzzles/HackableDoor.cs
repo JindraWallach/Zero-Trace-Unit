@@ -4,7 +4,7 @@ using UnityEngine;
 using Synty.AnimationBaseLocomotion.Samples;
 using Synty.AnimationBaseLocomotion.Samples.InputSystem;
 
-public class DoorPuzzleLauncher : MonoBehaviour, IInitializable
+public class HackableDoor : MonoBehaviour, IInitializable
 {
     [Header("Puzzle")]
     public PuzzleDefinition puzzleDefinition;

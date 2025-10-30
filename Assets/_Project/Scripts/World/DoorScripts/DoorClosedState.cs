@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class DoorClosedState : DoorState
 {
-    public DoorClosedState(DoorInteractable door) : base(door) { }
+    public DoorClosedState(DoorController door) : base(door) { }
 
     public override void Enter()
     {

@@ -4,7 +4,7 @@ public class DoorClosingState : DoorState
 {
     private float timer;
 
-    public DoorClosingState(DoorInteractable door) : base(door) { }
+    public DoorClosingState(DoorController door) : base(door) { }
 
     public override void Enter()
     {

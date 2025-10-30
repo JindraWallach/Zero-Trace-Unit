@@ -3,7 +3,7 @@ using System;
 
 public class DoorLockedState : DoorState
 {
-    public DoorLockedState(DoorInteractable door) : base(door) { }
+    public DoorLockedState(DoorController door) : base(door) { }
 
     public override void Enter()
     {
@@ -23,7 +23,7 @@ public class DoorLockedState : DoorState
     {
         door.HidePrompts();
 
-        var launcher = (door as Component)?.GetComponent<DoorPuzzleLauncher>();
+        var launcher = (door as Component)?.GetComponent<HackableDoor>();
         if (launcher != null)
         {
             bool started = launcher.TryStartPuzzle(() =>

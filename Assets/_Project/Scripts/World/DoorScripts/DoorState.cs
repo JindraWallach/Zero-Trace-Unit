@@ -2,9 +2,9 @@ using UnityEngine;
 
 public abstract class DoorState
 {
-    protected DoorInteractable door;
+    protected DoorController door;
 
-    public DoorState(DoorInteractable door)
+    public DoorState(DoorController door)
     {
         this.door = door;
     }
