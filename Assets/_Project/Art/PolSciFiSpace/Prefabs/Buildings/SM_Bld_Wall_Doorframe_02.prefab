@@ -195,8 +195,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b43e2fd9e76d23c40ac2db1485bb3197, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIPromptController
-  promptText: {fileID: 1316817142401104847}
-  canvasGroup: {fileID: 8623665895798852523}
+  promptText: {fileID: 3574064523588542249}
+  canvasGroup: {fileID: 8043132842639782958}
 --- !u!95 &8352087749016847735
 Animator:
   serializedVersion: 7

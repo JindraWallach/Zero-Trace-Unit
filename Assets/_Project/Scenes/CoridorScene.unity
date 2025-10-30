@@ -562,6 +562,23 @@ MonoBehaviour:
     done: 0
   - name: '2. TEN GO dveri ma 2x UIPromptController? potom GetComponents? '
     done: 0
+  - name: "3. DoorPrefab/ \u251C\u2500\u2500 DoorModel (visual mesh) \u251C\u2500\u2500
+      PromptFront (Canvas WorldSpace) \u2502   \u251C\u2500\u2500 Billboard (script)
+      \u2502   \u251C\u2500\u2500 CanvasGroup \u2502   \u251C\u2500\u2500 UIPromptController
+      (script) \u2502   \u2514\u2500\u2500 TMP Text child \u251C\u2500\u2500 PromptBack
+      (stejn\xFD jako Front) \u2514\u2500\u2500 Collider (BoxCollider, trigger =
+      OFF) tady ukazujes ze dvere maji child 2 prompty ale v interactiblebase pouzivas
+      requiredcomponent na dany komponente ale ty scripty UIPromptControlery maji
+      byt na child 2x canvasu a kodove hledas na doorprefabu? a toho jednoho? prave
+      tam jsem mel public void ShowPromptForSide(string text)     {         Vector3
+      localPlayerPos = transform.InverseTransformPoint(player.position);        
+      bool shouldShowBack = localPlayerPos.z >= 0;          if (invertSideLogic)            
+      shouldShowBack = !shouldShowBack;          if (shouldShowBack)         {            
+      promptBack.Show(text);             promptFront.Hide();         }         else        
+      {             promptFront.Show(text);             promptBack.Hide();        
+      }     }  ta matika tady funguje pro vybrani spravne promptu na ktery strane
+      je hrac"
+    done: 0
 --- !u!4 &36559939
 Transform:
   m_ObjectHideFlags: 0
