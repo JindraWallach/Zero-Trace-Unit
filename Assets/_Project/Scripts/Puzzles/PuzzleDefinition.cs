@@ -1,8 +1,13 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "PuzzleDefinition", menuName = "Puzzles/PuzzleDefinition")]
+/// <summary>
+/// ScriptableObject defining puzzle config.
+/// </summary>
+[CreateAssetMenu(fileName = "PuzzleDefinition", menuName = "Zero Trace/Puzzle Definition")]
 public class PuzzleDefinition : ScriptableObject
 {
-    // A prefab that implements IPuzzle (scene prefab or prefab asset)
+    [Header("Puzzle Config")]
     public GameObject puzzlePrefab;
+    public string puzzleName;
+    public int difficulty;
 }

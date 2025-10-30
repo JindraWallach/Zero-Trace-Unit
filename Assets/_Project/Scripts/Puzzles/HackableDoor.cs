@@ -1,153 +1,64 @@
 using System;
-using System.Linq;
 using UnityEngine;
-using Synty.AnimationBaseLocomotion.Samples;
-using Synty.AnimationBaseLocomotion.Samples.InputSystem;
 
-public class HackableDoor : MonoBehaviour, IInitializable
+/// <summary>
+/// Bridge between door and hack system.
+/// Registers as IHackTarget with HackManager.
+/// Does NOT handle UI or puzzles directly.
+/// </summary>
+public class HackableDoor : InteractableBase, IHackTarget, IInitializable
 {
-    [Header("Puzzle")]
-    public PuzzleDefinition puzzleDefinition;
-    public Transform instantiateParent;
+    [Header("Hack Config")]
+    [SerializeField] private PuzzleDefinition puzzleDefinition;
+    [SerializeField] private string targetID;
 
-    [Header("Optional: UI / Systems to disable while puzzle runs")]
-    [Tooltip("Objects to deactivate while the puzzle is active (e.g. minimap canvas)")]
-    public GameObject[] objectsToDisable;
+    private DoorStateMachine stateMachine;
+    private bool isHackable = true;
 
-    private InputReader injectedInputReader;
-    private SampleCameraController injectedCameraController;
-    private DependencyInjector dependencyInjector;
+    public string TargetID => targetID;
+    public bool IsHackable => isHackable && stateMachine.Lock.IsLocked;
 
-    private GameObject currentInstance;
-    private IPuzzle currentPuzzle;
+    protected override void Awake()
+    {
+        base.Awake();
+        stateMachine = GetComponent<DoorStateMachine>();
+
+        if (string.IsNullOrEmpty(targetID))
+            targetID = $"Door_{GetInstanceID()}";
+    }
 
     public void Initialize(DependencyInjector dependencyInjector)
     {
-        this.dependencyInjector = dependencyInjector;
-        injectedInputReader = this.dependencyInjector.InputReader;
-        injectedCameraController = this.dependencyInjector.CameraController;
+        // Register with HackManager
+        HackManager.Instance?.RegisterTarget(this);
     }
 
-    public bool TryStartPuzzle(Action onSuccess)
+    private void OnDestroy()
     {
-        if (puzzleDefinition == null || puzzleDefinition.puzzlePrefab == null)
-            return false;
+        HackManager.Instance?.UnregisterTarget(this);
+    }
 
-        if (currentInstance != null)
-            return false; // already running
+    public override void Interact()
+    {
+        stateMachine.OnInteract();
+    }
 
-        currentInstance = Instantiate(puzzleDefinition.puzzlePrefab, instantiateParent);
-        currentPuzzle = currentInstance.GetComponent<IPuzzle>();
-        if (currentPuzzle == null)
+    public void RequestHack(Action onSuccess, Action onFail)
+    {
+        if (!IsHackable)
         {
-            Debug.LogWarning($"Puzzle prefab on '{name}' does not implement IPuzzle.");
-            Destroy(currentInstance);
-            currentInstance = null;
-            return false;
+            Debug.LogWarning($"[HackableDoor] {targetID} is not hackable");
+            onFail?.Invoke();
+            return;
         }
 
-        // resolve systems from DI-injected fields
-        var inputReaderToDisable = injectedInputReader;
-        var cameraControllerToDisable = injectedCameraController;
+        bool started = HackManager.Instance.RequestHack(this, onSuccess, onFail);
+        if (!started)
+            onFail?.Invoke();
+    }
 
-        // call Initialize only if the puzzle implements IInitializable
-        if (currentPuzzle is IInitializable initializablePuzzle)
-        {
-            initializablePuzzle.Initialize(dependencyInjector);
-        }
-
-        // Unlock cursor and disable player camera / UI
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
-
-        // Block gameplay input but keep Exit (Escape) active
-        if (inputReaderToDisable != null)
-            inputReaderToDisable.DisableInputs(new[] { "Exit" });
-
-        if (cameraControllerToDisable != null)
-            cameraControllerToDisable.enabled = false;
-
-        if (objectsToDisable != null)
-        {
-            foreach (var o in objectsToDisable)
-            {
-                if (o != null)
-                    o.SetActive(false);
-            }
-        }
-
-        Action handler = null;
-        handler = () =>
-        {
-            try { currentPuzzle.OnPuzzleSuccess -= handler; } catch { }
-            try { onSuccess?.Invoke(); } catch (Exception ex) { Debug.LogException(ex); }
-            // cleanup
-            try { currentPuzzle.Hide(); } catch { }
-            Destroy(currentInstance);
-            currentInstance = null;
-            currentPuzzle = null;
-
-            // restore input/camera/UI/cursor
-            if (inputReaderToDisable != null)
-                inputReaderToDisable.EnableAllInputs();
-
-            if (cameraControllerToDisable != null)
-                cameraControllerToDisable.enabled = true;
-
-            if (objectsToDisable != null)
-            {
-                foreach (var o in objectsToDisable)
-                {
-                    if (o != null)
-                        o.SetActive(true);
-                }
-            }
-
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
-        };
-
-        Action cancelHandler = null;
-        cancelHandler = () =>
-        {
-            // unsubscribe both handlers to avoid leaks / unexpected callbacks
-            try { currentPuzzle.OnPuzzleCancelled -= cancelHandler; } catch { }
-            try { currentPuzzle.OnPuzzleSuccess -= handler; } catch { }
-
-            // cleanup without calling success callback (treat as failure/cancel)
-            try { currentPuzzle.Hide(); } catch { }
-            Destroy(currentInstance);
-            currentInstance = null;
-            currentPuzzle = null;
-
-            // restore input/camera/UI/cursor (re-enable inputs that were disabled)
-            if (inputReaderToDisable != null)
-                inputReaderToDisable.EnableAllInputs();
-
-            if (cameraControllerToDisable != null)
-                cameraControllerToDisable.enabled = true;
-
-            if (objectsToDisable != null)
-            {
-                foreach (var o in objectsToDisable)
-                {
-                    if (o != null)
-                        o.SetActive(true);
-                }
-            }
-
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
-
-
-
-            Debug.Log("Puzzle cancelled via ESC.");
-        };
-
-        currentPuzzle.OnPuzzleSuccess += handler;
-        currentPuzzle.OnPuzzleCancelled += cancelHandler;
-
-        currentPuzzle.Show();
-        return true;
+    public override string GetInteractText()
+    {
+        return stateMachine.Lock.IsLocked ? lockedText : interactText;
     }
 }

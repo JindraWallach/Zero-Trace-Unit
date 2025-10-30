@@ -1,8 +1,10 @@
 ﻿using Synty.AnimationBaseLocomotion.Samples;
 using Synty.AnimationBaseLocomotion.Samples.InputSystem;
-using System.Linq;
 using UnityEngine;
 
+/// <summary>
+/// Central dependency provider. Injects services into IInitializable components.
+/// </summary>
 public class DependencyInjector : MonoBehaviour
 {
     [Header("Services")]
@@ -11,7 +13,7 @@ public class DependencyInjector : MonoBehaviour
 
     [Header("Player Components")]
     [SerializeField] private Transform playerPosition;
-    [SerializeField] private PlayerInteractor interactionDetector;
+    [SerializeField] private PlayerInteractor playerInteractor;
 
     [Header("Objects to Initialize")]
     [SerializeField] private GameObject[] objectsToInitialize;
@@ -22,10 +24,15 @@ public class DependencyInjector : MonoBehaviour
 
     private void Awake()
     {
-        interactionDetector.Initialize(inputReader);
+        // Init player first
+        if (playerInteractor != null)
+            playerInteractor.Initialize(inputReader);
 
+        // Init all registered objects
         foreach (var go in objectsToInitialize)
         {
+            if (go == null) continue;
+
             var initializables = go.GetComponents<IInitializable>();
             foreach (var init in initializables)
             {

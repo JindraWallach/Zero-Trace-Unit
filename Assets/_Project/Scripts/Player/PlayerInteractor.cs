@@ -2,21 +2,19 @@ using Synty.AnimationBaseLocomotion.Samples.InputSystem;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Handles player interaction detection via trigger collider.
+/// Manages IInteractable targets in range.
+/// </summary>
 [RequireComponent(typeof(SphereCollider))]
 public class PlayerInteractor : MonoBehaviour
 {
-    [Header("References")]
+    [Header("Settings")]
     [SerializeField] private LayerMask interactableLayers;
 
     private readonly List<IInteractable> interactablesInRange = new();
     private IInteractable currentTarget;
     private InputReader inputReader;
-
-    private void OnDisable()
-    {
-        if (inputReader != null)
-            inputReader.onInteract -= TryInteract;
-    }
 
     public void Initialize(InputReader reader)
     {
@@ -24,12 +22,17 @@ public class PlayerInteractor : MonoBehaviour
         inputReader.onInteract += TryInteract;
     }
 
+    private void OnDisable()
+    {
+        if (inputReader != null)
+            inputReader.onInteract -= TryInteract;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (!IsInLayerMask(other.gameObject.layer, interactableLayers)) return;
         if (!other.TryGetComponent(out IInteractable interactable)) return;
 
-        // notify object it's in range (used for logic like isActive) but do NOT show its UI here
         interactable.OnEnterRange();
 
         if (!interactablesInRange.Contains(interactable))
@@ -43,7 +46,6 @@ public class PlayerInteractor : MonoBehaviour
     {
         if (!other.TryGetComponent(out IInteractable interactable)) return;
 
-        // notify object left range (also ensures prompt hidden)
         interactable.OnExitRange();
         interactablesInRange.Remove(interactable);
         UpdateCurrentTarget();
@@ -51,32 +53,39 @@ public class PlayerInteractor : MonoBehaviour
 
     private void UpdateCurrentTarget()
     {
-        // remove destroyed/null entries
         interactablesInRange.RemoveAll(i => i == null);
 
         if (interactablesInRange.Count == 0)
         {
-            // hide prompt on previous target
             if (currentTarget != null)
             {
-                if (currentTarget is InteractableObject ioPrev)
-                    ioPrev.HidePromptForPlayer();
-                else
-                    currentTarget.OnExitRange();
-
+                HidePromptFor(currentTarget);
                 currentTarget = null;
             }
             return;
         }
 
-        // find nearest
+        var nearest = FindNearest();
+        if (nearest != currentTarget)
+        {
+            if (currentTarget != null)
+                HidePromptFor(currentTarget);
+
+            currentTarget = nearest;
+
+            if (currentTarget != null)
+                ShowPromptFor(currentTarget);
+        }
+    }
+
+    private IInteractable FindNearest()
+    {
         float minDist = float.MaxValue;
         IInteractable nearest = null;
 
         foreach (var i in interactablesInRange)
         {
-            var mb = i as MonoBehaviour;
-            if (mb == null) continue;
+            if (i is not MonoBehaviour mb) continue;
 
             float dist = Vector3.Distance(transform.position, mb.transform.position);
             if (dist < minDist)
@@ -86,34 +95,23 @@ public class PlayerInteractor : MonoBehaviour
             }
         }
 
-        // if nearest changed, update prompts
-        if (nearest != currentTarget)
-        {
-            // hide previous
-            if (currentTarget != null)
-            {
-                if (currentTarget is InteractableObject ioPrev)
-                    ioPrev.HidePromptForPlayer();
-                else
-                    currentTarget.OnExitRange();
-            }
+        return nearest;
+    }
 
-            currentTarget = nearest;
+    private void ShowPromptFor(IInteractable target)
+    {
+        if (target is InteractableBase ib)
+            ib.ShowPromptForPlayer(transform);
+    }
 
-            // show prompt for new nearest
-            if (currentTarget != null)
-            {
-                if (currentTarget is InteractableObject ioNew)
-                    ioNew.ShowPromptForPlayer(transform);
-                else
-                    currentTarget.OnEnterRange();
-            }
-        }
+    private void HidePromptFor(IInteractable target)
+    {
+        if (target is InteractableBase ib)
+            ib.HidePromptForPlayer();
     }
 
     private void TryInteract()
     {
-        Debug.Log($"Trying to interact with current target {currentTarget}");
         currentTarget?.Interact();
     }
 

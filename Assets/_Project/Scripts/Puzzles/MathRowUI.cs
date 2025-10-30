@@ -3,53 +3,63 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// UI for a single math row (expression + digit buttons).
+/// </summary>
 [RequireComponent(typeof(RectTransform))]
 public class MathRowUI : MonoBehaviour
 {
-    [Header("UI")]
-    public TMP_Text expressionText;
-    public Transform buttonsParent; // container where 0..9 buttons will be instantiated
-    public Image solvedOverlay;     // optional overlay to show solved state
+    [Header("UI Elements")]
+    [SerializeField] private TMP_Text expressionText;
+    [SerializeField] private Transform buttonsParent;
+    [SerializeField] private Image solvedOverlay;
 
-    int index;
-    Action<int, int> submitCallback;
-
+    private int index;
+    private Action<int, int> submitCallback;
 
     public void Setup(int index, string expression, GameObject digitButtonPrefab, Action<int, int> submitCallback)
     {
         this.index = index;
         this.submitCallback = submitCallback;
-        expressionText.text = expression;
 
+        if (expressionText != null)
+            expressionText.text = expression;
 
-        // create buttons 0..9
-        for (int d = 1; d <= 9; d++)
-            CreateDigitButton(d, digitButtonPrefab);
-        CreateDigitButton(0, digitButtonPrefab); // 0 last (common layout)
+        CreateDigitButtons(digitButtonPrefab);
 
-        if (solvedOverlay != null) solvedOverlay.gameObject.SetActive(false);
+        if (solvedOverlay != null)
+            solvedOverlay.gameObject.SetActive(false);
     }
 
-    private void CreateDigitButton(int digit, GameObject prefab)
+    private void CreateDigitButtons(GameObject prefab)
+    {
+        for (int d = 1; d <= 9; d++)
+            CreateButton(d, prefab);
+
+        CreateButton(0, prefab); // 0 last
+    }
+
+    private void CreateButton(int digit, GameObject prefab)
     {
         var go = Instantiate(prefab, buttonsParent);
         var btn = go.GetComponent<Button>();
         var label = go.GetComponentInChildren<TMP_Text>();
-        if (label != null) label.text = digit.ToString();
+
+        if (label != null)
+            label.text = digit.ToString();
+
         btn.onClick.AddListener(() => OnButtonClicked(digit));
     }
 
     private void OnButtonClicked(int digit)
     {
-        Debug.Log($"MathRowUI index {index} submitted digit {digit}");
         submitCallback?.Invoke(index, digit);
     }
 
     public void MarkSolved()
     {
-        // disable all buttons and show solved overlay
-        foreach (var b in buttonsParent.GetComponentsInChildren<Button>())
-            b.interactable = false;
+        foreach (var btn in buttonsParent.GetComponentsInChildren<Button>())
+            btn.interactable = false;
 
         if (solvedOverlay != null)
             solvedOverlay.gameObject.SetActive(true);

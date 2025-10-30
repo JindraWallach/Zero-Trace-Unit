@@ -2,22 +2,16 @@ using UnityEngine;
 
 public class DoorOpenState : DoorState
 {
-    public DoorOpenState(DoorController door) : base(door) { }
+    public DoorOpenState(DoorStateMachine machine) : base(machine) { }
 
     public override void Enter()
     {
-        Debug.Log("Door is now in OpenState.");
-        door.SetAnimatorBool(true);
-        door.StartAutoLock();
-    }
-
-    public override void Exit()
-    {
-        door.StopAutoLock();
+        machine.Controller.Open();
+        Debug.Log("[DoorOpenState] Door open");
     }
 
     public override void Interact()
     {
-        door.SetState(new DoorClosingState(door));
+        machine.SetState(new DoorClosingState(machine));
     }
 }

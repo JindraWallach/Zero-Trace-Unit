@@ -4,25 +4,21 @@ public class DoorOpeningState : DoorState
 {
     private float timer;
 
-    public DoorOpeningState(DoorController door) : base(door) { }
+    public DoorOpeningState(DoorStateMachine machine) : base(machine) { }
 
     public override void Enter()
     {
-        // If the player opens the door, cancel any scheduled auto-lock.
-        door.CancelPendingLock();
-        Debug.Log("Door is now in OpeningState.");
-        door.SetAnimatorBool(true);
-        timer = door.Cooldown;
+        machine.Controller.Open();
+        timer = machine.AnimDuration;
+        Debug.Log("[DoorOpeningState] Door opening");
     }
 
     public override void Update()
     {
         timer -= Time.deltaTime;
         if (timer <= 0f)
-        {
-            door.SetState(new DoorOpenState(door));
-        }
+            machine.SetState(new DoorOpenState(machine));
     }
 
-    public override void Interact() { } 
+    public override void Interact() { } // ignore during animation
 }

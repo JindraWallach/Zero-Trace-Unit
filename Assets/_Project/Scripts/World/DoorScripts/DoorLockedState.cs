@@ -1,41 +1,29 @@
 ﻿using UnityEngine;
-using System;
 
 public class DoorLockedState : DoorState
 {
-    public DoorLockedState(DoorController door) : base(door) { }
+    public DoorLockedState(DoorStateMachine machine) : base(machine) { }
 
     public override void Enter()
     {
-        // Ensure door appears closed and show locked prompt
-        door.SetAnimatorBool(false);
-        Debug.Log("Door is now in LockedState.");
-        door.ShowPromptForSide(door.GetLockedText());
+        machine.Controller.Close();
+        Debug.Log("[DoorLockedState] Door locked");
     }
-
-    public override void Exit()
-    {
-        door.HidePrompts();
-    }
-
 
     public override void Interact()
     {
-        door.HidePrompts();
-
-        var launcher = (door as Component)?.GetComponent<HackableDoor>();
-        if (launcher != null)
+        // Attempt hack via HackableDoor component
+        var hackable = machine.GetComponent<HackableDoor>();
+        if (hackable != null)
         {
-            bool started = launcher.TryStartPuzzle(() =>
-            {
-                Debug.Log("Hack successful via puzzle! Door is now unlocked.");
-                door.OnHackSuccess();
-            });
-
-            if (started) return;
+            hackable.RequestHack(
+                onSuccess: () =>
+                {
+                    machine.Lock.Unlock();
+                    machine.SetState(new DoorOpeningState(machine));
+                },
+                onFail: () => Debug.Log("Hack failed")
+            );
         }
-
-        Debug.Log("No puzzle configured on this door; simulating hack success.");
-        door.OnHackSuccess();
     }
 }

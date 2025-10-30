@@ -4,23 +4,21 @@ public class DoorClosingState : DoorState
 {
     private float timer;
 
-    public DoorClosingState(DoorController door) : base(door) { }
+    public DoorClosingState(DoorStateMachine machine) : base(machine) { }
 
     public override void Enter()
     {
-        Debug.Log("Door is now in ClosingState.");
-        door.SetAnimatorBool(false);
-        timer = door.Cooldown;
+        machine.Controller.Close();
+        timer = machine.AnimDuration;
+        Debug.Log("[DoorClosingState] Door closing");
     }
 
     public override void Update()
     {
         timer -= Time.deltaTime;
         if (timer <= 0f)
-        {
-            door.SetState(new DoorClosedState(door));
-        }
+            machine.SetState(new DoorClosedState(machine));
     }
 
-    public override void Interact() { } // ignoruj během animace
+    public override void Interact() { } // ignore during animation
 }

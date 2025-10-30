@@ -1,17 +1,14 @@
-using UnityEngine;
-
 public abstract class DoorState
 {
-    protected DoorController door;
+    protected DoorStateMachine machine;
 
-    public DoorState(DoorController door)
+    public DoorState(DoorStateMachine machine)
     {
-        this.door = door;
+        this.machine = machine;
     }
 
     public virtual void Enter() { }
     public virtual void Exit() { }
     public virtual void Update() { }
-
     public abstract void Interact();
 }

@@ -1,16 +1,52 @@
 using UnityEngine;
 
+/// <summary>
+/// State machine for door states: Locked, Closed, Opening, Open, Closing.
+/// Delegates animation to DoorController.
+/// </summary>
 public class DoorStateMachine : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [Header("References")]
+    [SerializeField] private DoorController doorController;
+    [SerializeField] private LockSystem lockSystem;
+
+    private DoorState currentState;
+    private Transform player;
+
+    private void Start()
     {
-        
+        if (lockSystem.IsLocked)
+            SetState(new DoorLockedState(this));
+        else
+            SetState(new DoorClosedState(this));
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        currentState?.Update();
     }
+
+    public void SetState(DoorState newState)
+    {
+        currentState?.Exit();
+        currentState = newState;
+        currentState.Enter();
+    }
+
+    public void OnInteract()
+    {
+        currentState?.Interact();
+    }
+
+    // === Public API for states ===
+    public DoorController Controller => doorController;
+    public LockSystem Lock => lockSystem;
+    public float AnimDuration => doorController.AnimationDuration;
+
+    public void SetPlayerReference(Transform playerTransform)
+    {
+        player = playerTransform;
+    }
+
+    public Transform Player => player;
 }
