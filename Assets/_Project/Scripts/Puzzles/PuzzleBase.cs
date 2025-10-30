@@ -49,7 +49,9 @@ public abstract class PuzzleBase : MonoBehaviour
 
     public virtual void CancelPuzzle()
     {
+        Debug.Log("CancelPuzzle called");
         if (!isActive) return;
+        Debug.Log("Puzzle is active, proceeding to cancel");
 
         isActive = false;
         OnPuzzleCancel();

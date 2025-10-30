@@ -10,6 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: eb21632f834d4ce469c53cd8c56f75bb, type: 3}
-  m_Name: VoVPuzzle
+  m_Name: MathPuzzle_Easy
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleDefinition
   puzzlePrefab: {fileID: 5618843779435604823, guid: 3b50d44c93876ba42b46f48bc3d3a8d1, type: 3}
+  puzzleName: Meth Rows
+  difficulty: 1

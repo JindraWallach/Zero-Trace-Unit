@@ -27,6 +27,7 @@ public class MathRowsPuzzle : PuzzleBase, IInitializable
     {
         this.dependencyInjector = dependencyInjector;
         // Subscribe to ESC key via InputReader
+        Debug.Log("[MathRowsPuzzle] Subscribing to onEscapePressed");
         dependencyInjector.InputReader.onEscapePressed += CancelPuzzle;
     }
 
