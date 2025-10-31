@@ -157,16 +157,12 @@ public class HackManager : MonoBehaviour
         }
     }
 
-    public void BlockPlayerInput(InputReader reader, SampleCameraController cam)
+    public void BlockPlayerInput(InputReader reader)
     {
         inputReader = reader;
-        cameraController = cam;
 
         if (inputReader != null)
             inputReader.DisableInputs(new[] { "Exit" }); // Enable only Exit
-
-        if (cameraController != null)
-            cameraController.enabled = false;
     }
 
     private void RestorePlayerInput()
@@ -174,10 +170,6 @@ public class HackManager : MonoBehaviour
         if (inputReader != null)
             inputReader.EnableAllInputs();
 
-        if (cameraController != null)
-            cameraController.enabled = true;
-
         inputReader = null;
-        cameraController = null;
     }
 }
