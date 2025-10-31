@@ -44,6 +44,18 @@ public class HackableDoor : InteractableBase, IHackTarget, IInitializable
         stateMachine.OnInteract();
     }
 
+    public override void ShowPromptForPlayer(Transform player)
+    {
+        var controller = GetComponent<DoorController>();
+        controller.SetPlayerReference(player);
+        controller.ShowPromptForSide(GetInteractText());
+    }
+
+    public override void HidePromptForPlayer()
+    {
+        GetComponent<DoorController>()?.HidePrompts();
+    }
+
     public void RequestHack(Action onSuccess, Action onFail)
     {
         if (!IsHackable)

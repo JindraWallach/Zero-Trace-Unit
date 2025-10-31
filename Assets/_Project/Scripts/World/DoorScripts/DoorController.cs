@@ -11,6 +11,11 @@ public class DoorController : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] private string openBoolName = "IsOpen";
 
+    [Header("UI Prompts")]
+    [SerializeField] private UIPromptController promptFront;
+    [SerializeField] private UIPromptController promptBack;
+    [SerializeField] private bool invertSideLogic = false;
+
     [Header("Audio")]
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip openSound;
@@ -20,6 +25,9 @@ public class DoorController : MonoBehaviour
     [SerializeField] private float animationDuration = 1.25f;
 
     public float AnimationDuration => animationDuration;
+
+    private Transform player;
+
 
     private void Reset()
     {
@@ -38,6 +46,37 @@ public class DoorController : MonoBehaviour
         animator.SetBool(openBoolName, false);
         PlaySound(closeSound);
         Debug.Log("[DoorController] Door closing");
+    }
+
+    public void ShowPromptForSide(string text)
+    {
+        Vector3 localPlayerPos = transform.InverseTransformPoint(player.position);
+        bool shouldShowBack = localPlayerPos.z >= 0;
+
+        if (invertSideLogic)
+            shouldShowBack = !shouldShowBack;
+
+        if (shouldShowBack)
+        {
+            promptBack.Show(text);
+            promptFront.Hide();
+        }
+        else
+        {
+            promptFront.Show(text);
+            promptBack.Hide();
+        }
+    }
+
+    public void HidePrompts()
+    {
+        promptFront?.Hide();
+        promptBack?.Hide();
+    }
+
+    public void SetPlayerReference(Transform playerTransform)
+    {
+        player = playerTransform;
     }
 
     private void PlaySound(AudioClip clip)

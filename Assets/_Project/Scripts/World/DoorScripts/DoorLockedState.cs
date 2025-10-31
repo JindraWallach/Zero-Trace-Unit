@@ -7,7 +7,6 @@ public class DoorLockedState : DoorState
     public override void Enter()
     {
         machine.Controller.Close();
-        Debug.Log("[DoorLockedState] Door locked");
     }
 
     public override void Interact()

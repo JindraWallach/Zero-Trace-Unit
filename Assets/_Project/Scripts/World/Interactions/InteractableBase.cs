@@ -4,7 +4,7 @@
 /// Base class for all interactable world objects.
 /// Manages prompt UI via UIPromptController.
 /// </summary>
-[RequireComponent(typeof(UIPromptController))]
+
 public abstract class InteractableBase : MonoBehaviour, IInteractable
 {
     [SerializeField] protected string interactText = "Use";
@@ -39,13 +39,6 @@ public abstract class InteractableBase : MonoBehaviour, IInteractable
         HidePromptForPlayer();
     }
 
-    public virtual void ShowPromptForPlayer(Transform player)
-    {
-        promptController?.Show(GetInteractText());
-    }
-
-    public virtual void HidePromptForPlayer()
-    {
-        promptController?.Hide();
-    }
+    public virtual void ShowPromptForPlayer(Transform player) { }
+    public virtual void HidePromptForPlayer() { }
 }

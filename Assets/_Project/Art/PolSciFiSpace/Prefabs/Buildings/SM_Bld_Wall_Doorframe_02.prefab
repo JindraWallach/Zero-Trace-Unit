@@ -16,7 +16,6 @@ GameObject:
   - component: {fileID: -3455294810283630252}
   - component: {fileID: 7371815972592028288}
   - component: {fileID: 4930989083550011045}
-  - component: {fileID: 5784717074846145434}
   - component: {fileID: 8352087749016847735}
   m_Layer: 6
   m_Name: SM_Bld_Wall_Doorframe_02
@@ -135,6 +134,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DoorInteractable
   animator: {fileID: 8352087749016847735}
   openBoolName: IsOpen
+  promptFront: {fileID: 7340959424808602246}
+  promptBack: {fileID: 7625917837863780273}
+  invertSideLogic: 1
   audioSource: {fileID: 0}
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
@@ -183,20 +185,6 @@ MonoBehaviour:
   lockedText: HACK
   puzzleDefinition: {fileID: 11400000, guid: 4d189acc318cbb44f8f551920274ae0e, type: 2}
   targetID: 
---- !u!114 &5784717074846145434
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1543695114780030}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b43e2fd9e76d23c40ac2db1485bb3197, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UIPromptController
-  promptText: {fileID: 3574064523588542249}
-  canvasGroup: {fileID: 8043132842639782958}
 --- !u!95 &8352087749016847735
 Animator:
   serializedVersion: 7

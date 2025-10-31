@@ -1104,6 +1104,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4634501150350328, guid: 311e5dd270daced46a5eaa165501520c, type: 3}
   m_PrefabInstance: {fileID: 78564450}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &80029089 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1543695114780030, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+  m_PrefabInstance: {fileID: 740300967}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &81141343
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3643,7 +3648,7 @@ MonoBehaviour:
   objectsToInitialize:
   - {fileID: 686794069}
   - {fileID: 2135896837}
-  - {fileID: 0}
+  - {fileID: 80029089}
   - {fileID: 906790554}
   - {fileID: 730311588}
 --- !u!1001 &312965478

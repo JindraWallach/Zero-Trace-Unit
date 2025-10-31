@@ -8,7 +8,7 @@ public class DoorClosedState : DoorState
     {
         machine.Controller.Close();
         machine.Lock.StartAutoLock();
-        Debug.Log("[DoorClosedState] Door closed");
+        //Debug.Log("[DoorClosedState] Door closed");
     }
 
     public override void Exit()
