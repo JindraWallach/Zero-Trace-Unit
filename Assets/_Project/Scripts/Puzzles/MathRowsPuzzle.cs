@@ -1,3 +1,4 @@
+using Synty.AnimationBaseLocomotion.Samples.InputSystem;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,7 +7,7 @@ using UnityEngine;
 /// Math puzzle: solve expressions to unlock.
 /// Refactored to extend PuzzleBase with SRP principles.
 /// </summary>
-public class MathRowsPuzzle : PuzzleBase, IInitializable
+public class MathRowsPuzzle : PuzzleBase
 {
     [Header("Puzzle Config")]
     [Min(1)][SerializeField] private int rows = 5;
@@ -17,24 +18,14 @@ public class MathRowsPuzzle : PuzzleBase, IInitializable
     [SerializeField] private GameObject cellPrefab;
     [SerializeField] private GameObject digitButtonPrefab;
 
+    private InputReader inputReader;
     private List<int> targets = new();
     private List<MathRowUI> cells = new();
     private bool[] solved;
 
-    private DependencyInjector dependencyInjector;
-
-    public void Initialize(DependencyInjector dependencyInjector)
+    protected override void Awake()
     {
-        this.dependencyInjector = dependencyInjector;
-        // Subscribe to ESC key via InputReader
-        Debug.Log("[MathRowsPuzzle] Subscribing to onEscapePressed");
-        dependencyInjector.InputReader.onEscapePressed += CancelPuzzle;
-    }
-
-    private void OnDestroy()
-    {
-        if (dependencyInjector?.InputReader != null)
-            dependencyInjector.InputReader.onEscapePressed -= CancelPuzzle;
+        base.Awake();
     }
 
     protected override void OnPuzzleStart()

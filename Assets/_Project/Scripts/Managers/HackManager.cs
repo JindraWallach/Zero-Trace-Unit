@@ -32,6 +32,30 @@ public class HackManager : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        var di = FindFirstObjectByType<DependencyInjector>();
+        if (di != null)
+            inputReader = di.InputReader;
+    }
+
+    private void OnEnable()
+    {
+        if (inputReader != null)
+            inputReader.onEscapePressed += OnEscapePressed;
+    }
+
+    private void OnDisable()
+    {
+        if (inputReader != null)
+            inputReader.onEscapePressed -= OnEscapePressed;
+    }
+
+    private void OnEscapePressed()
+    {
+        if (activePuzzle != null)
+        {
+            activePuzzle.CancelPuzzle();
+        }
     }
 
     // === Registration ===

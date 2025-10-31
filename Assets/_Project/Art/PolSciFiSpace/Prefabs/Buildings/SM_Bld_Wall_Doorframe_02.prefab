@@ -136,7 +136,7 @@ MonoBehaviour:
   openBoolName: IsOpen
   promptFront: {fileID: 7340959424808602246}
   promptBack: {fileID: 7625917837863780273}
-  invertSideLogic: 1
+  invertSideLogic: 0
   audioSource: {fileID: 0}
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
