@@ -13,6 +13,7 @@ public class HackableDoor : InteractableBase, IHackTarget, IInitializable
     [SerializeField] private string targetID;
 
     private DoorStateMachine stateMachine;
+    private DependencyInjector dependencyInjector;
     private bool isHackable = true;
 
     public string TargetID => targetID;
@@ -27,9 +28,9 @@ public class HackableDoor : InteractableBase, IHackTarget, IInitializable
             targetID = $"Door_{GetInstanceID()}";
     }
 
-    public void Initialize(DependencyInjector dependencyInjector)
+    public void Initialize(DependencyInjector di)
     {
-        // Register with HackManager
+        dependencyInjector = di;
         HackManager.Instance?.RegisterTarget(this);
     }
 
@@ -60,10 +61,11 @@ public class HackableDoor : InteractableBase, IHackTarget, IInitializable
     {
         if (!IsHackable)
         {
-            Debug.LogWarning($"[HackableDoor] {targetID} is not hackable");
             onFail?.Invoke();
             return;
         }
+
+        HackManager.Instance.BlockPlayerInput(dependencyInjector.InputReader,dependencyInjector.CameraController);
 
         bool started = HackManager.Instance.RequestHack(this, onSuccess, onFail);
         if (!started)

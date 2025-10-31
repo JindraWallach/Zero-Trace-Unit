@@ -1,3 +1,5 @@
+using Synty.AnimationBaseLocomotion.Samples;
+using Synty.AnimationBaseLocomotion.Samples.InputSystem;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,6 +18,8 @@ public class HackManager : MonoBehaviour
     [SerializeField] private Transform puzzleSpawnParent;
     [SerializeField] private PuzzleFactory puzzleFactory;
 
+    private InputReader inputReader;
+    private SampleCameraController cameraController;
     private readonly Dictionary<string, IHackTarget> registeredTargets = new();
     private PuzzleBase activePuzzle;
 
@@ -98,6 +102,7 @@ public class HackManager : MonoBehaviour
         Debug.Log("[HackManager] Puzzle SUCCESS");
         CleanupPuzzle();
         UIManager.Instance?.ExitHackMode();
+        RestorePlayerInput(); 
         callback?.Invoke();
     }
 
@@ -106,6 +111,7 @@ public class HackManager : MonoBehaviour
         Debug.Log("[HackManager] Puzzle FAIL");
         CleanupPuzzle();
         UIManager.Instance?.ExitHackMode();
+        RestorePlayerInput(); 
         callback?.Invoke();
     }
 
@@ -114,6 +120,7 @@ public class HackManager : MonoBehaviour
         Debug.Log("[HackManager] Puzzle CANCELLED");
         CleanupPuzzle();
         UIManager.Instance?.ExitHackMode();
+        RestorePlayerInput(); 
         callback?.Invoke();
     }
 
@@ -124,5 +131,29 @@ public class HackManager : MonoBehaviour
             Destroy(activePuzzle.gameObject);
             activePuzzle = null;
         }
+    }
+
+    public void BlockPlayerInput(InputReader reader, SampleCameraController cam)
+    {
+        inputReader = reader;
+        cameraController = cam;
+
+        if (inputReader != null)
+            inputReader.DisableInputs(new[] { "Exit" }); // Enable only Exit
+
+        if (cameraController != null)
+            cameraController.enabled = false;
+    }
+
+    private void RestorePlayerInput()
+    {
+        if (inputReader != null)
+            inputReader.EnableAllInputs();
+
+        if (cameraController != null)
+            cameraController.enabled = true;
+
+        inputReader = null;
+        cameraController = null;
     }
 }
