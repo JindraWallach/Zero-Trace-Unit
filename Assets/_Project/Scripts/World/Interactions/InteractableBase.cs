@@ -9,6 +9,8 @@ public abstract class InteractableBase : MonoBehaviour, IInteractable
 {
     [SerializeField] protected string interactText = "Use";
     [SerializeField] protected string lockedText = "HACK";
+    public virtual string GetInteractText() => interactText;
+    public virtual string GetLockedText() => lockedText;
 
     protected UIPromptController promptController;
     protected bool isInRange;
@@ -23,8 +25,6 @@ public abstract class InteractableBase : MonoBehaviour, IInteractable
     {
         UIManager.Instance?.UnregisterPrompt(promptController);
     }
-
-    public virtual string GetInteractText() => interactText;
 
     public abstract void Interact();
 

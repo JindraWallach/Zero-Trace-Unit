@@ -45,16 +45,27 @@ public class HackableDoor : InteractableBase, IHackTarget, IInitializable
         stateMachine.OnInteract();
     }
 
+    public override void OnEnterRange()
+    {
+        base.OnEnterRange();
+        isInRange = true;
+    }
+
+    public override void OnExitRange()
+    {
+        base.OnExitRange();
+        isInRange = false;
+        GetComponent<DoorController>()?.SetPlayerInRange(null, false);
+    }
+
     public override void ShowPromptForPlayer(Transform player)
     {
-        var controller = GetComponent<DoorController>();
-        controller.SetPlayerReference(player);
-        controller.ShowPromptForSide(GetInteractText());
+        GetComponent<DoorController>()?.SetPlayerInRange(player, true);
     }
 
     public override void HidePromptForPlayer()
     {
-        GetComponent<DoorController>()?.HidePrompts();
+        GetComponent<DoorController>()?.SetPlayerInRange(null, false);
     }
 
     public void RequestHack(Action onSuccess, Action onFail)

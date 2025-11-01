@@ -10,6 +10,7 @@ public class DoorOpenState : DoorState
     public override void Enter()
     {
         machine.Controller.Open();
+        machine.Controller.SetPromptEnabled(false);
 
         if (machine.Lock.EnableAutoClose)
         {

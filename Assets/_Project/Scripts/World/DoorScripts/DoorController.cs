@@ -27,6 +27,9 @@ public class DoorController : MonoBehaviour
     public float AnimationDuration => animationDuration;
 
     private Transform player;
+    private string currentPromptText = "";
+    private bool playerInRange = false;
+    private bool shouldShowPrompt = false;
 
 
     private void Reset()
@@ -48,8 +51,39 @@ public class DoorController : MonoBehaviour
         Debug.Log("[DoorController] Door closing");
     }
 
+    public void SetPlayerInRange(Transform playerTransform, bool inRange)
+    {
+        player = playerTransform;
+        playerInRange = inRange;
+
+        if (!inRange)
+            HidePrompts();
+        else
+            UpdatePromptVisibility();
+    }
+
+    public void SetPromptEnabled(bool enabled, string promptText = "")
+    {
+        shouldShowPrompt = enabled;
+        currentPromptText = promptText; // Store text
+        UpdatePromptVisibility();
+    }
+
+    private void UpdatePromptVisibility()
+    {
+        if (!playerInRange || !shouldShowPrompt)
+        {
+            HidePrompts();
+            return;
+        }
+
+        ShowPromptForSide(currentPromptText);
+    }
+
     public void ShowPromptForSide(string text)
     {
+        if (!playerInRange || !shouldShowPrompt) return;
+
         Vector3 localPlayerPos = transform.InverseTransformPoint(player.position);
         bool shouldShowBack = localPlayerPos.z >= 0;
 

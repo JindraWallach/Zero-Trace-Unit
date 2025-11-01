@@ -7,15 +7,10 @@ public class DoorClosedState : DoorState
     public override void Enter()
     {
         machine.Controller.Close();
-
-        if (machine.Player != null)
-        {
-            var hackable = machine.GetComponent<HackableDoor>();
-            hackable?.ShowPromptForPlayer(machine.Player);
-        }
-
+        var hackable = machine.GetComponent<HackableDoor>();
+        string text = hackable?.GetInteractText() ?? "Use";
+        machine.Controller.SetPromptEnabled(true, text);
         machine.Lock.StartAutoLock();
-        //Debug.Log("[DoorClosedState] Door closed");
     }
 
     public override void Exit()
