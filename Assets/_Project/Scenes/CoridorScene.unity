@@ -531,8 +531,6 @@ MonoBehaviour:
     done: 0
   - name: "Indikator UI Locker dve\u0159\xED? Red Color? Blender"
     done: 0
-  - name: 
-    done: 0
   - name: SRP
     done: 0
   - name: "1. P\u0159id\xE1n\xED minim\xE1ln\u011B jednoho nep\u0159\xEDtele s patrolling
@@ -551,8 +549,6 @@ MonoBehaviour:
     done: 0
   - name: "Vy\u0159e\u0161en\xED baterky na UI hr\xE1\u010Di (pro\u010D m\xE1m baterku,
       kter\xE1 nen\xED videt na charakteru?)"
-    done: 0
-  - name: 
     done: 0
   - name: 4. dostavas hrozne lagy pri movevovani mysi v puzzlu nevim proc jinak ok
     done: 0
