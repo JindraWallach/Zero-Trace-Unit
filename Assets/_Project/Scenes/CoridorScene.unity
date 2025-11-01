@@ -2823,6 +2823,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HackOverlayUI
   scanLines: []
   canvasGroup: {fileID: 499343909}
+  isActive: 0
 --- !u!1 &223094786
 GameObject:
   m_ObjectHideFlags: 0
@@ -3616,6 +3617,7 @@ MonoBehaviour:
   - {fileID: 80029089}
   - {fileID: 906790554}
   - {fileID: 730311588}
+  - {fileID: 938499998}
 --- !u!1001 &312965478
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4612,6 +4614,7 @@ MonoBehaviour:
   batteryText: {fileID: 547827257}
   alertText: {fileID: 749705272}
   alertDuration: 3
+  alertTimer: 0
 --- !u!1001 &412424337
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7271,7 +7274,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &668915513
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10260,6 +10263,51 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4894799469115526, guid: 77200928bb40da847a49bb3cb2b3b019, type: 3}
   m_PrefabInstance: {fileID: 909243012}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &938499998
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 938499999}
+  - component: {fileID: 938500000}
+  m_Layer: 0
+  m_Name: PlayerModeController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &938499999
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 938499998}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7853577938338958500}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &938500000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 938499998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ce0425017c7b0b458018788de04e49e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerModeController
+  startMode: 0
 --- !u!1001 &940301315
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14120,8 +14168,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b2b15841835838428f5ed0ae26cd6be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIManager
-  hudController: {fileID: 409657920}
-  hackOverlay: {fileID: 217645488}
   disableDuringHack:
   - {fileID: 668915512}
 --- !u!1001 &1248543211
@@ -16672,52 +16718,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4174149541080578, guid: e766f33e0ec16d54599c071947759921, type: 3}
   m_PrefabInstance: {fileID: 1482483805}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1488741900
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1488741901}
-  - component: {fileID: 1488741902}
-  m_Layer: 0
-  m_Name: HackModeController
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1488741901
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1488741900}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7853577938338958500}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1488741902
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1488741900}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 282d7c13686d33a4aa1a903a519413e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HackModeController
-  hackModePostProcess: {fileID: 1096621093}
-  hackCamera: {fileID: 0}
 --- !u!1001 &1497153927
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18823,7 +18823,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1736550760
 RectTransform:
   m_ObjectHideFlags: 0
@@ -20849,8 +20849,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1045839602}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -22432,8 +22432,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1570517310}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -23283,6 +23283,14 @@ PrefabInstance:
     - target: {fileID: 4950033287718502, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7371815972592028288, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+      propertyPath: startLocked
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7371815972592028288, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+      propertyPath: enableAutoLock
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -27925,7 +27933,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 730311589}
-  - {fileID: 1488741901}
+  - {fileID: 938499999}
   - {fileID: 1008666427}
   - {fileID: 7853648510135343230}
   - {fileID: 7853190886528930614}
