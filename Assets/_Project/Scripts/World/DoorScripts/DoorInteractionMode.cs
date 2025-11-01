@@ -1,3 +1,4 @@
+// Scripts/World/DoorInteractionMode.cs
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,7 +23,7 @@ public class DoorInteractionMode : MonoBehaviour
         // Normal mode: only physical interaction
         normalModeStrategies.Add(new PhysicalInteractionStrategy());
 
-        // Hack mode: hack or already hacked
+        // Hack mode: hack, already hacked, or out of range
         hackModeStrategies.Add(new HackInteractionStrategy());
         hackModeStrategies.Add(new AlreadyHackedStrategy());
         hackModeStrategies.Add(new OutOfRangeStrategy());
@@ -34,13 +35,15 @@ public class DoorInteractionMode : MonoBehaviour
             Config = config,
             IsLocked = stateMachine.Lock.IsLocked
         };
+    }
 
-        // Subscribe to mode changes
+    private void OnEnable()
+    {
         if (PlayerModeController.Instance != null)
             PlayerModeController.Instance.OnModeChanged += OnModeChanged;
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
         if (PlayerModeController.Instance != null)
             PlayerModeController.Instance.OnModeChanged -= OnModeChanged;
@@ -52,11 +55,12 @@ public class DoorInteractionMode : MonoBehaviour
 
         if (!inRange)
         {
-            doorController.HidePrompts();
+            doorController.SetPlayerInRange(null, false);
             currentStrategy = null;
             return;
         }
 
+        doorController.SetPlayerInRange(player, true);
         UpdateInteraction();
     }
 
@@ -80,9 +84,14 @@ public class DoorInteractionMode : MonoBehaviour
         currentStrategy = FindFirstValidStrategy(strategies);
 
         if (currentStrategy != null)
-            doorController.SetPromptEnabled(true, currentStrategy.GetPromptText(context));
+        {
+            string promptText = currentStrategy.GetPromptText(context);
+            doorController.SetPromptEnabled(true, promptText);
+        }
         else
-            doorController.HidePrompts();
+        {
+            doorController.SetPromptEnabled(false);
+        }
     }
 
     private IInteractionStrategy FindFirstValidStrategy(List<IInteractionStrategy> strategies)

@@ -1,9 +1,6 @@
-﻿using UnityEngine;
+﻿// Scripts/World/DoorController.cs
+using UnityEngine;
 
-/// <summary>
-/// Controls door animation, sounds, and visual state.
-/// Pure open/close logic without lock/hack concerns.
-/// </summary>
 [RequireComponent(typeof(Animator))]
 public class DoorController : MonoBehaviour
 {
@@ -31,7 +28,6 @@ public class DoorController : MonoBehaviour
     private bool playerInRange = false;
     private bool shouldShowPrompt = false;
 
-
     private void Reset()
     {
         animator = GetComponent<Animator>();
@@ -41,14 +37,12 @@ public class DoorController : MonoBehaviour
     {
         animator.SetBool(openBoolName, true);
         PlaySound(openSound);
-        Debug.Log("[DoorController] Door opening");
     }
 
     public void Close()
     {
         animator.SetBool(openBoolName, false);
         PlaySound(closeSound);
-        Debug.Log("[DoorController] Door closing");
     }
 
     public void SetPlayerInRange(Transform playerTransform, bool inRange)
@@ -58,31 +52,22 @@ public class DoorController : MonoBehaviour
 
         if (!inRange)
             HidePrompts();
-        else
-            UpdatePromptVisibility();
     }
 
     public void SetPromptEnabled(bool enabled, string promptText = "")
     {
         shouldShowPrompt = enabled;
-        currentPromptText = promptText; // Store text
-        UpdatePromptVisibility();
-    }
+        currentPromptText = promptText;
 
-    private void UpdatePromptVisibility()
-    {
-        if (!playerInRange || !shouldShowPrompt)
-        {
+        if (enabled && playerInRange && !string.IsNullOrEmpty(promptText))
+            ShowPromptForSide(promptText);
+        else
             HidePrompts();
-            return;
-        }
-
-        ShowPromptForSide(currentPromptText);
     }
 
-    public void ShowPromptForSide(string text)
+    private void ShowPromptForSide(string text)
     {
-        if (!playerInRange || !shouldShowPrompt) return;
+        if (player == null) return;
 
         Vector3 localPlayerPos = transform.InverseTransformPoint(player.position);
         bool shouldShowBack = localPlayerPos.z >= 0;
@@ -92,13 +77,13 @@ public class DoorController : MonoBehaviour
 
         if (shouldShowBack)
         {
-            promptBack.Show(text);
-            promptFront.Hide();
+            promptBack?.Show(text);
+            promptFront?.Hide();
         }
         else
         {
-            promptFront.Show(text);
-            promptBack.Hide();
+            promptFront?.Show(text);
+            promptBack?.Hide();
         }
     }
 
@@ -106,11 +91,6 @@ public class DoorController : MonoBehaviour
     {
         promptFront?.Hide();
         promptBack?.Hide();
-    }
-
-    public void SetPlayerReference(Transform playerTransform)
-    {
-        player = playerTransform;
     }
 
     private void PlaySound(AudioClip clip)

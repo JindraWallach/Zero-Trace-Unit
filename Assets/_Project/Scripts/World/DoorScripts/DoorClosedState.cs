@@ -7,10 +7,8 @@ public class DoorClosedState : DoorState
     public override void Enter()
     {
         machine.Controller.Close();
-        var hackable = machine.GetComponent<HackableDoor>();
-        string text = hackable?.GetInteractText() ?? "Use";
-        machine.Controller.SetPromptEnabled(true, text);
         machine.Lock.StartAutoLock();
+        // Prompt handled by DoorInteractionMode
     }
 
     public override void Exit()

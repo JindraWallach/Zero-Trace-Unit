@@ -15,7 +15,6 @@ public class PlayerModeController : MonoBehaviour, IInitializable
     public PlayerMode CurrentMode { get; private set; }
 
     private InputReader inputReader;
-    private HackModeController hackModeController;
     private ToolController toolController;
 
     private void Awake()
@@ -27,7 +26,6 @@ public class PlayerModeController : MonoBehaviour, IInitializable
         }
         Instance = this;
 
-        hackModeController = GetComponent<HackModeController>();
         toolController = GetComponent<ToolController>();
         CurrentMode = startMode;
     }
@@ -56,16 +54,13 @@ public class PlayerModeController : MonoBehaviour, IInitializable
 
         CurrentMode = mode;
 
-        // Apply mode changes
         if (mode == PlayerMode.Hack)
         {
-            hackModeController?.EnableHackMode();
             toolController?.ShowTool();
             toolController?.StartScan();
         }
         else
         {
-            hackModeController?.DisableHackMode();
             toolController?.HideTool();
             toolController?.StopScan();
         }

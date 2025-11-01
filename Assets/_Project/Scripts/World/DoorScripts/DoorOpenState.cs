@@ -13,11 +13,7 @@ public class DoorOpenState : DoorState
         machine.Controller.SetPromptEnabled(false);
 
         if (machine.Lock.EnableAutoClose)
-        {
             autoCloseCoroutine = machine.StartCoroutine(AutoCloseCoroutine());
-        }
-
-        Debug.Log("[DoorOpenState] Door open");
     }
 
     public override void Exit()

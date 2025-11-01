@@ -12,6 +12,6 @@ public class AlreadyHackedStrategy : IInteractionStrategy
 
     public void Execute(DoorContext ctx)
     {
-        // Do nothing, just informational
+        // Informational only
     }
 }

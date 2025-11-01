@@ -9,9 +9,8 @@ public class DoorClosingState : DoorState
     public override void Enter()
     {
         machine.Controller.Close();
-        machine.Controller.SetPromptEnabled(false); // Hide prompt
+        machine.Controller.SetPromptEnabled(false);
         timer = machine.AnimDuration;
-        Debug.Log("[DoorClosingState] Door closing");
     }
 
     public override void Update()
@@ -21,5 +20,5 @@ public class DoorClosingState : DoorState
             machine.SetState(new DoorClosedState(machine));
     }
 
-    public override void Interact() { } // ignore during animation
+    public override void Interact() { }
 }

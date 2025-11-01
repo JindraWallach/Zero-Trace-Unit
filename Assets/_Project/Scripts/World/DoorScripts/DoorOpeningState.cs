@@ -9,9 +9,8 @@ public class DoorOpeningState : DoorState
     public override void Enter()
     {
         machine.Controller.Open();
-        machine.Controller.SetPromptEnabled(false); // Hide prompt
+        machine.Controller.SetPromptEnabled(false);
         timer = machine.AnimDuration;
-        Debug.Log("[DoorOpeningState] Door opening");
     }
 
     public override void Update()
@@ -21,5 +20,5 @@ public class DoorOpeningState : DoorState
             machine.SetState(new DoorOpenState(machine));
     }
 
-    public override void Interact() { } // ignore during animation
+    public override void Interact() { }
 }
