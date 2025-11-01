@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: -3455294810283630252}
   - component: {fileID: 7371815972592028288}
   - component: {fileID: 4930989083550011045}
+  - component: {fileID: 6400673175810272358}
   - component: {fileID: 8352087749016847735}
   m_Layer: 6
   m_Name: SM_Bld_Wall_Doorframe_02
@@ -167,8 +168,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c476fa80542c59148b5b3c20098dab00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LockSystem
-  startLocked: 1
-  enableAutoLock: 1
+  startLocked: 0
+  enableAutoLock: 0
   enableAutoClose: 1
   autoLockDelay: 30
   autoCloseDelay: 30
@@ -188,6 +189,22 @@ MonoBehaviour:
   lockedText: HACK
   puzzleDefinition: {fileID: 11400000, guid: 4d189acc318cbb44f8f551920274ae0e, type: 2}
   targetID: 
+--- !u!114 &6400673175810272358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1543695114780030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdeaefc95921dfa41a85f8f62825014b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DoorInteractionMode
+  stateMachine: {fileID: -3455294810283630252}
+  hackableDoor: {fileID: 4930989083550011045}
+  doorController: {fileID: 2963774249556382902}
+  config: {fileID: 11400000, guid: 038466aa5ff19034b8442d5765b84c6c, type: 2}
 --- !u!95 &8352087749016847735
 Animator:
   serializedVersion: 7

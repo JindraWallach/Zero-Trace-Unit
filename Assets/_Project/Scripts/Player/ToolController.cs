@@ -1,10 +1,8 @@
+// Scripts/Player/ToolController.cs
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Manages hack tool visualization and target scanning.
-/// Shows lines to hackable objects in hack mode.
-/// </summary>
 public class ToolController : MonoBehaviour
 {
     [Header("Tool Visual")]
@@ -13,17 +11,11 @@ public class ToolController : MonoBehaviour
 
     [Header("Scan Settings")]
     [SerializeField] private float scanRadius = 15f;
-    [Tooltip("Currently Interactible layer")]
-    [SerializeField] private LayerMask hackableLayer;
+    [SerializeField] private LayerMask targetLayer;
+    [SerializeField] private float scanInterval = 0.5f; // Scan every 0.5s instead of Update
 
     private readonly List<IHackTarget> scannedTargets = new();
-    private bool isScanning;
-
-    private void Update()
-    {
-        if (isScanning)
-            ScanForTargets();
-    }
+    private Coroutine scanCoroutine;
 
     public void ShowTool()
     {
@@ -39,33 +31,49 @@ public class ToolController : MonoBehaviour
 
     public void StartScan()
     {
-        isScanning = true;
-        Debug.Log("[ToolController] Scan started");
+        StopScan();
+        scanCoroutine = StartCoroutine(ScanCoroutine());
     }
 
     public void StopScan()
     {
-        isScanning = false;
+        if (scanCoroutine != null)
+        {
+            StopCoroutine(scanCoroutine);
+            scanCoroutine = null;
+        }
         scannedTargets.Clear();
-        Debug.Log("[ToolController] Scan stopped");
     }
 
-    private void ScanForTargets()
+    private IEnumerator ScanCoroutine()
+    {
+        var wait = new WaitForSeconds(scanInterval);
+
+        while (true)
+        {
+            PerformScan();
+            yield return wait;
+        }
+    }
+
+    private void PerformScan()
     {
         scannedTargets.Clear();
 
-        var colliders = Physics.OverlapSphere(transform.position, scanRadius, hackableLayer);
+        var colliders = Physics.OverlapSphere(transform.position, scanRadius, targetLayer);
+
         foreach (var col in colliders)
         {
-            if (col.TryGetComponent(out IHackTarget target))
-            {
-                if (target.IsHackable)
-                    scannedTargets.Add(target);
-            }
+            if (col.TryGetComponent(out IHackTarget target) && target.IsHackable)
+                scannedTargets.Add(target);
         }
-
-        // UI update handled by HackOverlayUI via HackManager
     }
 
     public List<IHackTarget> GetScannedTargets() => scannedTargets;
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(transform.position, scanRadius);
+    }
 }

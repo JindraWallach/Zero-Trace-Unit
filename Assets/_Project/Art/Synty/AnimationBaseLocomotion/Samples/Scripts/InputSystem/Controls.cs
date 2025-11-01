@@ -190,6 +190,15 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ChangeMode"",
+                    ""type"": ""Button"",
+                    ""id"": ""b6fe9bc8-0040-4ba8-9a99-6d51191ff0c9"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -500,6 +509,17 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""action"": ""Exit"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""85b03cc1-e9e7-44ce-bf43-a39f1b96430b"",
+                    ""path"": ""<Keyboard>/h"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard and Mouse"",
+                    ""action"": ""ChangeMode"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -547,6 +567,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         m_Player_ToggleFlashlight = m_Player.FindAction("ToggleFlashlight", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         m_Player_Exit = m_Player.FindAction("Exit", throwIfNotFound: true);
+        m_Player_ChangeMode = m_Player.FindAction("ChangeMode", throwIfNotFound: true);
     }
 
     ~@Controls()
@@ -638,6 +659,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_ToggleFlashlight;
     private readonly InputAction m_Player_Interact;
     private readonly InputAction m_Player_Exit;
+    private readonly InputAction m_Player_ChangeMode;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -693,6 +715,10 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/Exit".
         /// </summary>
         public InputAction @Exit => m_Wrapper.m_Player_Exit;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/ChangeMode".
+        /// </summary>
+        public InputAction @ChangeMode => m_Wrapper.m_Player_ChangeMode;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -752,6 +778,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Exit.started += instance.OnExit;
             @Exit.performed += instance.OnExit;
             @Exit.canceled += instance.OnExit;
+            @ChangeMode.started += instance.OnChangeMode;
+            @ChangeMode.performed += instance.OnChangeMode;
+            @ChangeMode.canceled += instance.OnChangeMode;
         }
 
         /// <summary>
@@ -796,6 +825,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Exit.started -= instance.OnExit;
             @Exit.performed -= instance.OnExit;
             @Exit.canceled -= instance.OnExit;
+            @ChangeMode.started -= instance.OnChangeMode;
+            @ChangeMode.performed -= instance.OnChangeMode;
+            @ChangeMode.canceled -= instance.OnChangeMode;
         }
 
         /// <summary>
@@ -939,5 +971,12 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnExit(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "ChangeMode" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnChangeMode(InputAction.CallbackContext context);
     }
 }

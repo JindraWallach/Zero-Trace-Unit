@@ -104,6 +104,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "ChangeMode",
+                    "type": "Button",
+                    "id": "b6fe9bc8-0040-4ba8-9a99-6d51191ff0c9",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -412,6 +421,17 @@
                     "processors": "",
                     "groups": ";Keyboard and Mouse",
                     "action": "Exit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "85b03cc1-e9e7-44ce-bf43-a39f1b96430b",
+                    "path": "<Keyboard>/h",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard and Mouse",
+                    "action": "ChangeMode",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -52,6 +52,8 @@ namespace Synty.AnimationBaseLocomotion.Samples.InputSystem
 
         public Action onEscapePressed;
 
+        public Action onHackModeToggle;
+
         /// <inheritdoc cref="OnEnable" />
         private void OnEnable()
         {
@@ -276,6 +278,12 @@ namespace Synty.AnimationBaseLocomotion.Samples.InputSystem
         {
             if (!context.performed) return;
             onEscapePressed?.Invoke();
+        }
+
+        public void OnChangeMode(InputAction.CallbackContext context)
+        {
+            if (!context.performed) return;
+            onHackModeToggle?.Invoke();
         }
     }
 }

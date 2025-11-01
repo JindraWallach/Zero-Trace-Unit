@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 615e07d49a413a74499510f663bd2f39, type: 3}
+  m_Name: DoorInteractionConfig
+  m_EditorClassIdentifier: Assembly-CSharp::DoorInteractionConfig
+  physicalInteractionRange: 3
+  hackRange: 5
+  physicalUseText: Open
+  hackText: Hack
+  alreadyHackedText: Access Already Granted
+  outOfRangeText: Out Of Range

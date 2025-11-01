@@ -13,16 +13,16 @@ public class HackableDoor : InteractableBase, IHackTarget, IInitializable
     [SerializeField] private string targetID;
 
     private DoorStateMachine stateMachine;
+    private DoorInteractionMode interactionMode;
     private DependencyInjector dependencyInjector;
-    private bool isHackable = true;
 
     public string TargetID => targetID;
-    public bool IsHackable => isHackable && stateMachine.Lock.IsLocked;
+    public bool IsHackable => GetComponent<DoorStateMachine>().Lock.IsLocked;
 
     protected override void Awake()
     {
         base.Awake();
-        stateMachine = GetComponent<DoorStateMachine>();
+        interactionMode = GetComponent<DoorInteractionMode>();
 
         if (string.IsNullOrEmpty(targetID))
             targetID = $"Door_{GetInstanceID()}";
@@ -34,15 +34,14 @@ public class HackableDoor : InteractableBase, IHackTarget, IInitializable
         HackManager.Instance?.RegisterTarget(this);
     }
 
-    protected override void OnDestroy()
+    private void OnDestroy()
     {
         HackManager.Instance?.UnregisterTarget(this);
-        base.OnDestroy();
     }
 
     public override void Interact()
     {
-        stateMachine.OnInteract();
+        interactionMode.ExecuteInteraction();
     }
 
     public override void OnEnterRange()
@@ -58,16 +57,6 @@ public class HackableDoor : InteractableBase, IHackTarget, IInitializable
         GetComponent<DoorController>()?.SetPlayerInRange(null, false);
     }
 
-    public override void ShowPromptForPlayer(Transform player)
-    {
-        GetComponent<DoorController>()?.SetPlayerInRange(player, true);
-    }
-
-    public override void HidePromptForPlayer()
-    {
-        GetComponent<DoorController>()?.SetPlayerInRange(null, false);
-    }
-
     public void RequestHack(Action onSuccess, Action onFail)
     {
         if (!IsHackable)
@@ -77,10 +66,20 @@ public class HackableDoor : InteractableBase, IHackTarget, IInitializable
         }
 
         HackManager.Instance.BlockPlayerInput(dependencyInjector.InputReader);
-
         bool started = HackManager.Instance.RequestHack(this, onSuccess, onFail);
+
         if (!started)
             onFail?.Invoke();
+    }
+
+    public override void ShowPromptForPlayer(Transform player)
+    {
+        interactionMode?.SetPlayerInRange(player, true);
+    }
+
+    public override void HidePromptForPlayer()
+    {
+        interactionMode?.SetPlayerInRange(null, false);
     }
 
     public override string GetInteractText()

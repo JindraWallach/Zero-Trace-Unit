@@ -10891,10 +10891,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ToolController
   toolModel: {fileID: 4928818055253244628, guid: 52ec3f4d96bf8394694b52d507516670, type: 3}
   toolTip: {fileID: 7845917863467487904}
-  scanRadius: 15
-  hackableLayer:
+  scanRadius: 5
+  targetLayer:
     serializedVersion: 2
     m_Bits: 64
+  scanInterval: 0.5
 --- !u!1001 &1012945163
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23281,22 +23282,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4950033287718502, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7371815972592028288, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
-      propertyPath: startLocked
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7371815972592028288, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
-      propertyPath: autoLockDelay
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 7371815972592028288, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
-      propertyPath: autoCloseDelay
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 7371815972592028288, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
-      propertyPath: enableAutoLock
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
