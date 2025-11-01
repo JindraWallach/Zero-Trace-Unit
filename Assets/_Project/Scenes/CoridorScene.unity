@@ -524,8 +524,7 @@ MonoBehaviour:
   - name: "Zm\u011Bna bohuzel celeho hack sys (Hlavne UI ale i UX) + Zlep\u0161en\xED
       nestatickeho designu hack tabulky?"
     done: 0
-  - name: "Opraven\xED textu hacku, pokud pot\u0159eba? Hack bude nejsp\xED\u0161e
-      anim + prefab + spojen\xED?"
+  - name: "Hack bude nejsp\xED\u0161e anim + prefab + spojen\xED?"
     done: 0
   - name: "Zlep\u0161en\xED z\xE1bavnosti hran\xED (ka\u017Ed\xFD dve\u0159e hack?),
       Spr\xE1vn\xFD lock sys, co dve\u0159e ktere nemaj\xED mit autolock?"
@@ -23287,6 +23286,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4950033287718502, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7371815972592028288, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+      propertyPath: startLocked
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7371815972592028288, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+      propertyPath: autoLockDelay
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7371815972592028288, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+      propertyPath: autoCloseDelay
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7371815972592028288, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+      propertyPath: enableAutoLock
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

@@ -8,13 +8,18 @@ public class LockSystem : MonoBehaviour
 {
     [Header("Lock Settings")]
     [SerializeField] private bool startLocked = true;
+    [SerializeField] private bool enableAutoLock = true;
+    [SerializeField] private bool enableAutoClose = true;
     [SerializeField] private float autoLockDelay = 30f;
+    [SerializeField] private float autoCloseDelay = 30f;
 
     private bool isLocked;
     private Coroutine autoLockCoroutine;
     private DoorStateMachine stateMachine;
 
     public bool IsLocked => isLocked;
+    public bool EnableAutoClose => enableAutoClose;
+    public float AutoCloseDelay => autoCloseDelay;
 
     private void Awake()
     {
@@ -42,6 +47,8 @@ public class LockSystem : MonoBehaviour
 
     public void StartAutoLock()
     {
+        if (!enableAutoLock) return;
+
         StopAutoLock();
         autoLockCoroutine = StartCoroutine(AutoLockCoroutine());
     }

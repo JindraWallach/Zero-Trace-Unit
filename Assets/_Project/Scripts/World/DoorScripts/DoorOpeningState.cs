@@ -9,6 +9,7 @@ public class DoorOpeningState : DoorState
     public override void Enter()
     {
         machine.Controller.Open();
+        machine.Controller.HidePrompts();
         timer = machine.AnimDuration;
         Debug.Log("[DoorOpeningState] Door opening");
     }

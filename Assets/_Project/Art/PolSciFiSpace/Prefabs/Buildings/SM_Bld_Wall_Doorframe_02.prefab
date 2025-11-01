@@ -168,7 +168,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LockSystem
   startLocked: 1
+  enableAutoLock: 1
+  enableAutoClose: 1
   autoLockDelay: 30
+  autoCloseDelay: 30
 --- !u!114 &4930989083550011045
 MonoBehaviour:
   m_ObjectHideFlags: 0
