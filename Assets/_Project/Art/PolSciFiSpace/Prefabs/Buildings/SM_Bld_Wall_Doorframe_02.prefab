@@ -156,6 +156,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DoorStateMachine
   doorController: {fileID: 2963774249556382902}
   lockSystem: {fileID: 7371815972592028288}
+  currentStateName: 
 --- !u!114 &7371815972592028288
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -168,11 +169,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c476fa80542c59148b5b3c20098dab00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LockSystem
-  startLocked: 0
-  enableAutoLock: 0
+  startLocked: 1
+  enableAutoLock: 1
   enableAutoClose: 1
-  autoLockDelay: 30
-  autoCloseDelay: 30
+  autoLockDelay: 15
+  autoCloseDelay: 15
+  isLockedDebug: 0
 --- !u!114 &4930989083550011045
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -521,13 +521,11 @@ MonoBehaviour:
   items:
   - name: 'Fog: Hex: 7CB1CF'
     done: 0
-  - name: "Zm\u011Bna bohuzel celeho hack sys (Hlavne UI ale i UX) + Zlep\u0161en\xED
-      nestatickeho designu hack tabulky?"
+  - name: "Zlep\u0161en\xED nestatickeho designu hack tabulky?"
     done: 0
   - name: "Hack bude nejsp\xED\u0161e anim + prefab + spojen\xED?"
     done: 0
-  - name: "Zlep\u0161en\xED z\xE1bavnosti hran\xED (ka\u017Ed\xFD dve\u0159e hack?),
-      Spr\xE1vn\xFD lock sys, co dve\u0159e ktere nemaj\xED mit autolock?"
+  - name: "Zlep\u0161en\xED z\xE1bavnosti hran\xED (ka\u017Ed\xFD dve\u0159e hack?)"
     done: 0
   - name: "Indikator UI Locker dve\u0159\xED? Red Color? Blender"
     done: 0
@@ -551,6 +549,25 @@ MonoBehaviour:
       kter\xE1 nen\xED videt na charakteru?)"
     done: 0
   - name: 4. dostavas hrozne lagy pri movevovani mysi v puzzlu nevim proc jinak ok
+    done: 0
+  - name: 
+    done: 0
+  - name: Normal muzu hackovat to je spatne, pokud normal mode a dvere jsou locked
+      tak Locked a pri interakci hrace se nic nestane
+    done: 0
+  - name: v hack modu pokud jsou dverte unlocked da to hack failder to je dobre,
+      ale ma to tam naspat neco jako Already Unlocked
+    done: 0
+  - name: a kdyz odemknu dvere v hack modu a zmenim state tak je hack failded a neotevrou
+      se< nekde chyba hrac je v normal ale kodove nekde v hack <
+    done: 0
+  - name: kdykoli prepnu mod musi se aktualizovat prompty, kdyz stojim v rangi a
+      prepnu mod UI nefaci a taky kod protoze jsem v rangi
+    done: 0
+  - name: 'jiste srp, oop a elegatne na vykon '
+    done: 0
+  - name: BONUS> pokdu hacknu dvere success tak se automaticky otevrou pokud byli
+      locked na unlocked
     done: 0
 --- !u!4 &36559939
 Transform:
@@ -2781,14 +2798,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 217645487}
-  - component: {fileID: 217645488}
   m_Layer: 5
   m_Name: HackOverlayUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &217645487
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2802,25 +2818,14 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 499343908}
+  - {fileID: 1984896629}
   m_Father: {fileID: 409657919}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &217645488
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 217645486}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9bfa3eb8c8e290d4585e97c32204c768, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HackOverlayUI
 --- !u!1 &223094786
 GameObject:
   m_ObjectHideFlags: 0
@@ -4588,10 +4593,10 @@ RectTransform:
   - {fileID: 217645487}
   m_Father: {fileID: 300282155}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &409657920
 MonoBehaviour:
@@ -4602,9 +4607,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 409657918}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e3813809dfcf99498df8ae33747c646, type: 3}
+  m_Script: {fileID: 11500000, guid: 4af840c33285b95499f487209de4c2fe, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HUDController
+  m_EditorClassIdentifier: Assembly-CSharp::HackModeUI
+  hackModeObjects:
+  - {fileID: 217645486}
 --- !u!1001 &412424337
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5529,7 +5536,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &499343908
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5558,7 +5565,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 499343907}
   m_Enabled: 1
-  m_Alpha: 0
+  m_Alpha: 1
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -14158,8 +14165,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b2b15841835838428f5ed0ae26cd6be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIManager
-  disableDuringHack:
-  - {fileID: 668915512}
+  disableDuringHack: []
 --- !u!1001 &1248543211
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21885,6 +21891,81 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4019274876942284, guid: 6507852163400bf438756827cd550fc8, type: 3}
   m_PrefabInstance: {fileID: 1980413922}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1984896628
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1984896629}
+  - component: {fileID: 1984896631}
+  - component: {fileID: 1984896630}
+  m_Layer: 5
+  m_Name: ScreenUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1984896629
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1984896628}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 217645487}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: -15}
+  m_SizeDelta: {x: 1000, y: 30}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1984896630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1984896628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.30588236}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 94eca94d5e347704b8512d5364ec9345, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1984896631
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1984896628}
+  m_CullTransparentMesh: 1
 --- !u!1001 &1991344534
 PrefabInstance:
   m_ObjectHideFlags: 0
