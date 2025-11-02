@@ -10,6 +10,9 @@ public class DoorStateMachine : MonoBehaviour
     [SerializeField] private DoorController doorController;
     [SerializeField] private LockSystem lockSystem;
 
+    [Header("Debug")]
+    [SerializeField] private string currentStateName;
+
     private DoorState currentState;
     private Transform player;
 
@@ -30,6 +33,7 @@ public class DoorStateMachine : MonoBehaviour
     {
         currentState?.Exit();
         currentState = newState;
+        currentStateName = currentState?.GetType().Name ?? "None";
         currentState.Enter();
     }
 

@@ -99,7 +99,8 @@ public class DoorInteractionMode : MonoBehaviour
         foreach (var strategy in strategies)
         {
             if (strategy.CanExecute(context))
-                return strategy;
+                Debug.Log($"[DoorInteractionMode] Selected strategy: {strategy.GetType().Name}");
+            return strategy;
         }
         return null;
     }

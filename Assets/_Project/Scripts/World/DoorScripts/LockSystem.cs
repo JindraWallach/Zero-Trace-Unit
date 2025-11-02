@@ -13,6 +13,9 @@ public class LockSystem : MonoBehaviour
     [SerializeField] private float autoLockDelay = 30f;
     [SerializeField] private float autoCloseDelay = 30f;
 
+    [Header("Debug")]
+    [SerializeField] private bool isLockedDebug;
+
     private bool isLocked;
     private Coroutine autoLockCoroutine;
     private DoorStateMachine stateMachine;
@@ -24,6 +27,7 @@ public class LockSystem : MonoBehaviour
     private void Awake()
     {
         isLocked = startLocked;
+        isLockedDebug = isLocked;
         stateMachine = GetComponent<DoorStateMachine>();
     }
 
@@ -32,6 +36,7 @@ public class LockSystem : MonoBehaviour
         if (isLocked) return;
 
         isLocked = true;
+        isLockedDebug = true;
         StopAutoLock();
         stateMachine.SetState(new DoorLockedState(stateMachine));
         Debug.Log("[LockSystem] Door locked");
@@ -42,6 +47,7 @@ public class LockSystem : MonoBehaviour
         if (!isLocked) return;
 
         isLocked = false;
+        isLockedDebug = false;
         Debug.Log("[LockSystem] Door unlocked");
     }
 

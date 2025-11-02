@@ -2821,9 +2821,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bfa3eb8c8e290d4585e97c32204c768, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HackOverlayUI
-  scanLines: []
-  canvasGroup: {fileID: 499343909}
-  isActive: 0
 --- !u!1 &223094786
 GameObject:
   m_ObjectHideFlags: 0
@@ -3589,11 +3586,11 @@ Transform:
   m_GameObject: {fileID: 312868193}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 34.47253, y: -6.40488, z: 9.03022}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 368616717}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &312868195
 MonoBehaviour:
@@ -4052,8 +4049,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1289478585}
-  - {fileID: 312868194}
   - {fileID: 72763324}
   - {fileID: 1247254112}
   m_Father: {fileID: 0}
@@ -4610,11 +4605,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e3813809dfcf99498df8ae33747c646, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HUDController
-  batterySlider: {fileID: 1202350686}
-  batteryText: {fileID: 547827257}
-  alertText: {fileID: 749705272}
-  alertDuration: 3
-  alertTimer: 0
 --- !u!1001 &412424337
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14762,12 +14752,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1289478584}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -34.47253, y: 6.40488, z: -9.03022}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 368616717}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1289478586
 MonoBehaviour:
@@ -23286,11 +23276,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7371815972592028288, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
       propertyPath: startLocked
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7371815972592028288, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
       propertyPath: enableAutoLock
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -30609,5 +30599,7 @@ SceneRoots:
   - {fileID: 818518902}
   - {fileID: 300282155}
   - {fileID: 7790563198676851893}
+  - {fileID: 1289478585}
+  - {fileID: 312868194}
   - {fileID: 368616717}
   - {fileID: 36559939}
