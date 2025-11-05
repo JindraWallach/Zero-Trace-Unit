@@ -187,8 +187,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a17c58e49df0e349bd412f8a4d1471f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorPuzzleLauncher
-  interactText: Open
-  lockedText: HACK
+  interactText: 0
+  lockedText: 1
   puzzleDefinition: {fileID: 11400000, guid: 4d189acc318cbb44f8f551920274ae0e, type: 2}
   targetID: 
 --- !u!114 &6400673175810272358
