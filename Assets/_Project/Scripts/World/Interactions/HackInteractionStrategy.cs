@@ -1,9 +1,7 @@
-using UnityEngine;
-
 /// <summary>
 /// Hack mode: Door is locked and in range - can hack.
 /// </summary>
-public class HackInteractionStrategy : MonoBehaviour, IInteractionStrategy
+public class HackInteractionStrategy : IInteractionStrategy
 {
     public bool CanExecute(DoorContext ctx)
     {
@@ -19,19 +17,21 @@ public class HackInteractionStrategy : MonoBehaviour, IInteractionStrategy
 
     public void Execute(DoorContext ctx)
     {
+        //Debug.Log("[HackInteractionStrategy] Starting hack...");
         ctx.HackableDoor.RequestHack(
             onSuccess: () =>
             {
+                //Debug.Log("[HackInteractionStrategy] Hack SUCCESS");
                 ctx.StateMachine.Lock.Unlock();
 
                 // BONUS: Auto-open after successful hack if enabled
                 if (ctx.StateMachine.Lock.OpenAfterUnlock)
                 {
-                    Debug.Log("[HackInteractionStrategy] Auto-opening door after unlock");
+                    //Debug.Log("[HackInteractionStrategy] Auto-opening door after unlock");
                     ctx.StateMachine.SetState(new DoorOpeningState(ctx.StateMachine));
                 }
             },
-            onFail: () => Debug.Log("[HackInteractionStrategy] Hack failed")
+            onFail: () => { }
         );
     }
 }

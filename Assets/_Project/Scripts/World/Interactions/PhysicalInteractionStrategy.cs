@@ -17,6 +17,7 @@ public class PhysicalInteractionStrategy : IInteractionStrategy
 
     public void Execute(DoorContext ctx)
     {
+        //Debug.Log("[PhysicalInteractionStrategy] Opening door physically");
         ctx.StateMachine.OnInteract();
     }
 }

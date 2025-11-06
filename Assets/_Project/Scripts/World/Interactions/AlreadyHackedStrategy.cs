@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 /// Hack mode: Door is already unlocked - show info only.
 /// </summary>
-public class AlreadyUnlockedStrategy : MonoBehaviour, IInteractionStrategy
+public class AlreadyUnlockedStrategy : IInteractionStrategy
 {
     public bool CanExecute(DoorContext ctx)
     {
@@ -20,6 +20,6 @@ public class AlreadyUnlockedStrategy : MonoBehaviour, IInteractionStrategy
     public void Execute(DoorContext ctx)
     {
         // Informational only
-        Debug.Log("[AlreadyUnlockedStrategy] Door already unlocked");
+        //Debug.Log("[AlreadyUnlockedStrategy] Door already unlocked");
     }
 }

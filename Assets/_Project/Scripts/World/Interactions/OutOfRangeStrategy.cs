@@ -1,9 +1,7 @@
-using UnityEngine;
-
 /// <summary>
 /// Hack mode: Target out of range.
 /// </summary>
-public class OutOfRangeStrategy : MonoBehaviour, IInteractionStrategy
+public class OutOfRangeStrategy : IInteractionStrategy
 {
     public bool CanExecute(DoorContext ctx)
     {
@@ -19,7 +17,6 @@ public class OutOfRangeStrategy : MonoBehaviour, IInteractionStrategy
 
     public void Execute(DoorContext ctx)
     {
-        // Can't interact
-        Debug.Log("[OutOfRangeStrategy] Target out of range");
+        //Debug.Log("[OutOfRangeStrategy] Target out of range");
     }
 }
