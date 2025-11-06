@@ -23368,11 +23368,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7371815972592028288, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
       propertyPath: startLocked
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7371815972592028288, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
       propertyPath: enableAutoLock
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
