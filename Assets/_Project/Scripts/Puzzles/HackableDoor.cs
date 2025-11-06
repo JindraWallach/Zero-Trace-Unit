@@ -1,7 +1,10 @@
-// Scripts/World/HackableDoor.cs
 using System;
 using UnityEngine;
 
+/// <summary>
+/// Bridge between door system and hack manager.
+/// Validates player mode before allowing hack requests.
+/// </summary>
 public class HackableDoor : InteractableBase, IHackTarget, IInitializable
 {
     [Header("Hack Config")]
@@ -40,8 +43,17 @@ public class HackableDoor : InteractableBase, IHackTarget, IInitializable
 
     public void RequestHack(Action onSuccess, Action onFail)
     {
+        // CRITICAL: Validate player is in Hack mode
+        if (PlayerModeController.Instance.CurrentMode != PlayerMode.Hack)
+        {
+            Debug.LogWarning("[HackableDoor] Cannot hack in Normal mode");
+            onFail?.Invoke();
+            return;
+        }
+
         if (!IsHackable)
         {
+            Debug.LogWarning("[HackableDoor] Door is already unlocked");
             onFail?.Invoke();
             return;
         }

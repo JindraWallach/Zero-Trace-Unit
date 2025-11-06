@@ -1,6 +1,9 @@
-﻿// Scripts/World/DoorController.cs
-using UnityEngine;
+﻿using UnityEngine;
 
+/// <summary>
+/// Handles door animations, sounds, and prompt display.
+/// Pure presentation logic - no game logic.
+/// </summary>
 [RequireComponent(typeof(Animator))]
 public class DoorController : MonoBehaviour
 {
@@ -24,9 +27,7 @@ public class DoorController : MonoBehaviour
     public float AnimationDuration => animationDuration;
 
     private Transform player;
-    private string currentPromptText = "";
     private bool playerInRange = false;
-    private bool shouldShowPrompt = false;
 
     private void Reset()
     {
@@ -54,20 +55,27 @@ public class DoorController : MonoBehaviour
             HidePrompts();
     }
 
+    /// <summary>
+    /// Updates prompt display. Called by DoorInteractionMode.
+    /// </summary>
     public void SetPromptEnabled(bool enabled, string promptText = "")
     {
-        shouldShowPrompt = enabled;
-        currentPromptText = promptText;
-
-        if (enabled && playerInRange && !string.IsNullOrEmpty(promptText))
-            ShowPromptForSide(promptText);
-        else
+        if (!playerInRange || !enabled || string.IsNullOrEmpty(promptText))
+        {
             HidePrompts();
+            return;
+        }
+
+        ShowPromptForSide(promptText);
     }
 
     private void ShowPromptForSide(string text)
     {
-        if (player == null) return;
+        if (player == null)
+        {
+            HidePrompts();
+            return;
+        }
 
         Vector3 localPlayerPos = transform.InverseTransformPoint(player.position);
         bool shouldShowBack = localPlayerPos.z >= 0;
