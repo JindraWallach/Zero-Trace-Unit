@@ -1,9 +1,10 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
 /// Strategy pattern controller for door interactions.
 /// Updates interaction state on mode change and lock state change.
+/// Event-driven architecture.
 /// </summary>
 public class DoorInteractionMode : MonoBehaviour
 {
@@ -24,13 +25,13 @@ public class DoorInteractionMode : MonoBehaviour
 
     private void Awake()
     {
-        // Normal mode: only physical interaction or locked message
+        // Normal mode strategies (in priority order)
         normalModeStrategies.Add(new PhysicalInteractionStrategy());
-        normalModeStrategies.Add(new NormalModeLockedStrategy()); // NEW
+        normalModeStrategies.Add(new NormalModeLockedStrategy());
 
-        // Hack mode: hack, already unlocked, or out of range
+        // Hack mode strategies (in priority order)
         hackModeStrategies.Add(new HackInteractionStrategy());
-        hackModeStrategies.Add(new AlreadyUnlockedStrategy()); // RENAMED
+        hackModeStrategies.Add(new HackModeUnlockedStrategy());
         hackModeStrategies.Add(new OutOfRangeStrategy());
 
         context = new DoorContext
@@ -40,6 +41,8 @@ public class DoorInteractionMode : MonoBehaviour
             Config = config,
             IsLocked = stateMachine.Lock.IsLocked
         };
+
+        Debug.Log($"[DoorInteractionMode] Initialized with {normalModeStrategies.Count} normal strategies, {hackModeStrategies.Count} hack strategies");
     }
 
     private void OnEnable()
@@ -70,10 +73,12 @@ public class DoorInteractionMode : MonoBehaviour
         {
             doorController.SetPlayerInRange(null, false);
             currentStrategy = null;
+            Debug.Log("[DoorInteractionMode] Player left range");
             return;
         }
 
         doorController.SetPlayerInRange(player, true);
+        Debug.Log("[DoorInteractionMode] Player entered range");
         UpdateInteraction();
     }
 
@@ -106,6 +111,8 @@ public class DoorInteractionMode : MonoBehaviour
         context.IsLocked = stateMachine.Lock.IsLocked;
         context.CurrentMode = PlayerModeController.Instance.CurrentMode;
 
+        Debug.Log($"[DoorInteractionMode] UPDATE - Mode={context.CurrentMode}, Dist={context.Distance:F2}m, Locked={context.IsLocked}, PhysRange={config.physicalInteractionRange}m, HackRange={config.hackRange}m");
+
         // Select strategies based on current mode
         var strategies = context.CurrentMode == PlayerMode.Hack
             ? hackModeStrategies
@@ -118,21 +125,28 @@ public class DoorInteractionMode : MonoBehaviour
             string promptText = currentStrategy.GetPromptText(context);
             bool canInteract = currentStrategy.CanInteract(context);
             doorController.SetPromptEnabled(canInteract, promptText);
-            Debug.Log($"[DoorInteractionMode] Strategy: {currentStrategy.GetType().Name}, Prompt: {promptText}, CanInteract: {canInteract}");
+            Debug.Log($"[DoorInteractionMode] ✅ Selected: {currentStrategy.GetType().Name}, Prompt='{promptText}', CanInteract={canInteract}");
         }
         else
         {
             doorController.SetPromptEnabled(false);
+            Debug.LogWarning("[DoorInteractionMode] ❌ No valid strategy found!");
         }
     }
 
     private IInteractionStrategy FindFirstValidStrategy(List<IInteractionStrategy> strategies)
     {
+        Debug.Log($"[DoorInteractionMode] Testing {strategies.Count} strategies:");
+
         foreach (var strategy in strategies)
         {
-            if (strategy.CanExecute(context))
+            bool canExecute = strategy.CanExecute(context);
+            Debug.Log($"[DoorInteractionMode]   - {strategy.GetType().Name}: {(canExecute ? "✅ CAN" : "❌ CANNOT")} execute");
+
+            if (canExecute)
                 return strategy;
         }
+
         return null;
     }
 
@@ -140,12 +154,12 @@ public class DoorInteractionMode : MonoBehaviour
     {
         if (currentStrategy != null && currentStrategy.CanInteract(context))
         {
-            Debug.Log($"[DoorInteractionMode] Executing interaction with {currentStrategy.GetType().Name}");
+            Debug.Log($"[DoorInteractionMode] Executing: {currentStrategy.GetType().Name}");
             currentStrategy.Execute(context);
         }
         else
         {
-            Debug.Log("[DoorInteractionMode] Cannot interact - strategy doesn't allow interaction");
+            Debug.LogWarning("[DoorInteractionMode] Cannot interact - strategy doesn't allow interaction");
         }
     }
 }

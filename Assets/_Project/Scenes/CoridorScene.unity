@@ -569,6 +569,9 @@ MonoBehaviour:
   - name: BONUS> pokdu hacknu dvere success tak se automaticky otevrou pokud byli
       locked na unlocked
     done: 0
+  - name: --hrac ma colider range na interakce prmptu na 3 metry takze outofrange
+      by se nikdy nemelo zavoalt?
+    done: 0
 --- !u!4 &36559939
 Transform:
   m_ObjectHideFlags: 0
