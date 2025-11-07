@@ -23358,21 +23358,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4930989083550011045, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
-      propertyPath: lockedText
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4930989083550011045, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
-      propertyPath: interactText
+    - target: {fileID: 7371815972592028288, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+      propertyPath: startLocked
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7371815972592028288, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
-      propertyPath: startLocked
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7371815972592028288, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
       propertyPath: enableAutoLock
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

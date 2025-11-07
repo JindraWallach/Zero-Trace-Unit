@@ -126,12 +126,12 @@ public class DoorInteractionMode : MonoBehaviour
             string promptText = currentStrategy.GetPromptText(context);
             bool canInteract = currentStrategy.CanInteract(context);
             doorController.SetPromptEnabled(canInteract, promptText);
-            Debug.Log($"[DoorInteractionMode] ✅ Selected: {currentStrategy.GetType().Name}, Prompt='{promptText}', CanInteract={canInteract}");
+            Debug.Log($"[DoorInteractionMode] Selected: {currentStrategy.GetType().Name}, Prompt='{promptText}', CanInteract={canInteract}");
         }
         else
         {
             doorController.SetPromptEnabled(false);
-            Debug.LogWarning("[DoorInteractionMode] ❌ No valid strategy found!");
+            Debug.LogWarning("[DoorInteractionMode] No valid strategy found!");
         }
     }
 
@@ -142,7 +142,7 @@ public class DoorInteractionMode : MonoBehaviour
         foreach (var strategy in strategies)
         {
             bool canExecute = strategy.CanExecute(context);
-            Debug.Log($"[DoorInteractionMode]   - {strategy.GetType().Name}: {(canExecute ? "✅ CAN" : "❌ CANNOT")} execute");
+            Debug.Log($"[DoorInteractionMode]   - {strategy.GetType().Name}: {(canExecute ? "CAN" : "CANNOT")} execute");
 
             if (canExecute)
                 return strategy;

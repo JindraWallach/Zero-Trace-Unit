@@ -3,13 +3,8 @@ using UnityEngine;
 
 public abstract class InteractableBase : MonoBehaviour, IInteractable
 {
-    [SerializeField] protected string interactText = "Use";
-    [SerializeField] protected string lockedText = "HACK";
 
     protected bool isInRange;
-
-    public virtual string GetInteractText() => interactText;
-    public virtual string GetLockedText() => lockedText;
 
     public abstract void Interact();
 
