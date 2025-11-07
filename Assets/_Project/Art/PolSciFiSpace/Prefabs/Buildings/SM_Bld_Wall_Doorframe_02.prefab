@@ -189,8 +189,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a17c58e49df0e349bd412f8a4d1471f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorPuzzleLauncher
-  interactText: 0
-  lockedText: 1
   puzzleDefinition: {fileID: 11400000, guid: 4d189acc318cbb44f8f551920274ae0e, type: 2}
   targetID: 
 --- !u!114 &6400673175810272358
@@ -650,7 +648,7 @@ Transform:
   m_GameObject: {fileID: 4830274201585861525}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.51, y: -1.03, z: 0.037}
+  m_LocalPosition: {x: -2.51, y: -0.009, z: 0.037}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
