@@ -34,7 +34,6 @@ public class HackModeUI : MonoBehaviour
 
     private void OnModeChanged(PlayerMode mode)
     {
-        Debug.Log($"[HackModeUI] Mode changed to: {mode}");
         bool isHackMode = mode == PlayerMode.Hack;
 
         foreach (var obj in hackModeObjects)

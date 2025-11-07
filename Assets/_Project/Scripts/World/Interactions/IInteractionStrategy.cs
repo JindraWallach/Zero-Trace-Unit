@@ -21,6 +21,7 @@ public interface IInteractionStrategy
 /// </summary>
 public class DoorContext
 {
+    //TODO : add show prompttextUI boolean
     public Transform Player;
     public float Distance;
     public bool IsLocked;

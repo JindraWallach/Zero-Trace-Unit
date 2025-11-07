@@ -1,4 +1,4 @@
-using Synty.AnimationBaseLocomotion.Samples.InputSystem;
+﻿using Synty.AnimationBaseLocomotion.Samples.InputSystem;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -101,7 +101,6 @@ public class PlayerInteractor : MonoBehaviour
     private void ShowPromptFor(IInteractable target)
     {
         if (target is InteractableBase ib) {
-            Debug.Log($"[PlayerInteractor] player global pos {transform.position}, player local pos {transform.localPosition}");
             ib.ShowPromptForPlayer(transform);
         }
     }

@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 615e07d49a413a74499510f663bd2f39, type: 3}
   m_Name: DoorInteractionConfig
   m_EditorClassIdentifier: Assembly-CSharp::DoorInteractionConfig
-  physicalInteractionRange: 4
-  hackRange: 6
+  physicalInteractionRange: 7.5
+  hackRange: 9.5
   physicalUseText: Open
   hackText: Hack
   outOfRangeText: Out Of Range

@@ -77,6 +77,8 @@ public class DoorController : MonoBehaviour
             return;
         }
 
+        Debug.Log("[DoorController] Showing prompt: " + text);
+
         Vector3 localPlayerPos = transform.InverseTransformPoint(player.position);
         bool shouldShowBack = localPlayerPos.z >= 0;
 
