@@ -572,6 +572,11 @@ MonoBehaviour:
   - name: --hrac ma colider range na interakce prmptu na 3 metry takze outofrange
       by se nikdy nemelo zavoalt?
     done: 0
+  - name: --zmenit system spojeni
+    done: 0
+  - name: --nejak vyresit aby pokud se dostanu do range dverim tak stale by se mohla
+      zmenit strategie
+    done: 0
 --- !u!4 &36559939
 Transform:
   m_ObjectHideFlags: 0
