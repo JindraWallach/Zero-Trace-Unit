@@ -12,6 +12,7 @@ public class DoorInteractionMode : MonoBehaviour
     [SerializeField] private DoorStateMachine stateMachine;
     [SerializeField] private HackableDoor hackableDoor;
     [SerializeField] private DoorController doorController;
+    [SerializeField] private Transform pivot;
 
     [Header("Config")]
     [SerializeField] private DoorInteractionConfig config;
@@ -107,7 +108,7 @@ public class DoorInteractionMode : MonoBehaviour
         if (context.Player == null) return;
 
         // Update context
-        context.Distance = Vector3.Distance(transform.position, context.Player.position);
+        context.Distance = Vector3.Distance(pivot.position, context.Player.position);
         context.IsLocked = stateMachine.Lock.IsLocked;
         context.CurrentMode = PlayerModeController.Instance.CurrentMode;
 
