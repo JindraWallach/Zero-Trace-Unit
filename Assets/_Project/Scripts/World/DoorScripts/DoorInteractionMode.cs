@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
 
 /// <summary>
-/// Strategy pattern controller for door interactions.
-/// Updates interaction state on mode change and lock state change.
-/// Event-driven architecture.
+/// Controller for door interactions using Resolver pattern.
+/// Continuously updates prompts while player is in range (coroutine).
+/// Event-driven for mode/lock changes + continuous checking.
 /// </summary>
 public class DoorInteractionMode : MonoBehaviour
 {
@@ -17,41 +17,19 @@ public class DoorInteractionMode : MonoBehaviour
     [Header("Config")]
     [SerializeField] private DoorInteractionConfig config;
 
-    private readonly List<IInteractionStrategy> normalModeStrategies = new();
-    private readonly List<IInteractionStrategy> hackModeStrategies = new();
+    [Header("Update Settings")]
+    [SerializeField] private float updateInterval = 0.2f; // Update prompts 5x per second
 
-    private DoorContext context;
-    private IInteractionStrategy currentStrategy;
+    private Transform player;
     private bool isPlayerInRange;
-
-    private void Awake()
-    {
-        // Normal mode strategies (in priority order)
-        normalModeStrategies.Add(new PhysicalInteractionStrategy());
-        normalModeStrategies.Add(new NormalModeLockedStrategy());
-
-        // Hack mode strategies (in priority order)
-        hackModeStrategies.Add(new HackInteractionStrategy());
-        hackModeStrategies.Add(new HackModeUnlockedStrategy());
-        hackModeStrategies.Add(new OutOfRangeStrategy());
-
-        context = new DoorContext
-        {
-            StateMachine = stateMachine,
-            HackableDoor = hackableDoor,
-            Config = config,
-            IsLocked = stateMachine.Lock.IsLocked
-        };
-
-        Debug.Log($"[DoorInteractionMode] Initialized with {normalModeStrategies.Count} normal strategies, {hackModeStrategies.Count} hack strategies");
-    }
+    private InteractionResult currentResult;
+    private Coroutine updateCoroutine;
 
     private void OnEnable()
     {
         if (PlayerModeController.Instance != null)
             PlayerModeController.Instance.OnModeChanged += OnModeChanged;
 
-        // Subscribe to lock state changes
         if (stateMachine != null && stateMachine.Lock != null)
             stateMachine.Lock.OnLockStateChanged += OnLockStateChanged;
     }
@@ -63,104 +41,106 @@ public class DoorInteractionMode : MonoBehaviour
 
         if (stateMachine != null && stateMachine.Lock != null)
             stateMachine.Lock.OnLockStateChanged -= OnLockStateChanged;
+
+        StopUpdating();
     }
 
-    public void SetPlayerInRange(Transform player, bool inRange)
+    public void SetPlayerInRange(Transform playerTransform, bool inRange)
     {
-        context.Player = player;
+        player = playerTransform;
         isPlayerInRange = inRange;
 
-        if (!inRange)
-        {
-            doorController.SetPlayerInRange(null, false);
-            currentStrategy = null;
-            Debug.Log("[DoorInteractionMode] Player left range");
-            return;
-        }
+        doorController.SetPlayerInRange(playerTransform, inRange);
 
-        doorController.SetPlayerInRange(player, true);
-        Debug.Log("[DoorInteractionMode] Player entered range");
-        UpdateInteraction();
+        if (inRange)
+            StartUpdating();
+        else
+            StopUpdating();
     }
 
     private void OnModeChanged(PlayerMode mode)
     {
-        // Update interaction when mode changes ONLY if player is in range
-        if (isPlayerInRange && context.Player != null)
-        {
-            Debug.Log($"[DoorInteractionMode] Mode changed to {mode}, updating interaction");
+        if (isPlayerInRange)
             UpdateInteraction();
-        }
     }
 
     private void OnLockStateChanged(bool isLocked)
     {
-        // Update interaction when lock state changes ONLY if player is in range
-        if (isPlayerInRange && context.Player != null)
-        {
-            Debug.Log($"[DoorInteractionMode] Lock state changed to {isLocked}, updating interaction");
+        if (isPlayerInRange)
             UpdateInteraction();
+    }
+
+    private void StartUpdating()
+    {
+        StopUpdating();
+        updateCoroutine = StartCoroutine(UpdateCoroutine());
+    }
+
+    private void StopUpdating()
+    {
+        if (updateCoroutine != null)
+        {
+            StopCoroutine(updateCoroutine);
+            updateCoroutine = null;
+        }
+
+        doorController.HidePrompts();
+        currentResult = InteractionResult.NoPrompt();
+    }
+
+    private IEnumerator UpdateCoroutine()
+    {
+        var wait = new WaitForSeconds(updateInterval);
+
+        while (isPlayerInRange && player != null)
+        {
+            UpdateInteraction();
+            yield return wait;
         }
     }
 
     private void UpdateInteraction()
     {
-        if (context.Player == null) return;
+        if (player == null || pivot == null)
+            return;
 
-        // Update context
-        context.Distance = Vector3.Distance(pivot.position, context.Player.position);
-        context.IsLocked = stateMachine.Lock.IsLocked;
-        context.CurrentMode = PlayerModeController.Instance.CurrentMode;
+        float distance = Vector3.Distance(pivot.position, player.position);
+        PlayerMode mode = PlayerModeController.Instance.CurrentMode;
+        bool isLocked = stateMachine.Lock.IsLocked;
 
-        Debug.Log($"[DoorInteractionMode] UPDATE - Mode={context.CurrentMode}, Dist={context.Distance:F2}m, Locked={context.IsLocked}, PhysRange={config.physicalInteractionRange}m, HackRange={config.hackRange}m");
+        // Resolve using pure function
+        currentResult = DoorInteractionResolver.Resolve(mode, isLocked, distance, config);
 
-        // Select strategies based on current mode
-        var strategies = context.CurrentMode == PlayerMode.Hack
-            ? hackModeStrategies
-            : normalModeStrategies;
-
-        currentStrategy = FindFirstValidStrategy(strategies);
-
-        if (currentStrategy != null)
-        {
-            string promptText = currentStrategy.GetPromptText(context);
-            bool canInteract = currentStrategy.CanInteract(context);
-            doorController.SetPromptEnabled(canInteract, promptText);
-            Debug.Log($"[DoorInteractionMode] Selected: {currentStrategy.GetType().Name}, Prompt='{promptText}', CanInteract={canInteract}");
-        }
+        // Update UI based on result
+        if (currentResult.ShowPrompt)
+            doorController.SetPromptEnabled(true, currentResult.PromptText);
         else
-        {
             doorController.SetPromptEnabled(false);
-            Debug.LogWarning("[DoorInteractionMode] No valid strategy found!");
-        }
-    }
-
-    private IInteractionStrategy FindFirstValidStrategy(List<IInteractionStrategy> strategies)
-    {
-        Debug.Log($"[DoorInteractionMode] Testing {strategies.Count} strategies:");
-
-        foreach (var strategy in strategies)
-        {
-            bool canExecute = strategy.CanExecute(context);
-            Debug.Log($"[DoorInteractionMode]   - {strategy.GetType().Name}: {(canExecute ? "CAN" : "CANNOT")} execute");
-
-            if (canExecute)
-                return strategy;
-        }
-
-        return null;
     }
 
     public void ExecuteInteraction()
     {
-        if (currentStrategy != null && currentStrategy.CanInteract(context))
+        if (!currentResult.CanInteract)
+            return;
+
+        switch (currentResult.Type)
         {
-            Debug.Log($"[DoorInteractionMode] Executing: {currentStrategy.GetType().Name}");
-            currentStrategy.Execute(context);
-        }
-        else
-        {
-            Debug.LogWarning("[DoorInteractionMode] Cannot interact - strategy doesn't allow interaction");
+            case InteractionType.Physical:
+                stateMachine.OnInteract();
+                break;
+
+            case InteractionType.Hack:
+                hackableDoor.RequestHack(
+                    onSuccess: () =>
+                    {
+                        stateMachine.Lock.Unlock();
+
+                        if (stateMachine.Lock.OpenAfterUnlock)
+                            stateMachine.SetState(new DoorOpeningState(stateMachine));
+                    },
+                    onFail: () => { /* Silent fail */ }
+                );
+                break;
         }
     }
 }

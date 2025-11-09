@@ -43,17 +43,14 @@ public class HackableDoor : InteractableBase, IHackTarget, IInitializable
 
     public void RequestHack(Action onSuccess, Action onFail)
     {
-        // CRITICAL: Validate player is in Hack mode
         if (PlayerModeController.Instance.CurrentMode != PlayerMode.Hack)
         {
-            Debug.LogWarning("[HackableDoor] Cannot hack in Normal mode");
             onFail?.Invoke();
             return;
         }
 
         if (!IsHackable)
         {
-            Debug.LogWarning("[HackableDoor] Door is already unlocked");
             onFail?.Invoke();
             return;
         }

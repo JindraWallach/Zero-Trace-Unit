@@ -27,7 +27,7 @@ public class DoorController : MonoBehaviour
     public float AnimationDuration => animationDuration;
 
     private Transform player;
-    private bool playerInRange = false;
+    private bool playerInRange;
 
     private void Reset()
     {
@@ -55,9 +55,6 @@ public class DoorController : MonoBehaviour
             HidePrompts();
     }
 
-    /// <summary>
-    /// Updates prompt display. Called by DoorInteractionMode.
-    /// </summary>
     public void SetPromptEnabled(bool enabled, string promptText = "")
     {
         if (!playerInRange || !enabled || string.IsNullOrEmpty(promptText))
@@ -76,8 +73,6 @@ public class DoorController : MonoBehaviour
             HidePrompts();
             return;
         }
-
-        Debug.Log("[DoorController] Showing prompt: " + text);
 
         Vector3 localPlayerPos = transform.InverseTransformPoint(player.position);
         bool shouldShowBack = localPlayerPos.z >= 0;
