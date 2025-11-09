@@ -5,6 +5,7 @@ using UnityEngine;
 /// Controller for door interactions using Resolver pattern.
 /// Continuously updates prompts while player is in range (coroutine).
 /// Event-driven for mode/lock changes + continuous checking.
+/// Hides prompts during animations, shows when animation completes.
 /// </summary>
 public class DoorInteractionMode : MonoBehaviour
 {
@@ -24,14 +25,22 @@ public class DoorInteractionMode : MonoBehaviour
     private bool isPlayerInRange;
     private InteractionResult currentResult;
     private Coroutine updateCoroutine;
+    private bool isAnimating; // Track if door is animating
 
     private void OnEnable()
     {
         if (PlayerModeController.Instance != null)
             PlayerModeController.Instance.OnModeChanged += OnModeChanged;
 
-        if (stateMachine != null && stateMachine.Lock != null)
-            stateMachine.Lock.OnLockStateChanged += OnLockStateChanged;
+        if (stateMachine != null)
+        {
+            if (stateMachine.Lock != null)
+                stateMachine.Lock.OnLockStateChanged += OnLockStateChanged;
+
+            // Subscribe to animation events
+            stateMachine.OnAnimationStarted += OnAnimationStarted;
+            stateMachine.OnAnimationCompleted += OnAnimationCompleted;
+        }
     }
 
     private void OnDisable()
@@ -39,8 +48,14 @@ public class DoorInteractionMode : MonoBehaviour
         if (PlayerModeController.Instance != null)
             PlayerModeController.Instance.OnModeChanged -= OnModeChanged;
 
-        if (stateMachine != null && stateMachine.Lock != null)
-            stateMachine.Lock.OnLockStateChanged -= OnLockStateChanged;
+        if (stateMachine != null)
+        {
+            if (stateMachine.Lock != null)
+                stateMachine.Lock.OnLockStateChanged -= OnLockStateChanged;
+
+            stateMachine.OnAnimationStarted -= OnAnimationStarted;
+            stateMachine.OnAnimationCompleted -= OnAnimationCompleted;
+        }
 
         StopUpdating();
     }
@@ -66,6 +81,22 @@ public class DoorInteractionMode : MonoBehaviour
 
     private void OnLockStateChanged(bool isLocked)
     {
+        if (isPlayerInRange)
+            UpdateInteraction();
+    }
+
+    private void OnAnimationStarted()
+    {
+        // Hide prompts when animation starts
+        isAnimating = true;
+        doorController.HidePrompts();
+    }
+
+    private void OnAnimationCompleted()
+    {
+        // Show prompts when animation completes
+        isAnimating = false;
+
         if (isPlayerInRange)
             UpdateInteraction();
     }
@@ -104,6 +135,13 @@ public class DoorInteractionMode : MonoBehaviour
         if (player == null || pivot == null)
             return;
 
+        // Don't show prompts during animation
+        if (isAnimating)
+        {
+            doorController.HidePrompts();
+            return;
+        }
+
         float distance = Vector3.Distance(pivot.position, player.position);
         PlayerMode mode = PlayerModeController.Instance.CurrentMode;
         bool isLocked = stateMachine.Lock.IsLocked;
@@ -130,6 +168,9 @@ public class DoorInteractionMode : MonoBehaviour
         if (!currentResult.CanInteract)
             return;
 
+        // Hide prompt immediately on interaction
+        doorController.HidePrompts();
+
         switch (currentResult.Type)
         {
             case InteractionType.Physical:
@@ -137,17 +178,36 @@ public class DoorInteractionMode : MonoBehaviour
                 break;
 
             case InteractionType.Hack:
-                hackableDoor.RequestHack(
-                    onSuccess: () =>
-                    {
-                        stateMachine.Lock.Unlock();
-
-                        if (stateMachine.Lock.OpenAfterUnlock)
-                            stateMachine.SetState(new DoorOpeningState(stateMachine));
-                    },
-                    onFail: () => { /* Silent fail */ }
-                );
+                RequestHack();
                 break;
         }
+    }
+
+    private void RequestHack()
+    {
+        hackableDoor.RequestHack(
+            onSuccess: () =>
+            {
+                stateMachine.Lock.Unlock();
+
+                if (stateMachine.Lock.OpenAfterUnlock)
+                {
+                    // Will auto-open, prompts will show after animation
+                    stateMachine.SetState(new DoorOpeningState(stateMachine));
+                }
+                else
+                {
+                    // Door unlocked but not opening, show prompt immediately
+                    if (isPlayerInRange)
+                        UpdateInteraction();
+                }
+            },
+            onFail: () =>
+            {
+                // Hack failed, show prompt again
+                if (isPlayerInRange)
+                    UpdateInteraction();
+            }
+        );
     }
 }

@@ -1,9 +1,11 @@
+using System;
 using UnityEngine;
 
 /// <summary>
 /// State machine for door states: Locked, Closed, Opening, Open, Closing.
 /// Delegates animation to DoorController.
 /// Exposes current state for external queries (SRP compliant).
+/// Fires events when states change for reactive UI updates.
 /// </summary>
 public class DoorStateMachine : MonoBehaviour
 {
@@ -16,6 +18,11 @@ public class DoorStateMachine : MonoBehaviour
 
     private DoorState currentState;
     private Transform player;
+
+    // Events for state transitions
+    public event Action OnStateChanged;
+    public event Action OnAnimationStarted; // Opening/Closing started
+    public event Action OnAnimationCompleted; // Open/Closed reached
 
     // Public property for state queries (read-only)
     public DoorState CurrentState => currentState;
@@ -39,6 +46,15 @@ public class DoorStateMachine : MonoBehaviour
         currentState = newState;
         currentStateName = currentState?.GetType().Name ?? "None";
         currentState.Enter();
+
+        // Notify listeners about state change
+        OnStateChanged?.Invoke();
+
+        // Fire specific events based on state type
+        if (newState is DoorOpeningState || newState is DoorClosingState)
+            OnAnimationStarted?.Invoke();
+        else if (newState is DoorOpenState || newState is DoorClosedState)
+            OnAnimationCompleted?.Invoke();
     }
 
     public void OnInteract()
