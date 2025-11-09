@@ -15,8 +15,11 @@ public class DoorInteractionConfig : ScriptableObject
     public float hackRange = 15f;
 
     [Header("UI Prompts")]
-    [Tooltip("Text for physical interaction (both modes, unlocked)")]
+    [Tooltip("Text for opening door (both modes, unlocked, closed)")]
     public string physicalUseText = "Open";
+
+    [Tooltip("Text for closing door (both modes, unlocked, open)")]
+    public string physicalCloseText = "Close";
 
     [Tooltip("Text for hack interaction (Hack mode, locked)")]
     public string hackText = "HACK";

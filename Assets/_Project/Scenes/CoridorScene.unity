@@ -552,15 +552,7 @@ MonoBehaviour:
     done: 0
   - name: 
     done: 0
-  - name: kdykoli prepnu mod musi se aktualizovat prompty, kdyz stojim v rangi a
-      prepnu mod UI nefaci a taky kod protoze jsem v rangi
-    done: 0
   - name: 'jiste srp, oop a elegatne na vykon '
-    done: 0
-  - name: BONUS> pokdu hacknu dvere success tak se automaticky otevrou pokud byli
-      locked na unlocked
-    done: 0
-  - name: --zmenit system spojeni
     done: 0
 --- !u!4 &36559939
 Transform:

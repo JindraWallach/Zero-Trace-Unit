@@ -107,15 +107,22 @@ public class DoorInteractionMode : MonoBehaviour
         float distance = Vector3.Distance(pivot.position, player.position);
         PlayerMode mode = PlayerModeController.Instance.CurrentMode;
         bool isLocked = stateMachine.Lock.IsLocked;
+        bool isOpen = IsOpen();
 
         // Resolve using pure function
-        currentResult = DoorInteractionResolver.Resolve(mode, isLocked, distance, config);
+        currentResult = DoorInteractionResolver.Resolve(mode, isLocked, isOpen, distance, config);
 
         // Update UI based on result
         if (currentResult.ShowPrompt)
             doorController.SetPromptEnabled(true, currentResult.PromptText);
         else
             doorController.SetPromptEnabled(false);
+    }
+
+    private bool IsOpen()
+    {
+        // Check if door is in Open state
+        return stateMachine.CurrentState is DoorOpenState;
     }
 
     public void ExecuteInteraction()

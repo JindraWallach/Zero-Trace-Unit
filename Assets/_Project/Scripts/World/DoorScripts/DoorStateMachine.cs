@@ -3,6 +3,7 @@ using UnityEngine;
 /// <summary>
 /// State machine for door states: Locked, Closed, Opening, Open, Closing.
 /// Delegates animation to DoorController.
+/// Exposes current state for external queries (SRP compliant).
 /// </summary>
 public class DoorStateMachine : MonoBehaviour
 {
@@ -15,6 +16,9 @@ public class DoorStateMachine : MonoBehaviour
 
     private DoorState currentState;
     private Transform player;
+
+    // Public property for state queries (read-only)
+    public DoorState CurrentState => currentState;
 
     private void Start()
     {

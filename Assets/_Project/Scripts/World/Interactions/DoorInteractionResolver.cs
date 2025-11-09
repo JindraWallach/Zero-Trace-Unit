@@ -14,17 +14,19 @@ public static class DoorInteractionResolver
     public static InteractionResult Resolve(
         PlayerMode mode,
         bool isLocked,
+        bool isOpen,
         float distance,
         DoorInteractionConfig config)
     {
         if (mode == PlayerMode.Normal)
-            return ResolveNormalMode(isLocked, distance, config);
+            return ResolveNormalMode(isLocked, isOpen, distance, config);
         else
-            return ResolveHackMode(isLocked, distance, config);
+            return ResolveHackMode(isLocked, isOpen, distance, config);
     }
 
     private static InteractionResult ResolveNormalMode(
         bool isLocked,
+        bool isOpen,
         float distance,
         DoorInteractionConfig config)
     {
@@ -36,12 +38,17 @@ public static class DoorInteractionResolver
         if (isLocked)
             return InteractionResult.InfoOnly("Locked");
 
-        // In range and unlocked - can open
+        // In range, unlocked, open - can close
+        if (isOpen)
+            return InteractionResult.Physical(config.physicalCloseText);
+
+        // In range, unlocked, closed - can open
         return InteractionResult.Physical(config.physicalUseText);
     }
 
     private static InteractionResult ResolveHackMode(
         bool isLocked,
+        bool isOpen,
         float distance,
         DoorInteractionConfig config)
     {
@@ -53,7 +60,11 @@ public static class DoorInteractionResolver
         if (isLocked)
             return InteractionResult.Hack(config.hackText);
 
-        // In range and unlocked - can open
+        // In range, unlocked, open - can close
+        if (isOpen)
+            return InteractionResult.Physical(config.physicalCloseText);
+
+        // In range, unlocked, closed - can open
         return InteractionResult.Physical(config.physicalUseText);
     }
 }
