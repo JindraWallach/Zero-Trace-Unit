@@ -554,8 +554,6 @@ MonoBehaviour:
     done: 0
   - name: 'jiste srp, oop a elegatne na vykon '
     done: 0
-  - name: Nelze menit stavy v hacking dveri
-    done: 0
 --- !u!4 &36559939
 Transform:
   m_ObjectHideFlags: 0
@@ -30462,6 +30460,7 @@ MonoBehaviour:
   - ScrollHotbar
   - Interact
   - Exit
+  - ChangeMode
 --- !u!143 &7899819685120886279
 CharacterController:
   m_ObjectHideFlags: 0
