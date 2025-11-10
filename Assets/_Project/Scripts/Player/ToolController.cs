@@ -47,6 +47,7 @@ public class ToolController : MonoBehaviour
 
     private IEnumerator ScanCoroutine()
     {
+        Debug.Log("ToolController: Starting scan coroutine.");
         var wait = new WaitForSeconds(scanInterval);
 
         while (true)
