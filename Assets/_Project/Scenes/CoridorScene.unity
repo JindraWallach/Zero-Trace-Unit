@@ -554,6 +554,10 @@ MonoBehaviour:
     done: 0
   - name: 'jiste srp, oop a elegatne na vykon '
     done: 0
+  - name: Change UIPrompts to PropScreen?
+    done: 0
+  - name: Make LockedText red?
+    done: 0
 --- !u!4 &36559939
 Transform:
   m_ObjectHideFlags: 0
