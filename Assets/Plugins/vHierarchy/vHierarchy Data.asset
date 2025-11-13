@@ -23,6 +23,7 @@ MonoBehaviour:
     - 24ac7a82bb9dfdb43a785bae85ff6691
     - baa9a1c212b5aea4c813f0b84bcc7707
     - 9253f80fc2f07b2419779996f230ba6b
+    - f29ddd06f84fc8f429ee69fe1b33f9d8
     values:
     - goDatas_byGlobalId:
         keys:
@@ -219,6 +220,24 @@ MonoBehaviour:
           isColorRecursive: 0
         - colorIndex: 1
           iconNameOrGuid: Settings Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+    - goDatas_byGlobalId:
+        keys:
+        - globalObjectIdString: GlobalObjectId_V1-2-f29ddd06f84fc8f429ee69fe1b33f9d8-165709209-0
+        - globalObjectIdString: GlobalObjectId_V1-2-f29ddd06f84fc8f429ee69fe1b33f9d8-1603404660-0
+        - globalObjectIdString: GlobalObjectId_V1-2-f29ddd06f84fc8f429ee69fe1b33f9d8-1273158575-0
+        values:
+        - colorIndex: 0
+          iconNameOrGuid: Rigidbody Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 0
+          iconNameOrGuid: StandaloneInputModule Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 0
+          iconNameOrGuid: Folder Icon
           isIconRecursive: 0
           isColorRecursive: 0
   bookmarks: []
