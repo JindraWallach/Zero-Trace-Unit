@@ -24,10 +24,6 @@ public class DependencyInjector : MonoBehaviour
 
     private void Awake()
     {
-        // Init player first
-        if (playerInteractor != null)
-            playerInteractor.Initialize(inputReader);
-
         // Init all registered objects
         foreach (var go in objectsToInitialize)
         {

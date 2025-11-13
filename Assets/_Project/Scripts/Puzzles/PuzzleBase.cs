@@ -24,7 +24,6 @@ public abstract class PuzzleBase : MonoBehaviour
         isActive = true;
         uiController?.Show();
         OnPuzzleStart();
-        Debug.Log($"[{GetType().Name}] Puzzle started");
     }
 
     public virtual void CompletePuzzle()
@@ -34,7 +33,6 @@ public abstract class PuzzleBase : MonoBehaviour
         isActive = false;
         OnPuzzleComplete();
         OnSuccess?.Invoke();
-        Debug.Log($"[{GetType().Name}] Puzzle completed");
     }
 
     public virtual void FailPuzzle()
@@ -44,19 +42,15 @@ public abstract class PuzzleBase : MonoBehaviour
         isActive = false;
         OnPuzzleFail();
         OnFail?.Invoke();
-        Debug.Log($"[{GetType().Name}] Puzzle failed");
     }
 
     public virtual void CancelPuzzle()
     {
-        Debug.Log("CancelPuzzle called");
         if (!isActive) return;
-        Debug.Log("Puzzle is active, proceeding to cancel");
 
         isActive = false;
         OnPuzzleCancel();
         OnCancel?.Invoke();
-        Debug.Log($"[{GetType().Name}] Puzzle cancelled");
     }
 
     // Override these in descendants

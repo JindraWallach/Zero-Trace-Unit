@@ -7,7 +7,7 @@ using UnityEngine;
 /// Manages IInteractable targets in range.
 /// </summary>
 [RequireComponent(typeof(SphereCollider))]
-public class PlayerInteractor : MonoBehaviour
+public class PlayerInteractor : MonoBehaviour, IInitializable
 {
     [Header("Settings")]
     [SerializeField] private LayerMask interactableLayers;
@@ -16,11 +16,12 @@ public class PlayerInteractor : MonoBehaviour
     private IInteractable currentTarget;
     private InputReader inputReader;
 
-    public void Initialize(InputReader reader)
+    public void Initialize(DependencyInjector dependencyInjector)
     {
-        inputReader = reader;
+        inputReader = dependencyInjector.InputReader;
         inputReader.onInteract += TryInteract;
     }
+
 
     private void OnDisable()
     {

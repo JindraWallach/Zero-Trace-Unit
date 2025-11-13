@@ -3611,6 +3611,7 @@ MonoBehaviour:
   - {fileID: 906790554}
   - {fileID: 730311588}
   - {fileID: 938499998}
+  - {fileID: 1289478584}
 --- !u!1001 &312965478
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14997,7 +14998,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ae9aa9389ebed348a16a4f79d3daab8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  isPaused: 0
+  currentState: 0
 --- !u!1001 &1291634801
 PrefabInstance:
   m_ObjectHideFlags: 0

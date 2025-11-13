@@ -50,8 +50,6 @@ public class UIManager : MonoBehaviour
 
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
-
-        Debug.Log("[UIManager] Entered Hack Mode");
     }
 
     public void ExitHackMode()
@@ -63,7 +61,5 @@ public class UIManager : MonoBehaviour
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-
-        Debug.Log("[UIManager] Exited Hack Mode");
     }
 }

@@ -1,4 +1,4 @@
-using Synty.AnimationBaseLocomotion.Samples;
+﻿using Synty.AnimationBaseLocomotion.Samples;
 using Synty.AnimationBaseLocomotion.Samples.InputSystem;
 using System;
 using System.Collections.Generic;
@@ -18,7 +18,6 @@ public class HackManager : MonoBehaviour
     [SerializeField] private Transform puzzleSpawnParent;
     [SerializeField] private PuzzleFactory puzzleFactory;
 
-    private InputReader inputReader;
     private SampleCameraController cameraController;
     private readonly Dictionary<string, IHackTarget> registeredTargets = new();
     private PuzzleBase activePuzzle;
@@ -32,22 +31,6 @@ public class HackManager : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
-
-        var di = FindFirstObjectByType<DependencyInjector>();
-        if (di != null)
-            inputReader = di.InputReader;
-    }
-
-    private void OnEnable()
-    {
-        if (inputReader != null)
-            inputReader.onEscapePressed += OnEscapePressed;
-    }
-
-    private void OnDisable()
-    {
-        if (inputReader != null)
-            inputReader.onEscapePressed -= OnEscapePressed;
     }
 
     private void OnEscapePressed()
@@ -73,6 +56,14 @@ public class HackManager : MonoBehaviour
     {
         if (target != null && !string.IsNullOrEmpty(target.TargetID))
             registeredTargets.Remove(target.TargetID);
+    }
+
+    public void CancelActivePuzzle()
+    {
+        if (activePuzzle != null)
+        {
+            activePuzzle.CancelPuzzle();
+        }
     }
 
     // === Hack Request ===
@@ -113,7 +104,7 @@ public class HackManager : MonoBehaviour
         activePuzzle.OnFail += () => HandlePuzzleFail(onFail);
         activePuzzle.OnCancel += () => HandlePuzzleCancel(onFail);
 
-        // Enter hack mode
+        GameManager.Instance?.EnterPuzzleMode();
         UIManager.Instance?.EnterHackMode();
         activePuzzle.StartPuzzle();
 
@@ -125,8 +116,10 @@ public class HackManager : MonoBehaviour
     {
         Debug.Log("[HackManager] Puzzle SUCCESS");
         CleanupPuzzle();
+
+        GameManager.Instance?.ExitPuzzleMode();
         UIManager.Instance?.ExitHackMode();
-        RestorePlayerInput(); 
+
         callback?.Invoke();
     }
 
@@ -134,17 +127,20 @@ public class HackManager : MonoBehaviour
     {
         Debug.Log("[HackManager] Puzzle FAIL");
         CleanupPuzzle();
+
+        GameManager.Instance?.ExitPuzzleMode();
         UIManager.Instance?.ExitHackMode();
-        RestorePlayerInput(); 
+
         callback?.Invoke();
     }
 
     private void HandlePuzzleCancel(Action callback)
     {
-        Debug.Log("[HackManager] Puzzle CANCELLED");
         CleanupPuzzle();
+
+        GameManager.Instance?.ExitPuzzleMode();
         UIManager.Instance?.ExitHackMode();
-        RestorePlayerInput(); 
+
         callback?.Invoke();
     }
 
@@ -155,21 +151,5 @@ public class HackManager : MonoBehaviour
             Destroy(activePuzzle.gameObject);
             activePuzzle = null;
         }
-    }
-
-    public void BlockPlayerInput(InputReader reader)
-    {
-        inputReader = reader;
-
-        if (inputReader != null)
-            inputReader.DisableInputs(new[] { "Exit" }); // Enable only Exit
-    }
-
-    private void RestorePlayerInput()
-    {
-        if (inputReader != null)
-            inputReader.EnableAllInputs();
-
-        inputReader = null;
     }
 }

@@ -55,7 +55,6 @@ public class HackableDoor : InteractableBase, IHackTarget, IInitializable
             return;
         }
 
-        HackManager.Instance.BlockPlayerInput(dependencyInjector.InputReader);
         bool started = HackManager.Instance.RequestHack(this, onSuccess, onFail);
 
         if (!started)
