@@ -81,17 +81,17 @@ namespace Synty.Interface.SciFiSoldierHUD.Samples
 #endif
         }
 
-        public void NextScene()
-        {
-            string currentScene = SceneManager.GetActiveScene().name;
-            SwitchScene(_sceneNames[(_sceneNames.IndexOf(currentScene) + 1) % _sceneNames.Count]);
-        }
+        //public void NextScene()
+        //{
+        //    string currentScene = SceneManager.GetActiveScene().name;
+        //    SwitchScene(_sceneNames[(_sceneNames.IndexOf(currentScene) + 1) % _sceneNames.Count]);
+        //}
 
-        public void PreviousScene()
-        {
-            string currentScene = SceneManager.GetActiveScene().name;
-            SwitchScene(_sceneNames[(_sceneNames.IndexOf(currentScene) - 1 + _sceneNames.Count) % _sceneNames.Count]);
-        }
+        //public void PreviousScene()
+        //{
+        //    string currentScene = SceneManager.GetActiveScene().name;
+        //    SwitchScene(_sceneNames[(_sceneNames.IndexOf(currentScene) - 1 + _sceneNames.Count) % _sceneNames.Count]);
+        //}
 
         public void SwitchScene(string sceneName)
         {
