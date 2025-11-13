@@ -228,16 +228,16 @@ MonoBehaviour:
         - globalObjectIdString: GlobalObjectId_V1-2-f29ddd06f84fc8f429ee69fe1b33f9d8-1603404660-0
         - globalObjectIdString: GlobalObjectId_V1-2-f29ddd06f84fc8f429ee69fe1b33f9d8-1273158575-0
         values:
-        - colorIndex: 0
+        - colorIndex: 7
           iconNameOrGuid: Rigidbody Icon
           isIconRecursive: 0
           isColorRecursive: 0
-        - colorIndex: 0
+        - colorIndex: 5
           iconNameOrGuid: StandaloneInputModule Icon
           isIconRecursive: 0
           isColorRecursive: 0
-        - colorIndex: 0
-          iconNameOrGuid: Folder Icon
+        - colorIndex: 8
+          iconNameOrGuid: Canvas Icon
           isIconRecursive: 0
           isColorRecursive: 0
   bookmarks: []

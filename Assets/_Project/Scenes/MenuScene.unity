@@ -12066,11 +12066,11 @@ MonoBehaviour:
     serializedVersion: 2
     rgba: 4291807315
   m_fontColor: {r: 0.32529372, g: 0.78431916, b: 0.8113208, a: 1}
-  m_enableVertexGradient: 0
+  m_enableVertexGradient: 1
   m_colorMode: 3
   m_fontColorGradient:
-    topLeft: {r: 1, g: 1, b: 1, a: 1}
-    topRight: {r: 1, g: 1, b: 1, a: 1}
+    topLeft: {r: 0.8490566, g: 0.8490566, b: 0.8490566, a: 1}
+    topRight: {r: 0.8509804, g: 0.8509804, b: 0.8509804, a: 1}
     bottomLeft: {r: 1, g: 1, b: 1, a: 1}
     bottomRight: {r: 1, g: 1, b: 1, a: 1}
   m_fontColorGradientPreset: {fileID: 0}
@@ -13530,7 +13530,7 @@ GameObject:
   - component: {fileID: 827488073}
   - component: {fileID: 827488072}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: PlayerCube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35960,7 +35960,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7930091766142507767, guid: d7a0fe5ccbda6e44e9b8db4ed995d053, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -41299,7 +41299,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 1154.71, y: 471}
+  m_AnchoredPosition: {x: 1154.71, y: 360}
   m_SizeDelta: {x: 1250, y: 350}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4399737740938982451
