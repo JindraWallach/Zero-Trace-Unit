@@ -356,7 +356,6 @@ namespace Synty.AnimationBaseLocomotion.Samples
             _inputReader.onCrouchDeactivated += DeactivateCrouch;
             _inputReader.onAimActivated += ActivateAim;
             _inputReader.onAimDeactivated += DeactivateAim;
-            _inputReader.onFlashlightToggled += ToggleFlashlight;
 
             _isStrafing = _alwaysStrafe;
 
@@ -1555,24 +1554,6 @@ namespace Synty.AnimationBaseLocomotion.Samples
         {
             DeactivateCrouch();
             SwitchState(AnimationState.Locomotion);
-        }
-
-        #endregion
-
-        #region ToggleFlashlight
-
-        private bool _flashlightOn = false;
-
-        private void ToggleFlashlight()
-        {
-            _flashlightOn = !_flashlightOn;
-
-            if (_flashlight != null)
-            {
-                _flashlight.SetActive(_flashlightOn);
-            }
-
-            //Debug.Log($"Flashlight toggled: {(_flashlightOn ? "ON" : "OFF")}");
         }
 
         #endregion

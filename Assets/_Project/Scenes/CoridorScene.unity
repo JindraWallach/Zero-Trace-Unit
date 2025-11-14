@@ -541,14 +541,7 @@ MonoBehaviour:
     done: 0
   - name: "2. Implementace kamery (vlastn\xED POV, detekce hr\xE1\u010De, indik\xE1tor)"
     done: 0
-  - name: "3. Implementace menu a nastaven\xED (Start Game, Settings, Exit)"
-    done: 0
-  - name: 
-    done: 0
-  - name: "Vy\u0159e\u0161en\xED baterky na UI hr\xE1\u010Di (pro\u010D m\xE1m baterku,
-      kter\xE1 nen\xED videt na charakteru?)"
-    done: 0
-  - name: 4. dostavas hrozne lagy pri movevovani mysi v puzzlu nevim proc jinak ok
+  - name: "3. Implementace nastaven\xED Settings"
     done: 0
   - name: 
     done: 0
@@ -557,6 +550,10 @@ MonoBehaviour:
   - name: Change UIPrompts to PropScreen?
     done: 0
   - name: Make LockedText red?
+    done: 0
+  - name: Add esc mini menu
+    done: 0
+  - name: Add X in puzzle for mouse exit
     done: 0
 --- !u!4 &36559939
 Transform:
@@ -2172,6 +2169,118 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4214762433135912, guid: 3e7db1b08fec4094d8b9d5262cd0adbe, type: 3}
   m_PrefabInstance: {fileID: 149528445}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &151728612
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 151728613}
+  - component: {fileID: 151728616}
+  - component: {fileID: 151728615}
+  - component: {fileID: 151728614}
+  m_Layer: 0
+  m_Name: Light_Chest
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &151728613
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 151728612}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.012521183, y: -0.0014370666, z: -0.16134875, w: 0.98681706}
+  m_LocalPosition: {x: 0.0388, y: 0.1728, z: -0.0027}
+  m_LocalScale: {x: 0.15, y: 0.15, z: 0.15}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 7853371097704374838}
+  m_LocalEulerAnglesHint: {x: -1.443, y: 0.069, z: -18.573}
+--- !u!64 &151728614
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 151728612}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 43044107127307026, guid: 8b7379f434da14f4a94d76f4aa7fb2e4, type: 2}
+--- !u!23 &151728615
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 151728612}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 4cee7a5983b187943adc589b9cb1f084, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &151728616
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 151728612}
+  m_Mesh: {fileID: 4300000, guid: e4ecc4d3e7dee2d4d9098b4c0fbdf73d, type: 3}
 --- !u!1001 &154278831
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3742,6 +3851,7 @@ MonoBehaviour:
   - {fileID: 730311588}
   - {fileID: 938499998}
   - {fileID: 1289478584}
+  - {fileID: 1961467781}
 --- !u!1001 &312965478
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21828,13 +21938,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1961467782}
+  - component: {fileID: 1961467783}
   m_Layer: 3
   m_Name: Flashlight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1961467782
 Transform:
   m_ObjectHideFlags: 0
@@ -21851,6 +21962,22 @@ Transform:
   - {fileID: 2119191173}
   m_Father: {fileID: 7853577938338958500}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1961467783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1961467781}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6abfdcb5bb6935e4fbb7c02fdb36bb75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FlashlightController
+  _light: {fileID: 2119191175}
+  _renderer: {fileID: 151728615}
+  _offMat: {fileID: 2100000, guid: 6205a7363db3a834b93abb789a92cb31, type: 2}
+  _onMat: {fileID: 2100000, guid: 4cee7a5983b187943adc589b9cb1f084, type: 2}
 --- !u!1001 &1969314998
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23941,7 +24068,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2119191172}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 11
   m_Type: 0
   m_Color: {r: 0.990566, g: 0.9675941, b: 0.70554465, a: 1}
@@ -26922,7 +27049,7 @@ GameObject:
   - component: {fileID: 7899819685120886279}
   - component: {fileID: 7899819685120886278}
   - component: {fileID: 7899819685120886277}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PolygonCharacter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28233,6 +28360,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7853552627903148330}
+  - {fileID: 151728613}
   m_Father: {fileID: 7853415908130345196}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &7853415908130345196
