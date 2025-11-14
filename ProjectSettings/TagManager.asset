@@ -13,8 +13,8 @@ TagManager:
   - UI
   - Interactable
   - CollisonLayer
-  - 
-  - 
+  - Player
+  - Enemies
   - 
   - 
   - 
