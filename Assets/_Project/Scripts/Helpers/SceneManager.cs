@@ -20,7 +20,7 @@ public class SceneManager : MonoBehaviour
     [SerializeField] private bool isLoading;
 
     // Events for loading feedback
-    public event Action<string> OnSceneLoadStarted;
+    public event Action OnSceneLoadStarted;
     public event Action<string> OnSceneLoadCompleted;
     public event Action<float> OnLoadProgress; // 0-1
 
@@ -123,7 +123,7 @@ public class SceneManager : MonoBehaviour
     private IEnumerator LoadSceneCoroutine(string sceneName)
     {
         isLoading = true;
-        OnSceneLoadStarted?.Invoke(sceneName);
+        OnSceneLoadStarted?.Invoke();
 
         float startTime = Time.realtimeSinceStartup;
 
@@ -165,7 +165,7 @@ public class SceneManager : MonoBehaviour
     {
         isLoading = true;
         string sceneName = GetSceneName(sceneIndex);
-        OnSceneLoadStarted?.Invoke(sceneName);
+        OnSceneLoadStarted?.Invoke();
 
         float startTime = Time.realtimeSinceStartup;
 

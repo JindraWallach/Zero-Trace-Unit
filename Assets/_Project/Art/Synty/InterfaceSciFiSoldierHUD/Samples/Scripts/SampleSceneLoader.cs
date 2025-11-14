@@ -60,7 +60,7 @@ namespace Synty.Interface.SciFiSoldierHUD.Samples
         {
             if (animator)
             {
-                Debug.Log("SampleSceneLoader: Activating animator.");
+                Debug.Log($"SampleSceneLoader: Activating animator on {gameObject.name}.");
                 animator.gameObject.SetActive(true);
                 animator.SetBool("Active", false);
             }

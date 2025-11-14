@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8073608228818111362}
   - component: {fileID: 5238016963914317939}
   - component: {fileID: 326658715513212566}
+  - component: {fileID: 437435024384906542}
   m_Layer: 5
   m_Name: SceneFX
   m_TagString: Untagged
@@ -47,8 +48,8 @@ CanvasGroup:
   m_GameObject: {fileID: 2368277350923261052}
   m_Enabled: 1
   m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
 --- !u!95 &326658715513212566
 Animator:
@@ -72,6 +73,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &437435024384906542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2368277350923261052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afdeca24e3a514d47833ee5d6f7aac47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SetAnimatorActiveOnDestroy
 --- !u!1001 &1461861014445536871
 PrefabInstance:
   m_ObjectHideFlags: 0

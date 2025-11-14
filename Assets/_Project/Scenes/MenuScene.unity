@@ -35798,6 +35798,7 @@ GameObject:
   - component: {fileID: 5488983083574855288}
   - component: {fileID: 4986872060589213869}
   - component: {fileID: 254382010029518761}
+  - component: {fileID: 6410557239366797292}
   m_Layer: 5
   m_Name: Screen_Title
   m_TagString: Untagged
@@ -35805,6 +35806,18 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &6410557239366797292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6410557239366797291}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afdeca24e3a514d47833ee5d6f7aac47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SetAnimatorActiveOnDestroy
 --- !u!222 &6418976640150559547
 CanvasRenderer:
   m_ObjectHideFlags: 0
