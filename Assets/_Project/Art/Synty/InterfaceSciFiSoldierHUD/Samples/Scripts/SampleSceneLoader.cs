@@ -124,11 +124,11 @@ namespace Synty.Interface.SciFiSoldierHUD.Samples
             yield return EditorSceneManager.LoadSceneAsyncInPlayMode(path, new LoadSceneParameters(LoadSceneMode.Single));
 #else
             // make sure the scene is in the build settings for runtime version
-            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
-            while (!asyncLoad.isDone)
-            {
-                yield return null;
-            }
+            //AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
+            //while (!asyncLoad.isDone)
+            //{
+            //    yield return null;
+            //}
 #endif
         }
     }

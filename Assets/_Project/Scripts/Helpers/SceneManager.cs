@@ -42,7 +42,7 @@ public class SceneManager : MonoBehaviour
     /// <summary>
     /// Load scene by name with optional callback.
     /// </summary>
-    public void LoadScene(string sceneName, Action onComplete = null)
+    public void LoadScene(string sceneName)
     {
         if (isLoading)
         {
@@ -56,7 +56,7 @@ public class SceneManager : MonoBehaviour
             return;
         }
 
-        loadCoroutine = StartCoroutine(LoadSceneCoroutine(sceneName, onComplete));
+        loadCoroutine = StartCoroutine(LoadSceneCoroutine(sceneName));
     }
 
     /// <summary>
@@ -82,15 +82,15 @@ public class SceneManager : MonoBehaviour
     /// <summary>
     /// Reload current scene.
     /// </summary>
-    public void ReloadCurrentScene(Action onComplete = null)
+    public void ReloadCurrentScene()
     {
-        LoadScene(currentSceneName, onComplete);
+        LoadScene(currentSceneName);
     }
 
     /// <summary>
     /// Load next scene in build settings.
     /// </summary>
-    public void LoadNextScene(Action onComplete = null)
+    public void LoadNextScene()
     {
         int currentIndex = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
         int nextIndex = currentIndex + 1;
@@ -101,7 +101,7 @@ public class SceneManager : MonoBehaviour
             nextIndex = 0;
         }
 
-        LoadScene(nextIndex, onComplete);
+        LoadScene(nextIndex);
     }
 
     /// <summary>
@@ -120,7 +120,7 @@ public class SceneManager : MonoBehaviour
 
     // === Coroutines ===
 
-    private IEnumerator LoadSceneCoroutine(string sceneName, Action onComplete)
+    private IEnumerator LoadSceneCoroutine(string sceneName)
     {
         isLoading = true;
         OnSceneLoadStarted?.Invoke(sceneName);
@@ -156,7 +156,6 @@ public class SceneManager : MonoBehaviour
         isLoading = false;
 
         OnSceneLoadCompleted?.Invoke(sceneName);
-        onComplete?.Invoke();
 
         Debug.Log($"[SceneManager] Loaded scene: {sceneName}");
         loadCoroutine = null;
