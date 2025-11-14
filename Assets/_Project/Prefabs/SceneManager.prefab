@@ -48,6 +48,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf518a7c4a93444459f80bcb8d41f203, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneManager
-  minLoadTime: 0.5
+  minLoadTime: 1
   currentSceneName: 
   isLoading: 0
