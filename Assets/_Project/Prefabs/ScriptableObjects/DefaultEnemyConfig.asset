@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8519e8e8b55bd748a7076182d16c12e, type: 3}
+  m_Name: DefaultEnemyConfig
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyConfig
+  visionAngle: 90
+  visionRange: 10
+  visionObstacleMask:
+    serializedVersion: 2
+    m_Bits: 192
+  visionCheckInterval: 0.1
+  patrolSpeed: 1.5
+  chaseSpeed: 4
+  waypointReachDistance: 0.5
+  waypointWaitTime: 2
+  alertDuration: 3
+  alertToSearchDelay: 1.5
+  attackRange: 1.2
+  catchRange: 1.2
+  attackCooldown: 1
+  searchDuration: 8
+  searchRadius: 5
+  searchSpeed: 2
+  memoryDuration: 5
+  debugVision: 1
+  debugStates: 1
+  debugMovement: 0
