@@ -724,6 +724,19 @@ MonoBehaviour:
     done: 0
   - name: Add esc mini menu
     done: 0
+  - name: 
+    done: 0
+  - name: 'Enemies: 1. zlepseni updatu v states'
+    done: 0
+  - name: 2. ten animator muzu proste vzit ten od synty a proste odstranit jenom
+      ty blend tree ktere nepouzivam? dale musime resit isgrounded, ale enemi ma
+      navmesh agenta takze nikdy by nemel nebyt !isgrounded?
+    done: 0
+  - name: 3. neslo by jak jsi videl ten sampleanimcontroller od synty tak pracuje
+      s root motion nejde to i u enemies/
+    done: 0
+  - name: 
+    done: 0
 --- !u!4 &36559939
 Transform:
   m_ObjectHideFlags: 0
@@ -15765,7 +15778,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!95 &1108836594
 Animator:
   serializedVersion: 7
@@ -36406,7 +36419,7 @@ Animator:
   m_GameObject: {fileID: 1090034692552934}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: c8c20564eb982f84a96a0d4d8e357cc5, type: 3}
-  m_Controller: {fileID: 9100000, guid: f50cb700ede46cb44a345d75cb109894, type: 2}
+  m_Controller: {fileID: 9100000, guid: a870152efcc6fb840aa97b69b00383c8, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
