@@ -73,6 +73,21 @@ public class GameManager : MonoBehaviour, IInitializable
         Debug.Log("[GameManager] Exited Puzzle Mode");
     }
 
+    public void OnPlayerCaught()
+    {
+        if (currentState == GameState.InPuzzle) return; // Ignore during puzzle
+
+        currentState = GameState.Paused; // Or GameState.Dead
+
+        if (inputReader != null)
+            inputReader.DisableInputs();
+
+        Debug.Log("[GameManager] Player caught by enemy!");
+
+        // TODO: Show death screen UI
+        // TODO: Delayed scene reload
+    }
+
     private void OnEscapePressed()
     {
         if (currentState == GameState.InPuzzle)
