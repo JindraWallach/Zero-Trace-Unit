@@ -33,14 +33,6 @@ public class HackManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    private void OnEscapePressed()
-    {
-        if (activePuzzle != null)
-        {
-            activePuzzle.CancelPuzzle();
-        }
-    }
-
     // === Registration ===
     public void RegisterTarget(IHackTarget target)
     {

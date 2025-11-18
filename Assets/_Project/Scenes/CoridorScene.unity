@@ -724,8 +724,6 @@ MonoBehaviour:
     done: 0
   - name: Add esc mini menu
     done: 0
-  - name: Add X in puzzle for mouse exit
-    done: 0
 --- !u!4 &36559939
 Transform:
   m_ObjectHideFlags: 0
@@ -47226,13 +47224,13 @@ SceneRoots:
   - {fileID: 818518902}
   - {fileID: 300282155}
   - {fileID: 7790563198676851893}
+  - {fileID: 4665669241027839}
+  - {fileID: 4374580183005776}
+  - {fileID: 1108836595}
+  - {fileID: 1558725309}
   - {fileID: 1289478585}
   - {fileID: 312868194}
   - {fileID: 72763324}
   - {fileID: 1247254112}
   - {fileID: 3227861009903692788}
   - {fileID: 36559939}
-  - {fileID: 4665669241027839}
-  - {fileID: 4374580183005776}
-  - {fileID: 1108836595}
-  - {fileID: 1558725309}
