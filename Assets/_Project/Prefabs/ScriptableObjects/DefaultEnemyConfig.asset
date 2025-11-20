@@ -16,21 +16,21 @@ MonoBehaviour:
   visionRange: 10
   visionObstacleMask:
     serializedVersion: 2
-    m_Bits: 192
-  visionCheckInterval: 0.1
+    m_Bits: 128
+  visionCheckInterval: 0.2
   patrolSpeed: 1.5
-  chaseSpeed: 4
+  chaseSpeed: 6.5
   waypointReachDistance: 0.5
-  waypointWaitTime: 2
-  alertDuration: 3
-  alertToSearchDelay: 1.5
+  waypointWaitTime: 5
+  alertDuration: 6
+  alertToSearchDelay: 3
   attackRange: 1.2
   catchRange: 1.2
   attackCooldown: 1
   searchDuration: 8
   searchRadius: 5
   searchSpeed: 2
-  memoryDuration: 5
+  memoryDuration: 8
   debugVision: 1
-  debugStates: 1
-  debugMovement: 1
+  debugStates: 0
+  debugMovement: 0
