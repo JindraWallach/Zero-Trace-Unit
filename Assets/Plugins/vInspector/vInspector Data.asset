@@ -76,3 +76,24 @@ MonoBehaviour:
     isAsset: 1
     _typeString: UnityEngine.InputSystem.InputActionAsset, Unity.InputSystem, Version=1.14.2.0,
       Culture=neutral, PublicKeyToken=null
+  - _obj: {fileID: 11400000, guid: 5fb12437f5e108645a67740ba4f3965a, type: 2}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-3-5fb12437f5e108645a67740ba4f3965a-11400000-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: PatrolRoute, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - _obj: {fileID: 11400000, guid: b854f7225edf3824d96735fe0283ff23, type: 2}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-3-b854f7225edf3824d96735fe0283ff23-11400000-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: EnemyConfig, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - _obj: {fileID: 9100000, guid: 3dcbb7ff605184746be82d748741383f, type: 2}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-3-3dcbb7ff605184746be82d748741383f-9100000-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: UnityEditor.Animations.AnimatorController, UnityEditor.CoreModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
