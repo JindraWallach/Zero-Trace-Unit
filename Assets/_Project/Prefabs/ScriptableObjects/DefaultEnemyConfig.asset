@@ -24,8 +24,8 @@ MonoBehaviour:
   waypointWaitTime: 5
   alertDuration: 6
   alertToSearchDelay: 3
-  attackRange: 1.2
-  catchRange: 1.2
+  attackRange: 1.5
+  catchRange: 2
   attackCooldown: 1
   searchDuration: 8
   searchRadius: 5
