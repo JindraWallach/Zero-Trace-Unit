@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8519e8e8b55bd748a7076182d16c12e, type: 3}
   m_Name: DefaultEnemyConfig
   m_EditorClassIdentifier: Assembly-CSharp::EnemyConfig
-  visionAngle: 90
+  visionAngle: 120
   visionRange: 10
   visionObstacleMask:
     serializedVersion: 2
@@ -33,4 +33,4 @@ MonoBehaviour:
   memoryDuration: 5
   debugVision: 1
   debugStates: 1
-  debugMovement: 0
+  debugMovement: 1

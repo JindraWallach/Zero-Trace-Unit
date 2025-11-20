@@ -36608,9 +36608,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyStateMachine
   config: {fileID: 11400000, guid: b854f7225edf3824d96735fe0283ff23, type: 2}
   patrolRoute: {fileID: 11400000, guid: 5fb12437f5e108645a67740ba4f3965a, type: 2}
-  playerTransform: {fileID: 7853577938338958500}
+  playerTransform: {fileID: 7846218088266727378}
   currentStateName: 
-  showDebugLogs: 0
+  showDebugLogs: 1
 --- !u!114 &95256342812446848
 MonoBehaviour:
   m_ObjectHideFlags: 0
