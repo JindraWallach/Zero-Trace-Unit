@@ -16,7 +16,7 @@ MonoBehaviour:
   visionRange: 10
   visionObstacleMask:
     serializedVersion: 2
-    m_Bits: 193
+    m_Bits: 192
   visionCheckInterval: 0.1
   patrolSpeed: 1.5
   chaseSpeed: 4
