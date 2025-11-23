@@ -14,32 +14,36 @@ public class SettingsManager : MonoBehaviour
     public static SettingsManager Instance { get; private set; }
 
     [Header("Default Settings")]
-    [SerializeField] private int defaultQualityLevel = 2; // Medium
     [SerializeField] private float defaultMasterVolume = 1f;
     [SerializeField] private bool defaultFullscreen = true;
+    [SerializeField] private int defaultTargetFramerate = 60;
+    [SerializeField] private bool defaultVSync = true;
 
     [Header("Debug - Current Values")]
-    [SerializeField] private int currentQualityLevel;
     [SerializeField] private float currentMasterVolume;
     [SerializeField] private int currentResolutionIndex;
     [SerializeField] private bool currentFullscreen;
+    [SerializeField] private int currentTargetFramerate;
+    [SerializeField] private bool currentVSync;
 
     // Events for UI updates
-    public event Action<int> OnQualityChanged;
     public event Action<float> OnVolumeChanged;
     public event Action<Resolution> OnResolutionChanged;
     public event Action<bool> OnFullscreenChanged;
+    public event Action<int> OnTargetFramerateChanged;
+    public event Action<bool> OnVSyncChanged;
 
     // Cached resolutions
     private Resolution[] availableResolutions;
     private Resolution currentResolution;
 
     // PlayerPrefs keys (const for performance)
-    private const string KEY_QUALITY = "QualityLevel";
     private const string KEY_VOLUME = "MasterVolume";
     private const string KEY_RES_WIDTH = "ResolutionWidth";
     private const string KEY_RES_HEIGHT = "ResolutionHeight";
     private const string KEY_FULLSCREEN = "Fullscreen";
+    private const string KEY_TARGET_FPS = "TargetFramerate";
+    private const string KEY_VSYNC = "VSync";
 
     private void Awake()
     {
@@ -49,54 +53,75 @@ public class SettingsManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        // Cache pouze v hlavní instanci
+        // Cache available resolutions (filtered for uniqueness)
         CacheResolutions();
 
-        // Načtení uložených nastavení
+        // Load and apply saved settings
         LoadSettings();
     }
 
-    // === QUALITY SETTINGS ===
+    // === TARGET FRAMERATE SETTINGS ===
 
     /// <summary>
-    /// Get available quality level names.
+    /// Get current target framerate (-1 = unlimited).
     /// </summary>
-    public string[] GetQualityLevels()
+    public int GetTargetFramerate()
     {
-        return QualitySettings.names;
+        return currentTargetFramerate;
     }
 
     /// <summary>
-    /// Get current quality level index.
+    /// Set target framerate (-1 = unlimited, 0 = platform default, >0 = specific FPS).
+    /// Common values: 30, 60, 120, 144, 240, -1 (unlimited)
     /// </summary>
-    public int GetCurrentQualityLevel()
+    public void SetTargetFramerate(int fps)
     {
-        return currentQualityLevel;
-    }
-
-    /// <summary>
-    /// Set quality level by index.
-    /// </summary>
-    public void SetQualityLevel(int index)
-    {
-        if (index < 0 || index >= QualitySettings.names.Length)
-        {
-            Debug.LogWarning($"[SettingsManager] Invalid quality level: {index}");
-            return;
-        }
-
-        currentQualityLevel = index;
-        QualitySettings.SetQualityLevel(index);
-        PlayerPrefs.SetInt(KEY_QUALITY, index);
+        currentTargetFramerate = fps;
+        Application.targetFrameRate = fps;
+        PlayerPrefs.SetInt(KEY_TARGET_FPS, fps);
         PlayerPrefs.Save();
 
-        OnQualityChanged?.Invoke(index);
+        OnTargetFramerateChanged?.Invoke(fps);
 
-        Debug.Log($"[SettingsManager] Quality set to: {QualitySettings.names[index]}");
+        string fpsText = fps == -1 ? "Unlimited" : fps.ToString();
+        Debug.Log($"[SettingsManager] Target framerate set to: {fpsText}");
+    }
+
+    // === VSYNC SETTINGS ===
+
+    /// <summary>
+    /// Get current VSync state.
+    /// </summary>
+    public bool GetVSync()
+    {
+        return currentVSync;
+    }
+
+    /// <summary>
+    /// Set VSync on/off.
+    /// Note: VSync forces framerate to monitor refresh rate.
+    /// </summary>
+    public void SetVSync(bool enabled)
+    {
+        currentVSync = enabled;
+        QualitySettings.vSyncCount = enabled ? 1 : 0;
+        PlayerPrefs.SetInt(KEY_VSYNC, enabled ? 1 : 0);
+        PlayerPrefs.Save();
+
+        OnVSyncChanged?.Invoke(enabled);
+
+        Debug.Log($"[SettingsManager] VSync: {(enabled ? "ON" : "OFF")}");
+    }
+
+    /// <summary>
+    /// Toggle VSync (convenience method).
+    /// </summary>
+    public void ToggleVSync()
+    {
+        SetVSync(!currentVSync);
     }
 
     // === VOLUME SETTINGS ===
@@ -123,7 +148,7 @@ public class SettingsManager : MonoBehaviour
 
         OnVolumeChanged?.Invoke(volume);
 
-        //Debug.Log($"[SettingsManager] Volume set to: {volume:F2}");
+        Debug.Log($"[SettingsManager] Volume set to: {volume:F2}");
     }
 
     // === RESOLUTION SETTINGS ===
@@ -229,9 +254,10 @@ public class SettingsManager : MonoBehaviour
     /// </summary>
     public void ResetToDefaults()
     {
-        SetQualityLevel(defaultQualityLevel);
         SetMasterVolume(defaultMasterVolume);
         SetFullscreen(defaultFullscreen);
+        SetTargetFramerate(defaultTargetFramerate);
+        SetVSync(defaultVSync);
 
         // Set resolution to native
         Resolution nativeRes = Screen.resolutions[Screen.resolutions.Length - 1];
@@ -273,15 +299,18 @@ public class SettingsManager : MonoBehaviour
 
     private void LoadSettings()
     {
-        // Load quality
-        currentQualityLevel = PlayerPrefs.GetInt(KEY_QUALITY, defaultQualityLevel);
-        currentQualityLevel = Mathf.Clamp(currentQualityLevel, 0, QualitySettings.names.Length - 1);
-        QualitySettings.SetQualityLevel(currentQualityLevel);
-
         // Load volume
         currentMasterVolume = PlayerPrefs.GetFloat(KEY_VOLUME, defaultMasterVolume);
         currentMasterVolume = Mathf.Clamp01(currentMasterVolume);
         AudioListener.volume = currentMasterVolume;
+
+        // Load target framerate
+        currentTargetFramerate = PlayerPrefs.GetInt(KEY_TARGET_FPS, defaultTargetFramerate);
+        Application.targetFrameRate = currentTargetFramerate;
+
+        // Load VSync
+        currentVSync = PlayerPrefs.GetInt(KEY_VSYNC, defaultVSync ? 1 : 0) == 1;
+        QualitySettings.vSyncCount = currentVSync ? 1 : 0;
 
         // Load fullscreen
         currentFullscreen = PlayerPrefs.GetInt(KEY_FULLSCREEN, defaultFullscreen ? 1 : 0) == 1;
@@ -307,8 +336,9 @@ public class SettingsManager : MonoBehaviour
         }
 
         Debug.Log($"[SettingsManager] Settings loaded:\n" +
-                  $"  Quality: {QualitySettings.names[currentQualityLevel]}\n" +
                   $"  Volume: {currentMasterVolume:F2}\n" +
+                  $"  Target FPS: {(currentTargetFramerate == -1 ? "Unlimited" : currentTargetFramerate.ToString())}\n" +
+                  $"  VSync: {(currentVSync ? "ON" : "OFF")}\n" +
                   $"  Resolution: {currentResolution.width}x{currentResolution.height}\n" +
                   $"  Fullscreen: {currentFullscreen}");
     }
@@ -332,8 +362,9 @@ public class SettingsManager : MonoBehaviour
     /// </summary>
     public void ApplySettings()
     {
-        QualitySettings.SetQualityLevel(currentQualityLevel);
         AudioListener.volume = currentMasterVolume;
+        Application.targetFrameRate = currentTargetFramerate;
+        QualitySettings.vSyncCount = currentVSync ? 1 : 0;
         Screen.SetResolution(currentResolution.width, currentResolution.height, currentFullscreen);
     }
 

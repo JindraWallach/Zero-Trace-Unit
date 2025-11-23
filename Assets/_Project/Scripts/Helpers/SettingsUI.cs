@@ -10,12 +10,13 @@ using UnityEngine.UI;
 /// </summary>
 public class SettingsUI : MonoBehaviour
 {
-    [Header("Quality Settings")]
-    [SerializeField] private TMP_Dropdown qualityDropdown;
-
     [Header("Volume Settings")]
     [SerializeField] private Slider volumeSlider;
     [SerializeField] private TMP_Text volumeValueText;
+
+    [Header("FPS Settings")]
+    [SerializeField] private TMP_Dropdown fpsLimitDropdown;
+    [SerializeField] private Toggle vsyncToggle;
 
     [Header("Resolution Settings")]
     [SerializeField] private TMP_Dropdown resolutionDropdown;
@@ -63,11 +64,20 @@ public class SettingsUI : MonoBehaviour
 
     private void InitializeUI()
     {
-        // Populate quality dropdown
-        if (qualityDropdown != null)
+        // Populate FPS limit dropdown
+        if (fpsLimitDropdown != null)
         {
-            qualityDropdown.ClearOptions();
-            qualityDropdown.AddOptions(new System.Collections.Generic.List<string>(settings.GetQualityLevels()));
+            fpsLimitDropdown.ClearOptions();
+            var fpsOptions = new System.Collections.Generic.List<string>
+            {
+                "30 FPS",
+                "60 FPS",
+                "120 FPS",
+                "144 FPS",
+                "240 FPS",
+                "Unlimited"
+            };
+            fpsLimitDropdown.AddOptions(fpsOptions);
         }
 
         // Populate resolution dropdown
@@ -98,11 +108,14 @@ public class SettingsUI : MonoBehaviour
     private void BindEvents()
     {
         // UI -> Settings
-        if (qualityDropdown != null)
-            qualityDropdown.onValueChanged.AddListener(OnQualityDropdownChanged);
-
         if (volumeSlider != null)
             volumeSlider.onValueChanged.AddListener(OnVolumeSliderChanged);
+
+        if (fpsLimitDropdown != null)
+            fpsLimitDropdown.onValueChanged.AddListener(OnFPSDropdownChanged);
+
+        if (vsyncToggle != null)
+            vsyncToggle.onValueChanged.AddListener(OnVSyncToggleChanged);
 
         if (resolutionDropdown != null)
             resolutionDropdown.onValueChanged.AddListener(OnResolutionDropdownChanged);
@@ -120,8 +133,9 @@ public class SettingsUI : MonoBehaviour
         // Settings -> UI (for external changes)
         if (settings != null)
         {
-            settings.OnQualityChanged += OnSettingsQualityChanged;
             settings.OnVolumeChanged += OnSettingsVolumeChanged;
+            settings.OnTargetFramerateChanged += OnSettingsTargetFramerateChanged;
+            settings.OnVSyncChanged += OnSettingsVSyncChanged;
             settings.OnResolutionChanged += OnSettingsResolutionChanged;
             settings.OnFullscreenChanged += OnSettingsFullscreenChanged;
         }
@@ -129,11 +143,14 @@ public class SettingsUI : MonoBehaviour
 
     private void UnbindEvents()
     {
-        if (qualityDropdown != null)
-            qualityDropdown.onValueChanged.RemoveListener(OnQualityDropdownChanged);
-
         if (volumeSlider != null)
             volumeSlider.onValueChanged.RemoveListener(OnVolumeSliderChanged);
+
+        if (fpsLimitDropdown != null)
+            fpsLimitDropdown.onValueChanged.RemoveListener(OnFPSDropdownChanged);
+
+        if (vsyncToggle != null)
+            vsyncToggle.onValueChanged.RemoveListener(OnVSyncToggleChanged);
 
         if (resolutionDropdown != null)
             resolutionDropdown.onValueChanged.RemoveListener(OnResolutionDropdownChanged);
@@ -149,20 +166,15 @@ public class SettingsUI : MonoBehaviour
 
         if (settings != null)
         {
-            settings.OnQualityChanged -= OnSettingsQualityChanged;
             settings.OnVolumeChanged -= OnSettingsVolumeChanged;
+            settings.OnTargetFramerateChanged -= OnSettingsTargetFramerateChanged;
+            settings.OnVSyncChanged -= OnSettingsVSyncChanged;
             settings.OnResolutionChanged -= OnSettingsResolutionChanged;
             settings.OnFullscreenChanged -= OnSettingsFullscreenChanged;
         }
     }
 
     // === UI -> SETTINGS (User Input) ===
-
-    private void OnQualityDropdownChanged(int value)
-    {
-        if (!isInitialized) return;
-        settings.SetQualityLevel(value);
-    }
 
     private void OnVolumeSliderChanged(float value)
     {
@@ -172,6 +184,24 @@ public class SettingsUI : MonoBehaviour
         float normalizedValue = value / 100f;
         settings.SetMasterVolume(normalizedValue);
         UpdateVolumeText(value);
+    }
+
+    private void OnFPSDropdownChanged(int index)
+    {
+        if (!isInitialized) return;
+
+        // Map dropdown index to FPS values
+        int[] fpsValues = { 30, 60, 120, 144, 240, -1 }; // -1 = unlimited
+        if (index >= 0 && index < fpsValues.Length)
+        {
+            settings.SetTargetFramerate(fpsValues[index]);
+        }
+    }
+
+    private void OnVSyncToggleChanged(bool value)
+    {
+        if (!isInitialized) return;
+        settings.SetVSync(value);
     }
 
     private void OnResolutionDropdownChanged(int value)
@@ -188,14 +218,6 @@ public class SettingsUI : MonoBehaviour
 
     // === SETTINGS -> UI (External Changes) ===
 
-    private void OnSettingsQualityChanged(int value)
-    {
-        if (qualityDropdown != null && qualityDropdown.value != value)
-        {
-            qualityDropdown.SetValueWithoutNotify(value);
-        }
-    }
-
     private void OnSettingsVolumeChanged(float value)
     {
         // Convert 0-1 to 0-100 for slider display
@@ -205,6 +227,28 @@ public class SettingsUI : MonoBehaviour
         {
             volumeSlider.SetValueWithoutNotify(sliderValue);
             UpdateVolumeText(sliderValue);
+        }
+    }
+
+    private void OnSettingsTargetFramerateChanged(int fps)
+    {
+        // Map FPS value to dropdown index
+        int[] fpsValues = { 30, 60, 120, 144, 240, -1 };
+        int index = System.Array.IndexOf(fpsValues, fps);
+
+        if (index == -1) index = 1; // Default to 60 FPS if not found
+
+        if (fpsLimitDropdown != null && fpsLimitDropdown.value != index)
+        {
+            fpsLimitDropdown.SetValueWithoutNotify(index);
+        }
+    }
+
+    private void OnSettingsVSyncChanged(bool value)
+    {
+        if (vsyncToggle != null && vsyncToggle.isOn != value)
+        {
+            vsyncToggle.SetIsOnWithoutNotify(value);
         }
     }
 
@@ -246,12 +290,6 @@ public class SettingsUI : MonoBehaviour
     {
         if (settings == null) return;
 
-        // Quality
-        if (qualityDropdown != null)
-        {
-            qualityDropdown.SetValueWithoutNotify(settings.GetCurrentQualityLevel());
-        }
-
         // Volume (convert 0-1 to 0-100 for slider)
         if (volumeSlider != null)
         {
@@ -259,6 +297,16 @@ public class SettingsUI : MonoBehaviour
             float sliderValue = volume * 100f;
             volumeSlider.SetValueWithoutNotify(sliderValue);
             UpdateVolumeText(sliderValue);
+        }
+
+        // Target Framerate
+        int fps = settings.GetTargetFramerate();
+        OnSettingsTargetFramerateChanged(fps);
+
+        // VSync
+        if (vsyncToggle != null)
+        {
+            vsyncToggle.SetIsOnWithoutNotify(settings.GetVSync());
         }
 
         // Resolution
