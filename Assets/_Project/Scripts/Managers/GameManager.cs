@@ -13,9 +13,6 @@ public class GameManager : MonoBehaviour, IInitializable
     [Header("State")]
     [SerializeField] private GameState currentState = GameState.Playing;
 
-    [Header("Settings")]
-    [SerializeField] private bool initializeSettingsOnStart = true;
-
     public GameState CurrentState => currentState;
     public bool IsPaused => currentState == GameState.Paused;
     public bool IsInPuzzle => currentState == GameState.InPuzzle;

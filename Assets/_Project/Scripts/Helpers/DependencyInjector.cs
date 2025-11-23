@@ -24,6 +24,8 @@ public class DependencyInjector : MonoBehaviour
 
     private void Awake()
     {
+        GameManager.Instance.Initialize(this);
+
         // Init all registered objects
         foreach (var go in objectsToInitialize)
         {
