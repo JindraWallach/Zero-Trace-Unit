@@ -1,10 +1,10 @@
 using Synty.AnimationBaseLocomotion.Samples.InputSystem;
-using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
 /// Game state manager (singleton).
-/// Handles pause, mission state, settings.
+/// Handles pause, mission state, settings integration.
+/// Updated to work with SettingsManager.
 /// </summary>
 public class GameManager : MonoBehaviour, IInitializable
 {
@@ -12,6 +12,9 @@ public class GameManager : MonoBehaviour, IInitializable
 
     [Header("State")]
     [SerializeField] private GameState currentState = GameState.Playing;
+
+    [Header("Settings")]
+    [SerializeField] private bool initializeSettingsOnStart = true;
 
     public GameState CurrentState => currentState;
     public bool IsPaused => currentState == GameState.Paused;
@@ -27,7 +30,8 @@ public class GameManager : MonoBehaviour, IInitializable
             return;
         }
         Instance = this;
-        //DontDestroyOnLoad(gameObject);
+
+        DontDestroyOnLoad(gameObject);
     }
 
     public void Initialize(DependencyInjector dependencyInjector)
@@ -38,7 +42,8 @@ public class GameManager : MonoBehaviour, IInitializable
         {
             inputReader.onEscapePressed += OnEscapePressed;
         }
-        else { 
+        else
+        {
             Debug.LogError("[GameManager] InputReader is null during initialization!");
         }
     }
@@ -48,6 +53,28 @@ public class GameManager : MonoBehaviour, IInitializable
         if (inputReader != null)
             inputReader.onEscapePressed -= OnEscapePressed;
     }
+
+    /// <summary>
+    /// Get reference to SettingsManager (convenience method).
+    /// </summary>
+    public SettingsManager GetSettings()
+    {
+        return SettingsManager.Instance;
+    }
+
+    /// <summary>
+    /// Apply all settings (useful after loading save game).
+    /// </summary>
+    public void ApplySettings()
+    {
+        if (SettingsManager.Instance != null)
+        {
+            SettingsManager.Instance.ApplySettings();
+            Debug.Log("[GameManager] Applied settings");
+        }
+    }
+
+    // === GAME STATE MANAGEMENT ===
 
     public void EnterPuzzleMode()
     {
@@ -100,15 +127,47 @@ public class GameManager : MonoBehaviour, IInitializable
     public void PauseGame()
     {
         currentState = GameState.Paused;
-        //Time.timeScale = 0f; never enable!
+        // NOTE: Never use Time.timeScale = 0 for pause!
+        // Use input disabling instead
         Debug.Log("[GameManager] Game paused");
     }
 
     public void ResumeGame()
     {
         currentState = GameState.Playing;
-        //Time.timeScale = 1f; never enable!
+        // NOTE: Never use Time.timeScale = 1 for resume!
         Debug.Log("[GameManager] Game resumed");
+    }
+
+    // === PAUSE MENU INTEGRATION ===
+
+    /// <summary>
+    /// Show pause menu (integrate with your UI system).
+    /// </summary>
+    public void ShowPauseMenu()
+    {
+        PauseGame();
+        // TODO: Show pause menu UI
+        // UIManager.Instance?.ShowPauseMenu();
+    }
+
+    /// <summary>
+    /// Hide pause menu and resume.
+    /// </summary>
+    public void HidePauseMenu()
+    {
+        ResumeGame();
+        // TODO: Hide pause menu UI
+        // UIManager.Instance?.HidePauseMenu();
+    }
+
+    /// <summary>
+    /// Show settings menu from pause menu.
+    /// </summary>
+    public void ShowSettingsMenu()
+    {
+        // TODO: Show settings UI
+        // UIManager.Instance?.ShowSettingsMenu();
     }
 }
 
