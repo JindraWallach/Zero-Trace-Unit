@@ -84,7 +84,7 @@ public class EnemyAlertState : EnemyState
     private void ReturnToNormalBehavior()
     {
         // Return to patrol or idle based on route availability
-        if (machine.PatrolRoute != null && machine.PatrolRoute.waypoints.Length >= 2)
+        if (machine.PatrolRoute != null && machine.PatrolRoute.WaypointCount >= 2)
         {
             machine.SetState(new EnemyPatrolState(machine));
         }

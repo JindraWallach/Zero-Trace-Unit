@@ -75,20 +75,9 @@ public class EnemyStateMachine : MonoBehaviour
             return;
         }
 
-        if (patrolRoute == null)
-        {
-            Debug.LogWarning($"[EnemyStateMachine] {gameObject.name} missing PatrolRoute - will idle.", this);
-        }
-
-        // Find player if not assigned
-        if (playerTransform == null)
-        {
-            var player = GameObject.FindGameObjectWithTag("Player");
-            if (player != null)
-                playerTransform = player.transform;
-            else
-                Debug.LogError("[EnemyStateMachine] Player not found! Assign manually or tag Player.", this);
-        }
+        // Note: Do NOT set initial state here — component initialization (Movement/Vision/Animation)
+        // that the states rely on happens in Start(). Setting a state in Awake() can call state.Enter()
+        // which may call Movement.MoveToPosition before Movement.Initialize has run and lead to NRE.
     }
 
     private void Start()
@@ -102,8 +91,8 @@ public class EnemyStateMachine : MonoBehaviour
         visionDetector.OnPlayerSpotted += HandlePlayerSpotted;
         visionDetector.OnPlayerLostSight += HandlePlayerLostSight;
 
-        // Start in appropriate state
-        if (patrolRoute != null && patrolRoute.waypoints.Length >= 2)
+        // Start in appropriate state (after components are initialized)
+        if (patrolRoute != null && patrolRoute.WaypointCount >= 2)
             SetState(new EnemyPatrolState(this));
         else
             SetState(new EnemyIdleState(this));

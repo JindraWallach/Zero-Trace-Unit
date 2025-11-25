@@ -41,7 +41,7 @@ public class EnemyIdleState : EnemyState
         }
 
         // Check if we have a patrol route to follow
-        if (machine.PatrolRoute != null && machine.PatrolRoute.waypoints.Length >= 2)
+        if (machine.PatrolRoute != null && machine.PatrolRoute.WaypointCount >= 2)
         {
             // Transition to patrol after brief idle
             if (idleTimer >= machine.Config.waypointWaitTime)

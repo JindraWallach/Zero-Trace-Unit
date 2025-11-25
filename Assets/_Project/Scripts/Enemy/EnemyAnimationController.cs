@@ -66,7 +66,7 @@ public class EnemyAnimationController : MonoBehaviour
     public void SetAlert(bool alert)
     {
         isAlert = alert;
-        animator.SetBool(isAlertHash, alert);
+        //animator.SetBool(isAlertHash, alert);
     }
 
     /// <summary>

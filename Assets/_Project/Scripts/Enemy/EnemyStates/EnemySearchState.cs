@@ -95,7 +95,7 @@ public class EnemySearchState : EnemyState
         // Clear memory and return to normal behavior
         machine.ClearMemory();
 
-        if (machine.PatrolRoute != null && machine.PatrolRoute.waypoints.Length >= 2)
+        if (machine.PatrolRoute != null && machine.PatrolRoute.WaypointCount >= 2)
         {
             machine.SetState(new EnemyPatrolState(machine));
         }

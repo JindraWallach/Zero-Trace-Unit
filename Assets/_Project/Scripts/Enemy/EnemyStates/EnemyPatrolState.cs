@@ -39,13 +39,6 @@ public class EnemyPatrolState : EnemyState
 
     public override void Update()
     {
-        if (machine.PatrolRoute == null || machine.PatrolRoute.waypoints.Length < 2)
-        {
-            // No valid route - return to idle
-            machine.SetState(new EnemyIdleState(machine));
-            return;
-        }
-
         if (isWaiting)
         {
             // Wait at waypoint
@@ -80,7 +73,7 @@ public class EnemyPatrolState : EnemyState
     {
         if (machine.PatrolRoute == null) return;
 
-        Vector3 waypoint = machine.PatrolRoute.waypoints[currentWaypointIndex];
+        Vector3 waypoint = machine.PatrolRoute.GetWaypointPosition(currentWaypointIndex); // ZMĚNA
         machine.Movement.MoveToPosition(waypoint, machine.Config.patrolSpeed);
 
         if (machine.Config.debugStates)
@@ -91,7 +84,7 @@ public class EnemyPatrolState : EnemyState
     {
         if (machine.PatrolRoute == null) return;
 
-        int waypointCount = machine.PatrolRoute.waypoints.Length;
+        int waypointCount = machine.PatrolRoute.WaypointCount; // ZMĚNA
 
         if (machine.PatrolRoute.loop)
         {
