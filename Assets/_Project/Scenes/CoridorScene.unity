@@ -718,6 +718,9 @@ MonoBehaviour:
     done: 0
   - name: 'Enemies: 1. zlepseni updatu v states'
     done: 0
+  - name: 'ENEMIES CRITICAL: zmeneni logiky ne insta spot - chase, ale sus meter
+      a UI plnici se bar'
+    done: 0
 --- !u!4 &36559939
 Transform:
   m_ObjectHideFlags: 0

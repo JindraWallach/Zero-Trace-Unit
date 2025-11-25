@@ -20,7 +20,7 @@ MonoBehaviour:
   visionCheckInterval: 0.2
   patrolSpeed: 1.5
   chaseSpeed: 6.5
-  waypointReachDistance: 0.5
+  waypointReachDistance: 1
   waypointWaitTime: 5
   alertDuration: 6
   alertToSearchDelay: 3
