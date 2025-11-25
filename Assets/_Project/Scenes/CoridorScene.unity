@@ -702,17 +702,9 @@ MonoBehaviour:
     done: 0
   - name: SRP
     done: 0
-  - name: "1. P\u0159id\xE1n\xED minim\xE1ln\u011B jednoho nep\u0159\xEDtele s patrolling
-      logikou"
-    done: 0
-  - name: "1.1. nastaven\xED 1 patroll trasy a vytvo\u0159en\xED state machine patternu
-      pro nep\u0159\xE1tel\xE9"
-    done: 0
   - name: "1.2. POV detekce hr\xE1\u010De nep\u0159\xEDtelem"
     done: 0
   - name: "2. Implementace kamery (vlastn\xED POV, detekce hr\xE1\u010De, indik\xE1tor)"
-    done: 0
-  - name: "3. Implementace nastaven\xED Settings"
     done: 0
   - name: 
     done: 0
@@ -727,19 +719,6 @@ MonoBehaviour:
   - name: 
     done: 0
   - name: 'Enemies: 1. zlepseni updatu v states'
-    done: 0
-  - name: 2. ten animator muzu proste vzit ten od synty a proste odstranit jenom
-      ty blend tree ktere nepouzivam? dale musime resit isgrounded, ale enemi ma
-      navmesh agenta takze nikdy by nemel nebyt !isgrounded?
-    done: 0
-  - name: 3. neslo by jak jsi videl ten sampleanimcontroller od synty tak pracuje
-      s root motion nejde to i u enemies/
-    done: 0
-  - name: 4. problem je zeu animaci od synty se pouziva move speed a isstrafing tak
-      u tu druhou musis pouzit tedka je kvuli tomu kdyz chodi enemy v idle
-    done: 0
-  - name: 5. enemy da dmg tedka instakill animaci pouze kdyz je rhac skrceni, nevis
-      jaky muzes byt problem? pokud hrac neni skrceni tak ho enemy posouva do nekonecna
     done: 0
 --- !u!4 &36559939
 Transform:
