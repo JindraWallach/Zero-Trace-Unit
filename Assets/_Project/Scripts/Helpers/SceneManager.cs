@@ -28,6 +28,9 @@ public class SceneManager : MonoBehaviour
 
     private void Awake()
     {
+        Time.timeScale = 1f;
+        Time.fixedDeltaTime = 0.02f;
+
         // Simple singleton - no DontDestroyOnLoad, new instance per scene
         if (Instance != null && Instance != this)
         {
