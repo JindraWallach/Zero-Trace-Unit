@@ -79,7 +79,7 @@ public class EnemyVisionDetector : MonoBehaviour
             return false;
         }
 
-        Debug.Log($"[EnemyVision] {gameObject.name} checking vision to player at distance {distanceToPlayer}", this);
+        //Debug.Log($"[EnemyVision] {gameObject.name} checking vision to player at distance {distanceToPlayer}", this);
 
         // Check 2: Angle check (FOV cone)
         float angleToPlayer = Vector3.Angle(transform.forward, directionToPlayer);

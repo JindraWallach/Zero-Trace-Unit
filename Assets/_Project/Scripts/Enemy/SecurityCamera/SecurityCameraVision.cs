@@ -6,9 +6,10 @@ using UnityEngine;
 /// </summary>
 public class SecurityCameraVision : MonoBehaviour
 {
+    public Transform eyePosition;
+
     private SecurityCameraConfig config;
     private Transform player;
-    private Transform eyePosition;
 
     // Detection state
     private bool lastResult;
@@ -25,17 +26,6 @@ public class SecurityCameraVision : MonoBehaviour
     {
         config = cameraConfig;
         player = playerTransform;
-
-        // Find or create eye position
-        eyePosition = transform.Find("EyePosition");
-        if (eyePosition == null)
-        {
-            GameObject eyeObj = new GameObject("EyePosition");
-            eyeObj.transform.SetParent(transform);
-            eyeObj.transform.localPosition = Vector3.zero;
-            eyePosition = eyeObj.transform;
-        }
-
         lastResult = false;
     }
 

@@ -15,7 +15,7 @@ TagManager:
   - CollisonLayer
   - Player
   - Enemy
-  - 
+  - SecurityCamera
   - 
   - 
   - 
