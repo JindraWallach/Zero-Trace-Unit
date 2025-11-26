@@ -13,6 +13,9 @@ public class GameManager : MonoBehaviour, IInitializable
     [Header("State")]
     [SerializeField] private GameState currentState = GameState.Playing;
 
+    [Header("UI References")]
+    [SerializeField] private GameObject pauseMenuUI;
+
     public GameState CurrentState => currentState;
     public bool IsPaused => currentState == GameState.Paused;
     public bool IsInPuzzle => currentState == GameState.InPuzzle;
@@ -118,53 +121,55 @@ public class GameManager : MonoBehaviour, IInitializable
         {
             HackManager.Instance?.CancelActivePuzzle();
         }
-        // TODO: Handle pause menu here
+
+        if (currentState == GameState.Paused)
+        {
+            ResumeGame();
+        }
+        else
+        {
+            PauseGame();
+        }
     }
 
     public void PauseGame()
     {
+        if (currentState == GameState.Paused) return;
+
         currentState = GameState.Paused;
-        // NOTE: Never use Time.timeScale = 0 for pause!
-        // Use input disabling instead
+
+        // Use UIManager to show pause menu
+        UIManager.Instance?.ShowPauseMenu();
+
+        Time.timeScale = 0f;
+
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
+        if (inputReader != null)
+            inputReader.DisableInputs(new[] { "Exit" });
+
         Debug.Log("[GameManager] Game paused");
     }
 
     public void ResumeGame()
     {
+        if (currentState != GameState.Paused) return;
+
         currentState = GameState.Playing;
-        // NOTE: Never use Time.timeScale = 1 for resume!
+
+        // Use UIManager to hide pause menu
+        UIManager.Instance?.HidePauseMenu();
+
+        Time.timeScale = 1f;
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+
+        if (inputReader != null)
+            inputReader.EnableAllInputs();
+
         Debug.Log("[GameManager] Game resumed");
-    }
-
-    // === PAUSE MENU INTEGRATION ===
-
-    /// <summary>
-    /// Show pause menu (integrate with your UI system).
-    /// </summary>
-    public void ShowPauseMenu()
-    {
-        PauseGame();
-        // TODO: Show pause menu UI
-        // UIManager.Instance?.ShowPauseMenu();
-    }
-
-    /// <summary>
-    /// Hide pause menu and resume.
-    /// </summary>
-    public void HidePauseMenu()
-    {
-        ResumeGame();
-        // TODO: Hide pause menu UI
-        // UIManager.Instance?.HidePauseMenu();
-    }
-
-    /// <summary>
-    /// Show settings menu from pause menu.
-    /// </summary>
-    public void ShowSettingsMenu()
-    {
-        // TODO: Show settings UI
-        // UIManager.Instance?.ShowSettingsMenu();
     }
 }
 

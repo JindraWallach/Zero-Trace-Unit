@@ -6,7 +6,10 @@ public class UIManager : MonoBehaviour
     public static UIManager Instance { get; private set; }
 
     [Header("UI References")]
-    [SerializeField] private GameObject[] disableDuringHack;
+    [SerializeField] private GameObject[] disableDuringHack; 
+    
+    [Header("Pause Menu")]
+    [SerializeField] private GameObject pauseMenuPanel;
 
     private readonly List<UIPromptController> activePrompts = new();
 
@@ -19,6 +22,33 @@ public class UIManager : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
+    }
+
+    private void Start()
+    {
+        HidePauseMenu();
+    }
+
+    public void ShowPauseMenu()
+    {
+        if (pauseMenuPanel != null)
+        {
+            pauseMenuPanel.SetActive(true);
+            Debug.Log("[UIManager] Pause menu shown");
+        }
+        else
+        {
+            Debug.LogWarning("[UIManager] Pause menu panel not assigned!");
+        }
+    }
+
+    public void HidePauseMenu()
+    {
+        if (pauseMenuPanel != null)
+        {
+            pauseMenuPanel.SetActive(false);
+            Debug.Log("[UIManager] Pause menu hidden");
+        }
     }
 
     public void RegisterPrompt(UIPromptController prompt)
