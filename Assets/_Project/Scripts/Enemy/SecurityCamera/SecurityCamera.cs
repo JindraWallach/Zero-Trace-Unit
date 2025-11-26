@@ -178,6 +178,17 @@ public class SecurityCamera : MonoBehaviour
         // Return to idle after cooldown
         if (stateTimer >= config.alertCooldown)
         {
+            // TODO: When AlarmSystem implemented, remove this reset
+            // Currently resets immediately - with AlarmSystem, camera should stay red
+            // until alarm is cancelled by player or times out
+
+            // Hide HUD warning
+            if (SecurityCameraHUD.Instance != null)
+            {
+                SecurityCameraHUD.Instance.HideWarning();
+                //SecurityCameraHUD.Instance.UpdateSuspicionBar(0f);
+            }
+
             TransitionToState(CameraState.Idle);
         }
     }

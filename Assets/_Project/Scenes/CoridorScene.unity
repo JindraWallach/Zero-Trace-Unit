@@ -700,14 +700,6 @@ MonoBehaviour:
     done: 0
   - name: "Indikator UI Locker dve\u0159\xED? Red Color? Blender"
     done: 0
-  - name: SRP
-    done: 0
-  - name: "2. Implementace kamery (vlastn\xED POV, detekce hr\xE1\u010De, indik\xE1tor)"
-    done: 0
-  - name: 
-    done: 0
-  - name: 'jiste srp, oop a elegatne na vykon '
-    done: 0
   - name: Change UIPrompts to PropScreen?
     done: 0
   - name: Make LockedText red?
@@ -716,13 +708,15 @@ MonoBehaviour:
     done: 0
   - name: 
     done: 0
-  - name: 'Enemies: 1. zlepseni updatu v states'
-    done: 0
   - name: 'ENEMIES CRITICAL: zmeneni logiky ne insta spot - chase, ale sus meter
       a UI plnici se bar'
     done: 0
   - name: 'Enemies: dvere jsou interactible layer a ten neni mask ale hrac ma collider
       ja te vrstve - block'
+    done: 0
+  - name: "P\u0159idat ragdol p\u0159i player death"
+    done: 0
+  - name: "P\u0159idat po\u0159\xE1dnou animaci catch/zabit\xED hr\xE1\u010De"
     done: 0
 --- !u!4 &36559939
 Transform:
@@ -2187,8 +2181,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.25}
   m_AnchorMax: {x: 1, y: 0.75}
-  m_AnchoredPosition: {x: -5, y: 0}
-  m_SizeDelta: {x: -20, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &123343100
 PrefabInstance:
@@ -4825,7 +4819,7 @@ Transform:
   m_GameObject: {fileID: 324648923}
   serializedVersion: 2
   m_LocalRotation: {x: 0.3934333, y: -0, z: -0, w: 0.91935325}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0, y: 0, z: -0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5863,7 +5857,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.4117647, g: 0.6784314, b: 1, a: 0.20392157}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -29865,7 +29859,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 10, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2085648420
 MonoBehaviour:
@@ -36241,7 +36235,7 @@ Transform:
   m_GameObject: {fileID: 7337032058987619807}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -7.149, y: 1.452, z: -11.927}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

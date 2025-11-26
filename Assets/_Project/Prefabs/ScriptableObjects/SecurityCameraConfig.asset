@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a10e99d6692c72041a700affbfd99b90, type: 3}
   m_Name: SecurityCameraConfig
   m_EditorClassIdentifier: Assembly-CSharp::SecurityCameraConfig
-  visionRange: 15
-  visionAngle: 60
-  visionCheckInterval: 0.3
+  visionRange: 10
+  visionAngle: 70
+  visionCheckInterval: 0.2
   visionObstacleMask:
     serializedVersion: 2
     m_Bits: 128

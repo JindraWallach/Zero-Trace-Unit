@@ -144,7 +144,14 @@ public class SecurityCameraHUD : MonoBehaviour
         if (suspicionFillImage != null && suspicionGradient != null)
         {
             suspicionFillImage.color = suspicionGradient.Evaluate(suspicionPercent / 100f);
-            Debug.Log($"[SecurityCameraHUD] Suspicion bar updated: {suspicionPercent}%");
+            //Debug.Log($"[SecurityCameraHUD] Suspicion bar updated: {suspicionPercent}%");
+        }
+
+        // Auto-hide warning if suspicion drops to 0 (player escaped before alert)
+        // TODO: When AlarmSystem added, this behavior changes - alarm persists even if player escapes
+        if (suspicionPercent <= 0f && isWarningVisible)
+        {
+            HideWarning();
         }
     }
 

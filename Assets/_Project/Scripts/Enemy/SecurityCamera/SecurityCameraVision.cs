@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// Simplified FOV detection for security cameras.
@@ -51,34 +51,60 @@ public class SecurityCameraVision : MonoBehaviour
         if (player == null || eyePosition == null)
             return false;
 
-        Vector3 playerPosition = player.position;
-        Vector3 directionToPlayer = (playerPosition - eyePosition.position).normalized;
-        float distanceToPlayer = Vector3.Distance(eyePosition.position, playerPosition);
+        // Target player center (not feet)
+        Vector3 playerCenter = player.position + Vector3.up * 1f; // Adjust height as needed
+        Vector3 directionToPlayer = (playerCenter - eyePosition.position).normalized;
+        float distanceToPlayer = Vector3.Distance(eyePosition.position, playerCenter);
 
         lastDirectionToPlayer = directionToPlayer;
 
         // Check 1: Range
         if (distanceToPlayer > config.visionRange)
+        {
+            if (config.debugStates)
+                Debug.Log($"[SecurityCameraVision] {name} - Out of range: {distanceToPlayer:F2}m > {config.visionRange}m");
             return false;
+        }
 
         // Check 2: Angle (FOV cone)
         float angleToPlayer = Vector3.Angle(transform.forward, directionToPlayer);
         lastAngleToPlayer = angleToPlayer;
 
         if (angleToPlayer > config.visionAngle * 0.5f)
+        {
+            if (config.debugStates)
+                Debug.Log($"[SecurityCameraVision] {name} - Outside FOV: {angleToPlayer:F1}° > {config.visionAngle * 0.5f:F1}°");
             return false;
+        }
 
         // Check 3: Raycast (obstacles)
-        Vector3 rayStart = eyePosition.position + directionToPlayer * 0.1f;
-        float rayDistance = distanceToPlayer - 0.1f;
+        Vector3 rayStart = eyePosition.position;
+        float rayDistance = distanceToPlayer;
 
         lastRaycastHit = Physics.Raycast(rayStart, directionToPlayer, out lastHitInfo, rayDistance, config.visionObstacleMask);
 
         if (lastRaycastHit)
         {
             // Check if hit player or obstacle
-            bool hitPlayer = lastHitInfo.collider.CompareTag("Player") || lastHitInfo.collider.transform == player;
-            return hitPlayer;
+            bool hitPlayer = lastHitInfo.collider.CompareTag("Player") ||
+                            lastHitInfo.collider.transform.root == player.root;
+
+            if (config.debugStates)
+            {
+                Debug.Log($"[SecurityCameraVision] {name} - Raycast hit: {lastHitInfo.collider.name} " +
+                         $"(IsPlayer: {hitPlayer}, Distance: {lastHitInfo.distance:F2}m)");
+            }
+
+            if (!hitPlayer)
+            {
+                // Blocked by obstacle
+                return false;
+            }
+        }
+        else
+        {
+            if (config.debugStates)
+                Debug.Log($"[SecurityCameraVision] {name} - Clear line of sight to player");
         }
 
         // Clear line of sight
@@ -134,13 +160,84 @@ public class SecurityCameraVision : MonoBehaviour
             prevPoint = point;
         }
 
-        // Direction to player
         if (player != null)
         {
-            Vector3 playerPos = player.position;
+            Vector3 playerCenter = player.position + Vector3.up * 1f; // Same as raycast
+            Vector3 eyePos = eyePosition.position;
+            Vector3 dirToPlayer = (playerCenter - eyePos).normalized;
+            float distToPlayer = Vector3.Distance(eyePos, playerCenter);
+
+            Vector3 rayStart = eyePos;
+
+            if (lastRaycastHit)
+            {
+                // Hit something - draw to hit point (RED)
+                Vector3 hitPoint = lastHitInfo.point;
+                Gizmos.color = Color.red;
+                Gizmos.DrawLine(rayStart, hitPoint);
+                Gizmos.DrawWireSphere(hitPoint, 0.1f);
+
+                // Yellow normal
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawLine(hitPoint, hitPoint + lastHitInfo.normal * 0.5f);
+
+                // Dotted line to player (blocked)
+                Gizmos.color = new Color(1f, 0f, 0f, 0.3f);
+                DrawDottedLine(hitPoint, playerCenter, 0.2f);
+
+#if UNITY_EDITOR
+                UnityEditor.Handles.Label(
+                    hitPoint + Vector3.up * 0.3f,
+                    $"BLOCKED: {lastHitInfo.collider.name}\nDist: {lastHitInfo.distance:F2}m",
+                    new GUIStyle()
+                    {
+                        normal = new GUIStyleState() { textColor = Color.red },
+                        fontSize = 10
+                    }
+                );
+#endif
+            }
+            else
+            {
+                // Clear line of sight (GREEN)
+                Gizmos.color = Color.green;
+                Gizmos.DrawLine(rayStart, playerCenter);
+
+#if UNITY_EDITOR
+                UnityEditor.Handles.Label(
+                    playerCenter + Vector3.up * 0.3f,
+                    $"VISIBLE\nDist: {distToPlayer:F2}m\nAngle: {lastAngleToPlayer:F1}°",
+                    new GUIStyle()
+                    {
+                        normal = new GUIStyleState() { textColor = Color.green },
+                        fontSize = 10
+                    }
+                );
+#endif
+            }
+
+            // Raycast start point
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawWireSphere(rayStart, 0.08f);
+
+            // Player center marker
             Gizmos.color = lastResult ? Color.green : Color.red;
-            Gizmos.DrawLine(eyePosition.position, playerPos);
-            Gizmos.DrawWireSphere(playerPos, 0.3f);
+            Gizmos.DrawWireSphere(playerCenter, 0.2f);
+        }
+
+    }
+
+    private void DrawDottedLine(Vector3 start, Vector3 end, float segmentLength)
+    {
+        Vector3 direction = (end - start).normalized;
+        float distance = Vector3.Distance(start, end);
+        int segments = Mathf.CeilToInt(distance / segmentLength);
+
+        for (int i = 0; i < segments; i += 2)
+        {
+            Vector3 segStart = start + direction * (i * segmentLength);
+            Vector3 segEnd = start + direction * Mathf.Min((i + 1) * segmentLength, distance);
+            Gizmos.DrawLine(segStart, segEnd);
         }
     }
 
