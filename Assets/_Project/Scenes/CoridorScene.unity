@@ -4824,13 +4824,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 324648923}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0.3934333, y: -0, z: -0, w: 0.91935325}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7333676739816343313}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 46.337, y: 0, z: 0}
 --- !u!1001 &328572296
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9983,17 +9983,17 @@ MonoBehaviour:
   suspicionFillImage: {fileID: 2085648420}
   suspicionGradient:
     serializedVersion: 2
-    key0: {r: 0.9528302, g: 0.3668747, b: 0.31910825, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
+    key0: {r: 0.9716981, g: 0.92073244, b: 0.12375401, a: 1}
+    key1: {r: 1, g: 0.50319403, b: 0, a: 1}
+    key2: {r: 1, g: 0, b: 0, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 0}
     key5: {r: 0, g: 0, b: 0, a: 0}
     key6: {r: 0, g: 0, b: 0, a: 0}
     key7: {r: 0, g: 0, b: 0, a: 0}
     ctime0: 0
-    ctime1: 65535
-    ctime2: 0
+    ctime1: 32768
+    ctime2: 65535
     ctime3: 0
     ctime4: 0
     ctime5: 0
@@ -10009,7 +10009,7 @@ MonoBehaviour:
     atime7: 0
     m_Mode: 0
     m_ColorSpace: 0
-    m_NumColorKeys: 2
+    m_NumColorKeys: 3
     m_NumAlphaKeys: 2
   fadeInDuration: 0.3
   fadeOutDuration: 0.5
@@ -36292,7 +36292,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SecurityCamera
   config: {fileID: 11400000, guid: 34a3dca7a28f9994c9ff2b870b3f81a7, type: 2}
-  player: {fileID: 7853577938338958500}
+  player: {fileID: 7846218088266727378}
   autoFindPlayer: 1
   currentStateDebug: 0
   suspicionMeterDebug: 0

@@ -144,6 +144,7 @@ public class SecurityCameraHUD : MonoBehaviour
         if (suspicionFillImage != null && suspicionGradient != null)
         {
             suspicionFillImage.color = suspicionGradient.Evaluate(suspicionPercent / 100f);
+            Debug.Log($"[SecurityCameraHUD] Suspicion bar updated: {suspicionPercent}%");
         }
     }
 
