@@ -704,8 +704,6 @@ MonoBehaviour:
     done: 0
   - name: Make LockedText red?
     done: 0
-  - name: Add esc mini menu
-    done: 0
   - name: 
     done: 0
   - name: 'ENEMIES CRITICAL: zmeneni logiky ne insta spot - chase, ale sus meter
@@ -713,8 +711,6 @@ MonoBehaviour:
     done: 0
   - name: 'Enemies: dvere jsou interactible layer a ten neni mask ale hrac ma collider
       ja te vrstve - block'
-    done: 0
-  - name: "P\u0159idat po\u0159\xE1dnou animaci catch/zabit\xED hr\xE1\u010De"
     done: 0
   - name: "Zm\u011Bnit catch an\xE1maci na taser, udelat raycast with trail pak zapnout
       ragdoll a force ze strany"
@@ -35657,6 +35653,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1852821211297802252, guid: cbde6f98b1791b541867b97d34472364, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1852821211297802252, guid: cbde6f98b1791b541867b97d34472364, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1852821211297802252, guid: cbde6f98b1791b541867b97d34472364, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1852821211297802252, guid: cbde6f98b1791b541867b97d34472364, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1852821211297802252, guid: cbde6f98b1791b541867b97d34472364, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6223549208303972588, guid: cbde6f98b1791b541867b97d34472364, type: 3}
       propertyPath: slowMotionDuration
       value: 5
