@@ -5,6 +5,9 @@ using UnityEngine;
 /// Handles player death execution: ragdoll, camera effects, scene reload.
 /// Pure execution component - triggered by GameManager.
 /// SRP: Only handles death sequence, doesn't decide when to die.
+/// 
+/// CRITICAL: Disables SamplePlayerAnimationController to prevent 
+/// "CharacterController.Move called on inactive controller" error.
 /// </summary>
 [RequireComponent(typeof(CharacterController))]
 public class PlayerDeath : MonoBehaviour
@@ -18,18 +21,19 @@ public class PlayerDeath : MonoBehaviour
     [SerializeField] private float slowMotionScale = 0.3f;
     [SerializeField] private float slowMotionDuration = 1f;
 
-    [Header("Camera")]
-    [SerializeField] private bool disableCameraOnDeath = true;
-
     [Header("Debug")]
     [SerializeField] private bool isDead;
 
     private CharacterController characterController;
     private Coroutine deathSequenceCoroutine;
 
+    // Cache player controller reference
+    private Synty.AnimationBaseLocomotion.Samples.SamplePlayerAnimationController playerController;
+
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
+        playerController = GetComponent<Synty.AnimationBaseLocomotion.Samples.SamplePlayerAnimationController>();
 
         if (animator == null)
             animator = GetComponent<Animator>();
@@ -41,6 +45,7 @@ public class PlayerDeath : MonoBehaviour
     /// <summary>
     /// Execute death sequence with optional delay before scene reload.
     /// Called by GameManager.OnPlayerCaught().
+    /// NOTE: GameManager should call InputReader.DisableInputs() BEFORE this method.
     /// </summary>
     /// <param name="reloadDelay">Delay in seconds before reloading scene</param>
     public void ExecuteDeath(float reloadDelay = 2f)
@@ -61,17 +66,26 @@ public class PlayerDeath : MonoBehaviour
     {
         Debug.Log("[PlayerDeath] Death sequence started");
 
-        // Step 1: Disable character controller and animator
+        // Step 1: CRITICAL - Disable SamplePlayerAnimationController FIRST
+        // This prevents "CharacterController.Move called on inactive controller" error
+        if (playerController != null)
+        {
+            playerController.enabled = false;
+            Debug.Log("[PlayerDeath] SamplePlayerAnimationController disabled");
+        }
+
+        // Step 2: Disable character controller (now safe - nothing calls Move())
         if (characterController != null)
             characterController.enabled = false;
 
+        // Step 3: Disable animator (stop walk/run animations)
         if (animator != null)
             animator.enabled = false;
 
-        // Step 2: Enable ragdoll
+        // Step 4: Enable ragdoll physics
         SetRagdollEnabled(true);
 
-        // Step 3: Optional slow-motion effect
+        // Step 5: Optional slow-motion effect
         if (enableSlowMotion)
         {
             Time.timeScale = slowMotionScale;
@@ -84,12 +98,12 @@ public class PlayerDeath : MonoBehaviour
             Time.fixedDeltaTime = 0.02f;
         }
 
-        // Step 5: Wait before reload
+        // Step 6: Wait before reload
         float remainingDelay = reloadDelay - (enableSlowMotion ? slowMotionDuration : 0f);
         if (remainingDelay > 0f)
             yield return new WaitForSecondsRealtime(remainingDelay);
 
-        // Step 6: Reload scene
+        // Step 7: Reload scene
         Debug.Log("[PlayerDeath] Reloading scene");
 
         if (SceneManager.Instance != null)
