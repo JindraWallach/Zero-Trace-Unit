@@ -22,7 +22,7 @@ public class DependencyInjector : MonoBehaviour
     public SampleCameraController CameraController => cameraController;
     public Transform PlayerPosition => playerPosition;
 
-    private void Awake()
+    private void Start()
     {
         GameManager.Instance.Initialize(this);
 

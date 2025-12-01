@@ -28,7 +28,6 @@ public class EnemyStateMachine : MonoBehaviour
     public event Action<EnemyState> OnStateChanged;
     public event Action<Vector3> OnPlayerDetected;
     public event Action<Vector3> OnPlayerLost;
-    public event Action OnPlayerCaught;
 
     // Component references (cached for performance)
     private EnemyState currentState;
@@ -165,20 +164,6 @@ public class EnemyStateMachine : MonoBehaviour
     {
         hasSeenPlayer = false;
         timeSinceLastSeen = 0f;
-    }
-
-    /// <summary>
-    /// Called when player is caught (triggers game over).
-    /// </summary>
-    public void CatchPlayer()
-    {
-        OnPlayerCaught?.Invoke();
-
-        if (showDebugLogs)
-            Debug.Log($"[EnemyStateMachine] {gameObject.name} caught player!", this);
-
-        // Notify GameManager
-        GameManager.Instance?.OnPlayerCaught();
     }
 
     // === Event Handlers ===
