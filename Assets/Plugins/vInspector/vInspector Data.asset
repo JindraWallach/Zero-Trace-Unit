@@ -76,6 +76,13 @@ MonoBehaviour:
     isAsset: 1
     _typeString: EnemyConfig, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+  - _obj: {fileID: 11400000, guid: 34a3dca7a28f9994c9ff2b870b3f81a7, type: 2}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-3-34a3dca7a28f9994c9ff2b870b3f81a7-11400000-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: SecurityCameraConfig, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
   - _obj: {fileID: 9100000, guid: 3dcbb7ff605184746be82d748741383f, type: 2}
     globalId:
       globalObjectIdString: GlobalObjectId_V1-3-3dcbb7ff605184746be82d748741383f-9100000-0

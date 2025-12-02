@@ -23,4 +23,4 @@ MonoBehaviour:
   alertDelay: 0.5
   alertCooldown: 10
   debugVision: 1
-  debugStates: 1
+  debugStates: 0
