@@ -24,6 +24,9 @@ public class DoorInteractionConfig : ScriptableObject
     [Tooltip("Text for hack interaction (Hack mode, locked)")]
     public string hackText = "HACK";
 
+    [Tooltip("Text for locked state (normal mode, locked)")]
+    public string lockedText = "Locked";
+
     [Tooltip("Text for out of range (Hack mode only)")]
     public string outOfRangeText = "OUT OF RANGE";
 

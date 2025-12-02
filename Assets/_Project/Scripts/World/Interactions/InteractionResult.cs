@@ -26,8 +26,8 @@ public readonly struct InteractionResult
     public static InteractionResult Hack(string text) =>
         new InteractionResult(true, true, text, InteractionType.Hack);
 
-    public static InteractionResult InfoOnly(string text) =>
-        new InteractionResult(false, true, text, InteractionType.None);
+    public static InteractionResult Locked(string text) =>
+        new InteractionResult(false, true, text, InteractionType.Locked);
 
     public static InteractionResult NoPrompt() =>
         new InteractionResult(false, false, "", InteractionType.None);
@@ -37,5 +37,6 @@ public enum InteractionType
 {
     None,
     Physical,
-    Hack
+    Hack,
+    Locked
 }

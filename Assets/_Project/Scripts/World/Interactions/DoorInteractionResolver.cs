@@ -36,7 +36,7 @@ public static class DoorInteractionResolver
 
         // In range but locked - show info
         if (isLocked)
-            return InteractionResult.InfoOnly("Locked");
+            return InteractionResult.Locked(config.lockedText);
 
         // In range, unlocked, open - can close
         if (isOpen)
@@ -54,7 +54,7 @@ public static class DoorInteractionResolver
     {
         // Out of range - show info
         if (distance > config.hackRange)
-            return InteractionResult.InfoOnly(config.outOfRangeText);
+            return InteractionResult.Locked(config.outOfRangeText);
 
         // In range and locked - can hack
         if (isLocked)

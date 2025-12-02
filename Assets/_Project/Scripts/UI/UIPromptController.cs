@@ -28,7 +28,7 @@ public class UIPromptController : MonoBehaviour
         }
 
         if (promptText != null)
-            promptText.text = $"[E] {text}";
+            promptText.text = $"{text} [E]";
     }
 
     public void Hide()

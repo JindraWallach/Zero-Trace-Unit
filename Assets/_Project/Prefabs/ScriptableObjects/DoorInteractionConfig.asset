@@ -15,5 +15,7 @@ MonoBehaviour:
   physicalInteractionRange: 7.5
   hackRange: 9.5
   physicalUseText: Open
+  physicalCloseText: Close
   hackText: Hack
+  lockedText: Access Denied
   outOfRangeText: Out Of Range
