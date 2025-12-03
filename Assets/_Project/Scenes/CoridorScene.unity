@@ -698,8 +698,9 @@ MonoBehaviour:
     done: 0
   - name: "Zlep\u0161en\xED z\xE1bavnosti hran\xED (ka\u017Ed\xFD dve\u0159e hack?)"
     done: 0
-  - name: "Red Color? Zm\u011Bna UIpromptu aby to [E] nebylo staticke ale psal bych
-      ho tam pres scriptableobject"
+  - name: "SRP,OOP, na vykon Red Color p\u0159i locked state nastaveniu pres SO?
+      Zm\u011Bna UIpromptu aby to [E] nebylo staticke ale psal bych ho tam pres scriptableobject,
+      nejlepe vsechny texty ke dverim barvy textu pres SO pis zmeny"
     done: 0
   - name: "Indikator UI Locker dve\u0159\xED? "
     done: 0
