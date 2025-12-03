@@ -97,3 +97,10 @@ MonoBehaviour:
     isAsset: 1
     _typeString: UnityEditor.Animations.AnimatorController, UnityEditor.CoreModule,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - _obj: {fileID: 1543695114780030, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-1-ceddc97abfdd06647918f15b13cfac6c-1543695114780030-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null

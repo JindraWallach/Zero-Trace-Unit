@@ -698,13 +698,10 @@ MonoBehaviour:
     done: 0
   - name: "Zlep\u0161en\xED z\xE1bavnosti hran\xED (ka\u017Ed\xFD dve\u0159e hack?)"
     done: 0
-  - name: "Indikator UI Locker dve\u0159\xED? Red Color? Blender a Zm\u011Bna UIpromptu
-      aby to [E] nebylo staticke ale psal bych ho tam pres scriptableobject + Locked
-      text by mel byt bran  SO take"
+  - name: "Red Color? Zm\u011Bna UIpromptu aby to [E] nebylo staticke ale psal bych
+      ho tam pres scriptableobject"
     done: 0
-  - name: Change UIPrompts to PropScreen?
-    done: 0
-  - name: Make LockedText red?
+  - name: "Indikator UI Locker dve\u0159\xED? "
     done: 0
   - name: 
     done: 0
