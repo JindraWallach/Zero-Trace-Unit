@@ -19,3 +19,9 @@ MonoBehaviour:
   hackText: Hack
   lockedText: Locked Authorization Required
   outOfRangeText: Out Of Range
+  physicalColor: {r: 1, g: 1, b: 1, a: 1}
+  hackColor: {r: 1, g: 1, b: 1, a: 1}
+  lockedColor: {r: 0.754717, g: 0, b: 0, a: 1}
+  interactKey: E
+  keyDisplayFormat: '[{0}] {1}'
+  showKeyInPrompt: 1

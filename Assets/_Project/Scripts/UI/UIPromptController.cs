@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -5,6 +6,7 @@ using UnityEngine.UI;
 /// <summary>
 /// World-space interaction prompt with dynamic text and color.
 /// Supports formatted text with input keys and color coding.
+/// Uses coroutine for pulse animation (performance-friendly).
 /// </summary>
 public class UIPromptController : MonoBehaviour
 {
@@ -20,7 +22,7 @@ public class UIPromptController : MonoBehaviour
     [SerializeField] private float pulseMax = 1.0f;
 
     private Color currentColor = Color.white;
-    private float pulseTimer;
+    private Coroutine pulseCoroutine;
 
     private void Awake()
     {
@@ -30,20 +32,9 @@ public class UIPromptController : MonoBehaviour
         Hide();
     }
 
-    private void Update()
+    private void OnDisable()
     {
-        if (enablePulse && canvasGroup != null && canvasGroup.alpha > 0)
-        {
-            pulseTimer += Time.deltaTime * pulseSpeed;
-            float scale = Mathf.Lerp(pulseMin, pulseMax, (Mathf.Sin(pulseTimer) + 1f) * 0.5f);
-
-            if (promptText != null)
-            {
-                Color pulsedColor = currentColor * scale;
-                pulsedColor.a = currentColor.a;
-                promptText.color = pulsedColor;
-            }
-        }
+        StopPulse();
     }
 
     /// <summary>
@@ -73,7 +64,9 @@ public class UIPromptController : MonoBehaviour
             backgroundImage.color = bgColor;
         }
 
-        pulseTimer = 0f;
+        // Start pulse animation if enabled
+        if (enablePulse)
+            StartPulse();
     }
 
     /// <summary>
@@ -86,6 +79,8 @@ public class UIPromptController : MonoBehaviour
 
     public void Hide()
     {
+        StopPulse();
+
         if (canvasGroup != null)
         {
             canvasGroup.alpha = 0f;
@@ -104,6 +99,7 @@ public class UIPromptController : MonoBehaviour
             promptText.text = text;
             currentColor = color;
 
+            // Reset color immediately if pulse is disabled
             if (!enablePulse)
                 promptText.color = color;
         }
@@ -113,6 +109,52 @@ public class UIPromptController : MonoBehaviour
             Color bgColor = color;
             bgColor.a = 0.3f;
             backgroundImage.color = bgColor;
+        }
+
+        // Restart pulse with new color
+        if (enablePulse && canvasGroup != null && canvasGroup.alpha > 0)
+        {
+            StopPulse();
+            StartPulse();
+        }
+    }
+
+    private void StartPulse()
+    {
+        StopPulse();
+        pulseCoroutine = StartCoroutine(PulseCoroutine());
+    }
+
+    private void StopPulse()
+    {
+        if (pulseCoroutine != null)
+        {
+            StopCoroutine(pulseCoroutine);
+            pulseCoroutine = null;
+        }
+
+        // Reset to original color when stopping
+        if (promptText != null)
+            promptText.color = currentColor;
+    }
+
+    private IEnumerator PulseCoroutine()
+    {
+        float timer = 0f;
+
+        while (true)
+        {
+            timer += Time.deltaTime * pulseSpeed;
+            float scale = Mathf.Lerp(pulseMin, pulseMax, (Mathf.Sin(timer) + 1f) * 0.5f);
+
+            if (promptText != null)
+            {
+                Color pulsedColor = currentColor * scale;
+                pulsedColor.a = currentColor.a; // Preserve alpha
+                promptText.color = pulsedColor;
+            }
+
+            yield return null;
         }
     }
 
