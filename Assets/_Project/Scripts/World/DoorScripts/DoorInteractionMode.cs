@@ -6,6 +6,7 @@ using UnityEngine;
 /// Continuously updates prompts while player is in range (coroutine).
 /// Event-driven for mode/lock changes + continuous checking.
 /// Hides prompts during animations, shows when animation completes.
+/// Now uses InteractionResult with colors from ScriptableObject.
 /// </summary>
 public class DoorInteractionMode : MonoBehaviour
 {
@@ -25,7 +26,7 @@ public class DoorInteractionMode : MonoBehaviour
     private bool isPlayerInRange;
     private InteractionResult currentResult;
     private Coroutine updateCoroutine;
-    private bool isAnimating; // Track if door is animating
+    private bool isAnimating;
 
     private void OnEnable()
     {
@@ -37,7 +38,6 @@ public class DoorInteractionMode : MonoBehaviour
             if (stateMachine.Lock != null)
                 stateMachine.Lock.OnLockStateChanged += OnLockStateChanged;
 
-            // Subscribe to animation events
             stateMachine.OnAnimationStarted += OnAnimationStarted;
             stateMachine.OnAnimationCompleted += OnAnimationCompleted;
         }
@@ -87,14 +87,12 @@ public class DoorInteractionMode : MonoBehaviour
 
     private void OnAnimationStarted()
     {
-        // Hide prompts when animation starts
         isAnimating = true;
         doorController.HidePrompts();
     }
 
     private void OnAnimationCompleted()
     {
-        // Show prompts when animation completes
         isAnimating = false;
 
         if (isPlayerInRange)
@@ -147,19 +145,15 @@ public class DoorInteractionMode : MonoBehaviour
         bool isLocked = stateMachine.Lock.IsLocked;
         bool isOpen = IsOpen();
 
-        // Resolve using pure function
+        // Resolve using pure function (now returns formatted text + color)
         currentResult = DoorInteractionResolver.Resolve(mode, isLocked, isOpen, distance, config);
 
-        // Update UI based on result
-        if (currentResult.ShowPrompt)
-            doorController.SetPromptEnabled(true, currentResult.PromptText);
-        else
-            doorController.SetPromptEnabled(false);
+        // Update UI with color-coded prompt
+        doorController.SetPrompt(currentResult);
     }
 
     private bool IsOpen()
     {
-        // Check if door is in Open state
         return stateMachine.CurrentState is DoorOpenState;
     }
 
@@ -168,7 +162,6 @@ public class DoorInteractionMode : MonoBehaviour
         if (!currentResult.CanInteract)
             return;
 
-        // Hide prompt immediately on interaction
         doorController.HidePrompts();
 
         switch (currentResult.Type)
@@ -192,19 +185,16 @@ public class DoorInteractionMode : MonoBehaviour
 
                 if (stateMachine.Lock.OpenAfterUnlock)
                 {
-                    // Will auto-open, prompts will show after animation
                     stateMachine.SetState(new DoorOpeningState(stateMachine));
                 }
                 else
                 {
-                    // Door unlocked but not opening, show prompt immediately
                     if (isPlayerInRange)
                         UpdateInteraction();
                 }
             },
             onFail: () =>
             {
-                // Hack failed, show prompt again
                 if (isPlayerInRange)
                     UpdateInteraction();
             }

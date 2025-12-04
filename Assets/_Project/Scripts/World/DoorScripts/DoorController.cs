@@ -3,6 +3,7 @@
 /// <summary>
 /// Handles door animations, sounds, and prompt display.
 /// Pure presentation logic - no game logic.
+/// Now supports colored prompts via InteractionResult.
 /// </summary>
 [RequireComponent(typeof(Animator))]
 public class DoorController : MonoBehaviour
@@ -55,6 +56,24 @@ public class DoorController : MonoBehaviour
             HidePrompts();
     }
 
+    /// <summary>
+    /// Set prompt with InteractionResult (includes color + formatted text).
+    /// </summary>
+    public void SetPrompt(InteractionResult result)
+    {
+        if (!playerInRange || !result.ShowPrompt || string.IsNullOrEmpty(result.PromptText))
+        {
+            HidePrompts();
+            return;
+        }
+
+        ShowPromptForSide(result.PromptText, result.PromptColor);
+    }
+
+    /// <summary>
+    /// Legacy method - kept for backwards compatibility.
+    /// Use SetPrompt(InteractionResult) instead.
+    /// </summary>
     public void SetPromptEnabled(bool enabled, string promptText = "")
     {
         if (!playerInRange || !enabled || string.IsNullOrEmpty(promptText))
@@ -63,10 +82,10 @@ public class DoorController : MonoBehaviour
             return;
         }
 
-        ShowPromptForSide(promptText);
+        ShowPromptForSide(promptText, Color.white);
     }
 
-    private void ShowPromptForSide(string text)
+    private void ShowPromptForSide(string text, Color color)
     {
         if (player == null)
         {
@@ -82,12 +101,12 @@ public class DoorController : MonoBehaviour
 
         if (shouldShowBack)
         {
-            promptBack?.Show(text);
+            promptBack?.Show(text, color);
             promptFront?.Hide();
         }
         else
         {
-            promptFront?.Show(text);
+            promptFront?.Show(text, color);
             promptBack?.Hide();
         }
     }

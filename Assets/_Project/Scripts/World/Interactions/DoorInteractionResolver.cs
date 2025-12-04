@@ -3,13 +3,13 @@ using UnityEngine;
 /// <summary>
 /// Pure static resolver for door interactions.
 /// No state, no allocations - just pure functions.
-/// Replaces Strategy pattern with simple if/else logic.
+/// Now returns formatted text with colors from config.
 /// </summary>
 public static class DoorInteractionResolver
 {
     /// <summary>
     /// Resolves interaction based on current context.
-    /// Returns what should happen and what UI to show.
+    /// Returns what should happen, what UI to show, and what color to use.
     /// </summary>
     public static InteractionResult Resolve(
         PlayerMode mode,
@@ -34,16 +34,32 @@ public static class DoorInteractionResolver
         if (distance > config.physicalInteractionRange)
             return InteractionResult.NoPrompt();
 
-        // In range but locked - show info
+        // In range but locked - show red locked text (no key shown)
         if (isLocked)
-            return InteractionResult.Locked(config.lockedText);
+        {
+            // Don't format with key for locked state (just info)
+            return InteractionResult.Locked(
+                config.lockedText,
+                config.lockedColor
+            );
+        }
 
-        // In range, unlocked, open - can close
+        // In range, unlocked, open - can close (green)
         if (isOpen)
-            return InteractionResult.Physical(config.physicalCloseText);
+        {
+            string formattedText = config.FormatPrompt(config.physicalCloseText);
+            return InteractionResult.Physical(
+                formattedText,
+                config.physicalColor
+            );
+        }
 
-        // In range, unlocked, closed - can open
-        return InteractionResult.Physical(config.physicalUseText);
+        // In range, unlocked, closed - can open (green)
+        string openText = config.FormatPrompt(config.physicalUseText);
+        return InteractionResult.Physical(
+            openText,
+            config.physicalColor
+        );
     }
 
     private static InteractionResult ResolveHackMode(
@@ -52,19 +68,40 @@ public static class DoorInteractionResolver
         float distance,
         DoorInteractionConfig config)
     {
-        // Out of range - show info
+        // Out of range - show red info (no interaction)
         if (distance > config.hackRange)
-            return InteractionResult.Locked(config.outOfRangeText);
+        {
+            return InteractionResult.Locked(
+                config.outOfRangeText,
+                config.lockedColor
+            );
+        }
 
-        // In range and locked - can hack
+        // In range and locked - can hack (yellow/orange)
         if (isLocked)
-            return InteractionResult.Hack(config.hackText);
+        {
+            string formattedText = config.FormatPrompt(config.hackText);
+            return InteractionResult.Hack(
+                formattedText,
+                config.hackColor
+            );
+        }
 
-        // In range, unlocked, open - can close
+        // In range, unlocked, open - can close (green)
         if (isOpen)
-            return InteractionResult.Physical(config.physicalCloseText);
+        {
+            string formattedText = config.FormatPrompt(config.physicalCloseText);
+            return InteractionResult.Physical(
+                formattedText,
+                config.physicalColor
+            );
+        }
 
-        // In range, unlocked, closed - can open
-        return InteractionResult.Physical(config.physicalUseText);
+        // In range, unlocked, closed - can open (green)
+        string openText = config.FormatPrompt(config.physicalUseText);
+        return InteractionResult.Physical(
+            openText,
+            config.physicalColor
+        );
     }
 }
