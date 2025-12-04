@@ -492,6 +492,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InteractionPromptUI
   promptText: {fileID: 1117640077588625120}
   canvasGroup: {fileID: 6158871692364785402}
+  backgroundImage: {fileID: 0}
+  enablePulse: 0
+  pulseSpeed: 2
+  pulseMin: 0.8
+  pulseMax: 1
 --- !u!225 &6158871692364785402
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -650,7 +655,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: ff441463b98299b4d81a053d95ca9b76, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1297,6 +1302,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InteractionPromptUI
   promptText: {fileID: 3574064523588542249}
   canvasGroup: {fileID: 8043132842639782958}
+  backgroundImage: {fileID: 0}
+  enablePulse: 0
+  pulseSpeed: 2
+  pulseMin: 0.8
+  pulseMax: 1
 --- !u!225 &8043132842639782958
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -1412,7 +1422,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: ff441463b98299b4d81a053d95ca9b76, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
