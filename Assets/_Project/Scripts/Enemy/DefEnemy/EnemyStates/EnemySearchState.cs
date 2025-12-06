@@ -4,6 +4,7 @@ using UnityEngine;
 /// Search state - enemy lost player, searches last known area.
 /// Moves to random points around last known position.
 /// Transitions to Chase if player re-spotted, or returns to Patrol after timeout.
+/// UPDATED: Uses suspicion system for detection.
 /// </summary>
 public class EnemySearchState : EnemyState
 {
@@ -44,9 +45,12 @@ public class EnemySearchState : EnemyState
         // Check if we found player
         if (CanSeePlayer())
         {
-            // Player found - chase!
-            machine.SetState(new EnemyChaseState(machine));
-            return;
+            // Player found - suspicion will build, let system decide chase
+            if (ShouldChase())
+            {
+                machine.SetState(new EnemyChaseState(machine));
+                return;
+            }
         }
 
         // Check if reached current search point
@@ -76,8 +80,8 @@ public class EnemySearchState : EnemyState
 
     public override void OnPlayerDetected(Vector3 playerPosition)
     {
-        // Found player - chase immediately
-        machine.SetState(new EnemyChaseState(machine));
+        // Found player - suspicion system will handle transition
+        searchCenter = playerPosition; // Update search center
     }
 
     private void MoveToNextSearchPoint()

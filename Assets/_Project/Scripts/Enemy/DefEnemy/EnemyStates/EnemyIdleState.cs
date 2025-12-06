@@ -4,6 +4,7 @@ using UnityEngine;
 /// Idle state - enemy stands still and looks around.
 /// Used when no patrol route assigned or at waypoints.
 /// Transitions to Patrol/Alert/Chase based on patrol route or player detection.
+/// UPDATED: Uses suspicion system for gradual detection.
 /// </summary>
 public class EnemyIdleState : EnemyState
 {
@@ -54,6 +55,7 @@ public class EnemyIdleState : EnemyState
     public override void OnPlayerDetected(Vector3 playerPosition)
     {
         // Player spotted while idle - go to alert
+        // (Suspicion system will handle transition to chase at 100%)
         machine.SetState(new EnemyAlertState(machine, playerPosition));
     }
 

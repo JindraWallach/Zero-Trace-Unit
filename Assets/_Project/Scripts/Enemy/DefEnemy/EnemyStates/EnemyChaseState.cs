@@ -5,6 +5,7 @@ using UnityEngine;
 /// Continuously follows player while in vision.
 /// Checks for catch range to trigger game over.
 /// Transitions to Search if player lost.
+/// UPDATED: Uses suspicion system for detection.
 /// </summary>
 public class EnemyChaseState : EnemyState
 {

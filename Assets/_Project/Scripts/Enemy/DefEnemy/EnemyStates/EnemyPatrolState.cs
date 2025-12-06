@@ -5,6 +5,7 @@
 /// Deterministic route following (no randomness).
 /// Waits at each waypoint before moving to next.
 /// Transitions to Alert/Chase when player detected.
+/// UPDATED: Uses suspicion system for gradual detection.
 /// </summary>
 public class EnemyPatrolState : EnemyState
 {
@@ -65,15 +66,19 @@ public class EnemyPatrolState : EnemyState
 
     public override void OnPlayerDetected(Vector3 playerPosition)
     {
-        // Player spotted during patrol - go to alert
-        machine.SetState(new EnemyAlertState(machine, playerPosition));
+        // Player spotted during patrol
+        // Suspicion system will handle transition (Alert at 30%, Chase at 100%)
+        if (IsInAlertRange())
+        {
+            machine.SetState(new EnemyAlertState(machine, playerPosition));
+        }
     }
 
     private void MoveToCurrentWaypoint()
     {
         if (machine.PatrolRoute == null) return;
 
-        Vector3 waypoint = machine.PatrolRoute.GetWaypointPosition(currentWaypointIndex); // ZMĚNA
+        Vector3 waypoint = machine.PatrolRoute.GetWaypointPosition(currentWaypointIndex);
         machine.Movement.MoveToPosition(waypoint, machine.Config.patrolSpeed);
 
         if (machine.Config.debugStates)
@@ -84,7 +89,7 @@ public class EnemyPatrolState : EnemyState
     {
         if (machine.PatrolRoute == null) return;
 
-        int waypointCount = machine.PatrolRoute.WaypointCount; // ZMĚNA
+        int waypointCount = machine.PatrolRoute.WaypointCount;
 
         if (machine.PatrolRoute.loop)
         {

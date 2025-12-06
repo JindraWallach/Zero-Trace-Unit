@@ -91,6 +91,41 @@ public class EnemyConfig : ScriptableObject
     [Tooltip("Show movement paths")]
     public bool debugMovement = false;
 
+    [Header("Suspicion System (Gradual Detection)")]
+    [Tooltip("Enable gradual suspicion system (recommended). If false, uses instant detection.")]
+    public bool enableSuspicionSystem = true;
+
+    [Tooltip("Suspicion increase rate per second (base)")]
+    [Range(5f, 100f)]
+    public float suspicionBuildRate = 20f;
+
+    [Tooltip("Suspicion decrease rate per second when player hidden")]
+    [Range(5f, 50f)]
+    public float suspicionDecayRate = 10f;
+
+    [Tooltip("Grace period before suspicion starts decaying (seconds)")]
+    [Range(0f, 5f)]
+    public float suspicionDecayGracePeriod = 1f;
+
+    [Tooltip("Multiplier per visible body part (0.5 = +50% per part, max 4 parts)")]
+    [Range(0f, 2f)]
+    public float suspicionVisibilityMultiplier = 0.5f;
+
+    [Tooltip("Suspicion % to trigger Alert state (recommended 30%)")]
+    [Range(10f, 99f)]
+    public float suspicionAlertThreshold = 30f;
+
+    [Tooltip("Suspicion % to trigger Chase state (always 100%)")]
+    public float suspicionChaseThreshold = 100f;
+
+    [Header("Multi-Point Vision (Enhanced Detection)")]
+    [Tooltip("Enable 4-point body detection (head/torso/hands) instead of single raycast")]
+    public bool enableMultiPointVision = true;
+
+    [Tooltip("How often to check vision (seconds) - lower = more responsive but heavier")]
+    [Range(0.05f, 0.5f)]
+    public float visionCheckIntervalMultiPoint = 0.2f;
+
     private void OnValidate()
     {
         // Ensure logical values

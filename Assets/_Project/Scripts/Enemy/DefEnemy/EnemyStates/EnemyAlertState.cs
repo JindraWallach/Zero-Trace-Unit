@@ -6,6 +6,7 @@ using UnityEngine;
 /// - Transitions to Chase if player confirmed
 /// - Transitions to Search if player not visible
 /// - Returns to Patrol/Idle if nothing found
+/// UPDATED: Works with suspicion system (30-99% range).
 /// </summary>
 public class EnemyAlertState : EnemyState
 {
@@ -45,12 +46,19 @@ public class EnemyAlertState : EnemyState
             machine.Movement.FacePosition(alertPosition);
         }
 
+        // Check suspicion level (NEW)
+        if (ShouldChase())
+        {
+            // Suspicion reached 100% - chase!
+            machine.SetState(new EnemyChaseState(machine));
+            return;
+        }
+
         // Check if we can see player now
         if (CanSeePlayer())
         {
-            // Player confirmed - chase!
-            machine.SetState(new EnemyChaseState(machine));
-            return;
+            // Player confirmed - stay alert (suspicion will build)
+            alertTimer = 0f; // Reset timer
         }
 
         // After alert duration, decide next action
@@ -71,8 +79,9 @@ public class EnemyAlertState : EnemyState
 
     public override void OnPlayerDetected(Vector3 playerPosition)
     {
-        // Player spotted during alert - chase immediately
-        machine.SetState(new EnemyChaseState(machine));
+        // Player spotted during alert - suspicion system will handle transition
+        alertPosition = playerPosition;
+        alertTimer = 0f; // Reset timer
     }
 
     public override void OnPlayerLost(Vector3 lastKnownPosition)
