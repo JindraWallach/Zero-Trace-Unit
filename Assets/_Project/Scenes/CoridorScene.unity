@@ -5540,7 +5540,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyDetectionManager
   enemiesPerBatch: 3
   minCycleTime: 0.1
-  debugMode: 0
+  debugMode: 1
 --- !u!1 &384306992
 GameObject:
   m_ObjectHideFlags: 0

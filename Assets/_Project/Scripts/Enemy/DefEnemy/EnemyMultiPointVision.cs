@@ -32,6 +32,8 @@ public class EnemyMultiPointVision : MonoBehaviour
     private bool canSeePlayer;
     private bool wasVisible;
 
+    private Coroutine visionCheckCoroutine;
+
     // Debug visualization data
     private Vector3[] lastRayStarts = new Vector3[4];
     private Vector3[] lastRayDirections = new Vector3[4];
@@ -40,12 +42,21 @@ public class EnemyMultiPointVision : MonoBehaviour
     private float[] lastAngles = new float[4];
     private float[] lastDistances = new float[4];
 
-    // Coroutine
-    private Coroutine visionCheckCoroutine;
+    private void OnDestroy()
+    {
+        // Unregister from manager
+        EnemyDetectionManager.Instance?.UnregisterDetector(this);
+    }
 
     // Public API
     public int VisiblePoints => visiblePointsCount;
     public bool CanSeePlayer => canSeePlayer;
+
+    // Compatibility wrapper for legacy manager call
+    public void PerformDetectionCheck()
+    {
+        PerformVisionCheck();
+    }
 
     public void Initialize(EnemyStateMachine machine, EnemyConfig enemyConfig, SuspicionConfig susConfig, Transform player)
     {
@@ -71,6 +82,9 @@ public class EnemyMultiPointVision : MonoBehaviour
             enabled = false;
             return;
         }
+
+        // Register with detection manager for batch processing
+        EnemyDetectionManager.Instance?.RegisterDetector(this);
 
         Debug.Log($"[EnemyMultiPointVision] {gameObject.name} initialized. Eye at {eyePosition.position}, Player: {playerTransform.name}", this);
     }
@@ -165,6 +179,11 @@ public class EnemyMultiPointVision : MonoBehaviour
         if (suspicionSystem != null)
         {
             suspicionSystem.SetPlayerVisible(canSeePlayer, visiblePointsCount);
+            Debug.Log($"[EnemyMultiPointVision] {gameObject.name} -> SuspicionSystem.SetPlayerVisible called. Visible={canSeePlayer}, Parts={visiblePointsCount}", this);
+        }
+        else
+        {
+            Debug.LogWarning($"[EnemyMultiPointVision] {gameObject.name} suspicionSystem is NULL when trying to update suspicion", this);
         }
 
         // Fire visibility changed event

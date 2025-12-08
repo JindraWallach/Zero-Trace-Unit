@@ -52,6 +52,9 @@ public class EnemySuspicionSystem : MonoBehaviour
             enabled = false;
             return;
         }
+
+        // Ensure tracking coroutine is running after initialization
+        StartTracking();
     }
 
     private void OnEnable()
@@ -73,8 +76,14 @@ public class EnemySuspicionSystem : MonoBehaviour
         isPlayerVisible = visible;
         visibleBodyParts = Mathf.Clamp(visibleParts, 0, 4);
 
+        Debug.Log($"[EnemySuspicionSystem] {gameObject.name} SetPlayerVisible: Visible={visible}, Parts={visibleBodyParts}", this);
+
         if (visible)
+        {
             timeSinceLastSeen = 0f;
+            // Notify listeners immediately so UI can reflect current suspicion right away
+            OnSuspicionChanged?.Invoke(currentSuspicion);
+        }
     }
 
     /// <summary>
@@ -131,6 +140,8 @@ public class EnemySuspicionSystem : MonoBehaviour
 
                 CheckThresholds();
                 OnSuspicionChanged?.Invoke(currentSuspicion);
+
+                Debug.Log($"[EnemySuspicionSystem] {gameObject.name} Suspicion increased to {currentSuspicion:F1} (visibleParts={visibleBodyParts})", this);
             }
             else
             {
@@ -148,6 +159,8 @@ public class EnemySuspicionSystem : MonoBehaviour
 
                     if (currentSuspicion <= 0f)
                         OnSuspicionCleared?.Invoke();
+
+                    Debug.Log($"[EnemySuspicionSystem] {gameObject.name} Suspicion decreased to {currentSuspicion:F1}", this);
                 }
             }
 
