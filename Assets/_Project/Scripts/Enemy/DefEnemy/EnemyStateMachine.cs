@@ -4,42 +4,39 @@ using UnityEngine.AI;
 
 /// <summary>
 /// Central orchestrator for enemy AI behavior.
-/// NOW WITH: Suspicion system integration for gradual detection.
-/// Pattern identical to DoorStateMachine - manages state transitions.
-/// Provides access to all AI components (Movement, Vision, Animation, Suspicion).
+/// Manages state transitions with suspicion system.
+/// NO LEGACY SYSTEM - clean suspicion-only implementation.
 /// </summary>
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(EnemyMovementController))]
 [RequireComponent(typeof(EnemyAnimationController))]
+[RequireComponent(typeof(EnemySuspicionSystem))]
+[RequireComponent(typeof(EnemyMultiPointVision))]
 public class EnemyStateMachine : MonoBehaviour
 {
     [Header("Configuration")]
     [SerializeField] private EnemyConfig config;
     [SerializeField] private PatrolRoute patrolRoute;
 
-    [Header("References")]
+    [Header("Player Reference")]
     [SerializeField] private Transform playerTransform;
 
     [Header("Debug")]
     [SerializeField] private string currentStateName;
-    [SerializeField] private bool showDebugLogs = true;
-    [SerializeField] private float currentSuspicion;
+    [SerializeField] private float currentSuspicionDebug;
 
-    // Events for external listeners (UI, analytics, etc.)
+    // Events
     public event Action<EnemyState> OnStateChanged;
     public event Action<Vector3> OnPlayerDetected;
     public event Action<Vector3> OnPlayerLost;
 
-    // Component references (cached for performance)
+    // Component references
     private EnemyState currentState;
     private EnemyMovementController movementController;
     private EnemyAnimationController animationController;
     private NavMeshAgent navAgent;
-
-    // NEW: Suspicion system components
     private EnemySuspicionSystem suspicionSystem;
     private EnemyMultiPointVision multiPointVision;
-    private EnemyVisionDetector legacyVision; // Fallback for old system
 
     // Memory system
     private Vector3 lastKnownPlayerPosition;
@@ -58,13 +55,9 @@ public class EnemyStateMachine : MonoBehaviour
     public EnemyMovementController Movement => movementController;
     public EnemyAnimationController Animation => animationController;
     public NavMeshAgent Agent => navAgent;
-
-    // NEW: Suspicion system accessors
     public EnemySuspicionSystem Suspicion => suspicionSystem;
     public EnemyMultiPointVision MultiPointVision => multiPointVision;
-    public bool UsingSuspicionSystem => config != null && config.enableSuspicionSystem && suspicionSystem != null;
 
-    // Current state accessor (read-only)
     public EnemyState CurrentState => currentState;
 
     private void Awake()
@@ -73,16 +66,27 @@ public class EnemyStateMachine : MonoBehaviour
         navAgent = GetComponent<NavMeshAgent>();
         movementController = GetComponent<EnemyMovementController>();
         animationController = GetComponent<EnemyAnimationController>();
-
-        // NEW: Get suspicion system components (may be null if not using)
         suspicionSystem = GetComponent<EnemySuspicionSystem>();
         multiPointVision = GetComponent<EnemyMultiPointVision>();
-        legacyVision = GetComponent<EnemyVisionDetector>();
 
         // Validate configuration
         if (config == null)
         {
             Debug.LogError($"[EnemyStateMachine] {gameObject.name} missing EnemyConfig!", this);
+            enabled = false;
+            return;
+        }
+
+        if (!config.enableSuspicionSystem)
+        {
+            Debug.LogError($"[EnemyStateMachine] {gameObject.name} suspicion system disabled in config! This system requires it.", this);
+            enabled = false;
+            return;
+        }
+
+        if (config.suspicionConfig == null)
+        {
+            Debug.LogError($"[EnemyStateMachine] {gameObject.name} missing SuspicionConfig reference in EnemyConfig!", this);
             enabled = false;
             return;
         }
@@ -94,34 +98,40 @@ public class EnemyStateMachine : MonoBehaviour
             if (playerObj != null)
             {
                 playerTransform = playerObj.transform;
-                Debug.Log($"[EnemyStateMachine] {gameObject.name} auto-found player", this);
+            }
+            else
+            {
+                Debug.LogError($"[EnemyStateMachine] {gameObject.name} could not find player!", this);
+                enabled = false;
+                return;
             }
         }
     }
 
     private void Start()
     {
-        // Initialize components with config
+        // Initialize components
         movementController.Initialize(this);
         animationController.Initialize(this);
+        suspicionSystem.Initialize(this, config.suspicionConfig);
+        multiPointVision.Initialize(this, config, config.suspicionConfig, playerTransform);
 
-        // Initialize vision system based on config
-        if (config.enableSuspicionSystem && config.enableMultiPointVision)
-        {
-            InitializeMultiPointVisionSystem();
-        }
-        else
-        {
-            InitializeLegacyVisionSystem();
-        }
+        // Subscribe to vision events
+        multiPointVision.OnPlayerSpotted += HandlePlayerSpotted;
+        multiPointVision.OnPlayerLostSight += HandlePlayerLostSight;
 
-        // Start in appropriate state (after components are initialized)
+        // Subscribe to suspicion events
+        suspicionSystem.OnAlertTriggered += HandleSuspicionAlert;
+        suspicionSystem.OnChaseTriggered += HandleSuspicionChase;
+        suspicionSystem.OnSuspicionCleared += HandleSuspicionCleared;
+
+        // Start in appropriate state
         if (patrolRoute != null && patrolRoute.WaypointCount >= 2)
             SetState(new EnemyPatrolState(this));
         else
             SetState(new EnemyIdleState(this));
 
-        Debug.Log($"[EnemyStateMachine] {gameObject.name} initialized with {(UsingSuspicionSystem ? "SUSPICION" : "LEGACY")} system", this);
+        Debug.Log($"[EnemyStateMachine] {gameObject.name} initialized with suspicion system", this);
     }
 
     private void Update()
@@ -134,84 +144,18 @@ public class EnemyStateMachine : MonoBehaviour
         currentState?.Update();
 
         // Debug info
-        if (suspicionSystem != null)
-            currentSuspicion = suspicionSystem.Suspicion;
+        currentSuspicionDebug = suspicionSystem.Suspicion;
     }
 
     private void OnDestroy()
     {
         // Unsubscribe from events
-        UnsubscribeFromVisionEvents();
-        UnsubscribeFromSuspicionEvents();
-    }
-
-    // === VISION SYSTEM INITIALIZATION ===
-
-    private void InitializeMultiPointVisionSystem()
-    {
-        if (multiPointVision == null)
-        {
-            Debug.LogWarning($"[EnemyStateMachine] {gameObject.name} missing EnemyMultiPointVision component! Add it or disable multi-point vision in config.", this);
-            InitializeLegacyVisionSystem();
-            return;
-        }
-
-        if (suspicionSystem == null)
-        {
-            Debug.LogWarning($"[EnemyStateMachine] {gameObject.name} missing EnemySuspicionSystem component! Add it or disable suspicion system in config.", this);
-            InitializeLegacyVisionSystem();
-            return;
-        }
-
-        // Initialize multi-point vision
-        multiPointVision.Initialize(this, playerTransform);
-
-        // Subscribe to events
-        multiPointVision.OnPlayerSpotted += HandlePlayerSpotted;
-        multiPointVision.OnPlayerLostSight += HandlePlayerLostSight;
-
-        // Subscribe to suspicion events
-        suspicionSystem.OnAlertTriggered += HandleSuspicionAlert;
-        suspicionSystem.OnChaseTriggered += HandleSuspicionChase;
-        suspicionSystem.OnSuspicionCleared += HandleSuspicionCleared;
-
-        Debug.Log($"[EnemyStateMachine] {gameObject.name} using MULTI-POINT VISION + SUSPICION system", this);
-    }
-
-    private void InitializeLegacyVisionSystem()
-    {
-        if (legacyVision == null)
-        {
-            Debug.LogError($"[EnemyStateMachine] {gameObject.name} missing EnemyVisionDetector component!", this);
-            return;
-        }
-
-        legacyVision.Initialize(this);
-
-        // Subscribe to legacy vision events
-        legacyVision.OnPlayerSpotted += HandlePlayerSpotted;
-        legacyVision.OnPlayerLostSight += HandlePlayerLostSight;
-
-        Debug.Log($"[EnemyStateMachine] {gameObject.name} using LEGACY VISION system (instant detection)", this);
-    }
-
-    private void UnsubscribeFromVisionEvents()
-    {
         if (multiPointVision != null)
         {
             multiPointVision.OnPlayerSpotted -= HandlePlayerSpotted;
             multiPointVision.OnPlayerLostSight -= HandlePlayerLostSight;
         }
 
-        if (legacyVision != null)
-        {
-            legacyVision.OnPlayerSpotted -= HandlePlayerSpotted;
-            legacyVision.OnPlayerLostSight -= HandlePlayerLostSight;
-        }
-    }
-
-    private void UnsubscribeFromSuspicionEvents()
-    {
         if (suspicionSystem != null)
         {
             suspicionSystem.OnAlertTriggered -= HandleSuspicionAlert;
@@ -222,10 +166,6 @@ public class EnemyStateMachine : MonoBehaviour
 
     // === STATE MANAGEMENT ===
 
-    /// <summary>
-    /// Transitions to a new state (public API).
-    /// Handles Enter/Exit lifecycle + debug logging.
-    /// </summary>
     public void SetState(EnemyState newState)
     {
         if (newState == null)
@@ -234,27 +174,17 @@ public class EnemyStateMachine : MonoBehaviour
             return;
         }
 
-        // Exit previous state
         currentState?.Exit();
-
-        // Set new state
         currentState = newState;
         currentStateName = currentState.GetType().Name;
 
-        // Debug logging
-        if (showDebugLogs && config.debugStates)
+        if (config.debugStates)
             Debug.Log($"[EnemyStateMachine] {gameObject.name} → {currentStateName}", this);
 
-        // Enter new state
         currentState.Enter();
-
-        // Notify listeners
         OnStateChanged?.Invoke(currentState);
     }
 
-    /// <summary>
-    /// Updates last known player position (memory system).
-    /// </summary>
     public void UpdateLastKnownPosition(Vector3 position)
     {
         lastKnownPlayerPosition = position;
@@ -262,17 +192,11 @@ public class EnemyStateMachine : MonoBehaviour
         hasSeenPlayer = true;
     }
 
-    /// <summary>
-    /// Clears player memory (used when returning to patrol).
-    /// </summary>
     public void ClearMemory()
     {
         hasSeenPlayer = false;
         timeSinceLastSeen = 0f;
-
-        // Also clear suspicion if using system
-        if (suspicionSystem != null)
-            suspicionSystem.ClearSuspicion();
+        suspicionSystem.ClearSuspicion();
     }
 
     // === EVENT HANDLERS ===
@@ -281,8 +205,6 @@ public class EnemyStateMachine : MonoBehaviour
     {
         UpdateLastKnownPosition(playerPosition);
         OnPlayerDetected?.Invoke(playerPosition);
-
-        // Let state handle detection (different behavior per state)
         currentState?.OnPlayerDetected(playerPosition);
     }
 
@@ -290,15 +212,12 @@ public class EnemyStateMachine : MonoBehaviour
     {
         UpdateLastKnownPosition(lastPosition);
         OnPlayerLost?.Invoke(lastPosition);
-
-        // Let state handle losing player
         currentState?.OnPlayerLost(lastPosition);
     }
 
-    // NEW: Suspicion system event handlers
     private void HandleSuspicionAlert()
     {
-        // 30%+ suspicion reached → transition to Alert state
+        // 30%+ suspicion → Alert state
         if (currentState is EnemyPatrolState || currentState is EnemyIdleState)
         {
             SetState(new EnemyAlertState(this, lastKnownPlayerPosition));
@@ -307,7 +226,7 @@ public class EnemyStateMachine : MonoBehaviour
 
     private void HandleSuspicionChase()
     {
-        // 100% suspicion reached → transition to Chase state
+        // 100% suspicion → Chase state
         if (!(currentState is EnemyChaseState || currentState is EnemyAttackState || currentState is EnemyCatchState))
         {
             SetState(new EnemyChaseState(this));
@@ -316,7 +235,7 @@ public class EnemyStateMachine : MonoBehaviour
 
     private void HandleSuspicionCleared()
     {
-        // Suspicion dropped to 0% → return to patrol/idle
+        // 0% suspicion → return to patrol/idle
         if (currentState is EnemyAlertState || currentState is EnemySearchState)
         {
             if (patrolRoute != null && patrolRoute.WaypointCount >= 2)
@@ -331,19 +250,6 @@ public class EnemyStateMachine : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         if (config == null) return;
-
-        // Draw vision cone (forwarded to active vision system)
-        if (config.debugVision)
-        {
-            if (multiPointVision != null && config.enableMultiPointVision)
-            {
-                // Multi-point vision draws its own gizmos
-            }
-            else if (legacyVision != null)
-            {
-                legacyVision.DrawVisionGizmos();
-            }
-        }
 
         // Draw last known position
         if (hasSeenPlayer && config.debugStates)

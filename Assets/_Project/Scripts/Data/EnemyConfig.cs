@@ -8,6 +8,13 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "EnemyConfig", menuName = "Zero Trace/Enemy Config")]
 public class EnemyConfig : ScriptableObject
 {
+    [Header("Suspicion System")]
+    [Tooltip("Enable gradual suspicion detection (recommended)")]
+    public bool enableSuspicionSystem = true;
+
+    [Tooltip("Suspicion configuration (separate SO for modularity)")]
+    public SuspicionConfig suspicionConfig;
+
     [Header("Vision Settings")]
     [Tooltip("Field of view angle in degrees (60-120 recommended)")]
     [Range(30f, 180f)]
@@ -19,10 +26,6 @@ public class EnemyConfig : ScriptableObject
 
     [Tooltip("Layer mask for vision raycasts (obstacles that block vision)")]
     public LayerMask visionObstacleMask;
-
-    [Tooltip("How often to perform vision checks (seconds)")]
-    [Range(0.05f, 0.5f)]
-    public float visionCheckInterval = 0.1f;
 
     [Header("Movement Settings")]
     [Tooltip("Patrol walking speed")]
@@ -91,41 +94,6 @@ public class EnemyConfig : ScriptableObject
     [Tooltip("Show movement paths")]
     public bool debugMovement = false;
 
-    [Header("Suspicion System (Gradual Detection)")]
-    [Tooltip("Enable gradual suspicion system (recommended). If false, uses instant detection.")]
-    public bool enableSuspicionSystem = true;
-
-    [Tooltip("Suspicion increase rate per second (base)")]
-    [Range(5f, 100f)]
-    public float suspicionBuildRate = 20f;
-
-    [Tooltip("Suspicion decrease rate per second when player hidden")]
-    [Range(5f, 50f)]
-    public float suspicionDecayRate = 10f;
-
-    [Tooltip("Grace period before suspicion starts decaying (seconds)")]
-    [Range(0f, 5f)]
-    public float suspicionDecayGracePeriod = 1f;
-
-    [Tooltip("Multiplier per visible body part (0.5 = +50% per part, max 4 parts)")]
-    [Range(0f, 2f)]
-    public float suspicionVisibilityMultiplier = 0.5f;
-
-    [Tooltip("Suspicion % to trigger Alert state (recommended 30%)")]
-    [Range(10f, 99f)]
-    public float suspicionAlertThreshold = 30f;
-
-    [Tooltip("Suspicion % to trigger Chase state (always 100%)")]
-    public float suspicionChaseThreshold = 100f;
-
-    [Header("Multi-Point Vision (Enhanced Detection)")]
-    [Tooltip("Enable 4-point body detection (head/torso/hands) instead of single raycast")]
-    public bool enableMultiPointVision = true;
-
-    [Tooltip("How often to check vision (seconds) - lower = more responsive but heavier")]
-    [Range(0.05f, 0.5f)]
-    public float visionCheckIntervalMultiPoint = 0.2f;
-
     private void OnValidate()
     {
         // Ensure logical values
@@ -142,6 +110,12 @@ public class EnemyConfig : ScriptableObject
         if (visionRange < attackRange)
         {
             Debug.LogWarning($"[EnemyConfig] Vision range ({visionRange}) should be >= attack range ({attackRange})");
+        }
+
+        // Warn if suspicion enabled but config missing
+        if (enableSuspicionSystem && suspicionConfig == null)
+        {
+            Debug.LogWarning($"[EnemyConfig] Suspicion system enabled but SuspicionConfig not assigned!", this);
         }
     }
 }

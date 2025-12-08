@@ -75,7 +75,7 @@ public class EnemyDetectionManager : MonoBehaviour
         // Start detection coroutine for this detector
         float interval = globalDetectionInterval > 0
             ? globalDetectionInterval
-            : detector.GetComponent<EnemyStateMachine>().Config.visionCheckInterval;
+            : detector.GetComponent<EnemyStateMachine>().Config.suspicionConfig.visionCheckInterval;
 
         Coroutine coroutine = StartCoroutine(DetectionCoroutine(detector, interval));
         detectorCoroutines[detector] = coroutine;
@@ -175,7 +175,7 @@ public class EnemyDetectionManager : MonoBehaviour
 
             float interval = globalDetectionInterval > 0
                 ? globalDetectionInterval
-                : detector.GetComponent<EnemyStateMachine>().Config.visionCheckInterval;
+                : detector.GetComponent<EnemyStateMachine>().Config.suspicionConfig.visionCheckInterval;
 
             Coroutine coroutine = StartCoroutine(DetectionCoroutine(detector, interval));
             detectorCoroutines[detector] = coroutine;

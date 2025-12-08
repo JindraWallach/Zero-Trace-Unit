@@ -90,6 +90,13 @@ MonoBehaviour:
     isAsset: 1
     _typeString: DoorInteractionConfig, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+  - _obj: {fileID: 11400000, guid: d4520402759172e4692e9f85b73d9839, type: 2}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-3-d4520402759172e4692e9f85b73d9839-11400000-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: SuspicionConfig, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
   - _obj: {fileID: 9100000, guid: 3dcbb7ff605184746be82d748741383f, type: 2}
     globalId:
       globalObjectIdString: GlobalObjectId_V1-3-3dcbb7ff605184746be82d748741383f-9100000-0
