@@ -76,8 +76,6 @@ public class EnemySuspicionSystem : MonoBehaviour
         isPlayerVisible = visible;
         visibleBodyParts = Mathf.Clamp(visibleParts, 0, 4);
 
-        Debug.Log($"[EnemySuspicionSystem] {gameObject.name} SetPlayerVisible: Visible={visible}, Parts={visibleBodyParts}", this);
-
         if (visible)
         {
             timeSinceLastSeen = 0f;
@@ -140,8 +138,6 @@ public class EnemySuspicionSystem : MonoBehaviour
 
                 CheckThresholds();
                 OnSuspicionChanged?.Invoke(currentSuspicion);
-
-                Debug.Log($"[EnemySuspicionSystem] {gameObject.name} Suspicion increased to {currentSuspicion:F1} (visibleParts={visibleBodyParts})", this);
             }
             else
             {
@@ -159,8 +155,6 @@ public class EnemySuspicionSystem : MonoBehaviour
 
                     if (currentSuspicion <= 0f)
                         OnSuspicionCleared?.Invoke();
-
-                    Debug.Log($"[EnemySuspicionSystem] {gameObject.name} Suspicion decreased to {currentSuspicion:F1}", this);
                 }
             }
 
@@ -203,6 +197,19 @@ public class EnemySuspicionSystem : MonoBehaviour
         if (config == null || !config.showDebugBar)
             return;
 
+        DrawSuspicionGizmo();
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (config == null || !config.showDebugBar)
+            return;
+
+        DrawSuspicionGizmo();
+    }
+
+    private void DrawSuspicionGizmo()
+    {
         // Suspicion bar above enemy head
         Vector3 barPosition = transform.position + Vector3.up * 2.5f;
         float barWidth = 2f;
@@ -230,7 +237,7 @@ public class EnemySuspicionSystem : MonoBehaviour
                 label += $"\n{visibleBodyParts}/4 visible";
 
             UnityEditor.Handles.Label(
-                barPosition + Vector3.up * 0.35f,
+                barPosition + Vector3.up * 0.6f,
                 label,
                 new GUIStyle()
                 {
