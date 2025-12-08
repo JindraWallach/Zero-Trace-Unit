@@ -5538,10 +5538,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ade4d35383f38b6428251cb722bdf676, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyDetectionManager
-  globalDetectionInterval: 0.2
-  registeredDetectors: 0
-  checksPerSecond: 0
-  showDebugStats: 0
+  enemiesPerBatch: 3
+  minCycleTime: 0.1
+  debugMode: 0
 --- !u!1 &384306992
 GameObject:
   m_ObjectHideFlags: 0
@@ -37223,7 +37222,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4351547334174229746, guid: 1b3fe60eb0b3d0c4b9b1e28d6a9d7f30, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

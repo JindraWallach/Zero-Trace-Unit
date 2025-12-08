@@ -33,5 +33,5 @@ MonoBehaviour:
   searchSpeed: 2
   memoryDuration: 8
   debugVision: 1
-  debugStates: 0
-  debugMovement: 0
+  debugStates: 1
+  debugMovement: 1
