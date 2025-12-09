@@ -38,13 +38,17 @@ public class DoorController : MonoBehaviour
     public void Open()
     {
         animator.SetBool(openBoolName, true);
+
         PlaySound(openSound);
+        NoiseSystem.Instance?.EmitNoise(transform.position, 8f, NoiseType.DoorOpen);
     }
 
     public void Close()
     {
         animator.SetBool(openBoolName, false);
+
         PlaySound(closeSound);
+        NoiseSystem.Instance?.EmitNoise(transform.position, 6f, NoiseType.DoorClose);
     }
 
     public void SetPlayerInRange(Transform playerTransform, bool inRange)

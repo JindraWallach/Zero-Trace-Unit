@@ -73,7 +73,7 @@ namespace Synty.AnimationBaseLocomotion.Samples
         private float _rotationY;
 
         private Transform _syntyCamera;
-
+        
         /// <inheritdoc cref="Start" />
         private void Start()
         {

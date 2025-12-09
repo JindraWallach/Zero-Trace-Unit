@@ -1,4 +1,4 @@
-// Copyright (c) 2024 Synty Studios Limited. All rights reserved.
+﻿// Copyright (c) 2024 Synty Studios Limited. All rights reserved.
 //
 // Use of this software is subject to the terms and conditions of the Synty Studios End User Licence Agreement (EULA)
 // available at: https://syntystore.com/pages/end-user-licence-agreement
@@ -74,6 +74,8 @@ namespace Synty.AnimationBaseLocomotion.Samples
         private readonly int _bodyLookYHash = Animator.StringToHash("BodyLookY");
 
         private readonly int _locomotionStartDirectionHash = Animator.StringToHash("LocomotionStartDirection");
+
+        private NoiseEmitter noiseEmitter;
 
         #endregion
 
@@ -358,6 +360,8 @@ namespace Synty.AnimationBaseLocomotion.Samples
             _inputReader.onAimDeactivated += DeactivateAim;
 
             _isStrafing = _alwaysStrafe;
+
+            noiseEmitter = GetComponent<NoiseEmitter>();
 
             SwitchState(AnimationState.Locomotion);
         }
@@ -767,6 +771,12 @@ namespace Synty.AnimationBaseLocomotion.Samples
                 _velocity.y += Physics.gravity.y * _gravityMultiplier * Time.deltaTime;
             }
         }
+
+        private void OnLanded(float fallVelocity)
+        {
+            noiseEmitter?.EmitLanding(Mathf.Abs(fallVelocity));
+        }
+
 
         /// <summary>
         ///     Calculates the movement direction of the player, and sets the relevant flags.
@@ -1366,6 +1376,15 @@ namespace Synty.AnimationBaseLocomotion.Samples
             FaceMoveDirection();
             Move();
             UpdateAnimatorController();
+            VoiceEmit();
+        }
+
+        private void VoiceEmit()
+        {
+            bool isMoving = _speed2D > 0.1f;
+            bool isRunning = _currentGait == GaitState.Run || _currentGait == GaitState.Sprint; 
+            bool isGrounded = _isGrounded;
+            noiseEmitter.UpdateFootsteps(isMoving, isRunning, isGrounded);
         }
 
         /// <summary>
@@ -1466,8 +1485,12 @@ namespace Synty.AnimationBaseLocomotion.Samples
 
             if (_controller.isGrounded)
             {
+                float fallVelocity = _velocity.y;
+                OnLanded(fallVelocity);
+
                 SwitchState(AnimationState.Locomotion);
             }
+
 
             UpdateFallingDuration();
         }
