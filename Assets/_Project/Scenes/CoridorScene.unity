@@ -698,8 +698,6 @@ MonoBehaviour:
     done: 0
   - name: "Zlep\u0161en\xED z\xE1bavnosti hran\xED (ka\u017Ed\xFD dve\u0159e hack?)"
     done: 0
-  - name: "Indikator UI Locker dve\u0159\xED? "
-    done: 0
   - name: 
     done: 0
   - name: 'Enemies: dvere jsou interactible layer a ten neni mask ale hrac ma collider
