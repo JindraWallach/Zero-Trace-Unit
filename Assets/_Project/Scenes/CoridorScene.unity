@@ -11326,6 +11326,11 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.2859011, y: -0.012233481, z: 0}
     m_Extent: {x: 0.18533412, y: 0.16624767, z: 0.14421478}
   m_DirtyAABB: 0
+--- !u!1 &785762782 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7335453236581871755, guid: 1b3fe60eb0b3d0c4b9b1e28d6a9d7f30, type: 3}
+  m_PrefabInstance: {fileID: 7854983181078636514}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &793236500
 GameObject:
   m_ObjectHideFlags: 0
@@ -13319,6 +13324,52 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4894799469115526, guid: 77200928bb40da847a49bb3cb2b3b019, type: 3}
   m_PrefabInstance: {fileID: 909243012}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &933032096
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 933032097}
+  - component: {fileID: 933032098}
+  m_Layer: 0
+  m_Name: NoiseSystemManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &933032097
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 933032096}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -34.03349, y: -0.88662, z: 0.90099}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &933032098
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 933032096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab4f8de42e9b9164aa9d4f8e39cb28a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NoiseSystem
+  config: {fileID: 11400000, guid: 115b124c02a033b43ba5ecc7a6ea6911, type: 2}
+  showDebugLogs: 1
 --- !u!1 &938499998 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5238299185647453024, guid: cbde6f98b1791b541867b97d34472364, type: 3}
@@ -30125,6 +30176,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4950033287718502, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
   m_PrefabInstance: {fileID: 2104556699}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2105544484 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8903983273562572519, guid: cbde6f98b1791b541867b97d34472364, type: 3}
+  m_PrefabInstance: {fileID: 4038055958801473409}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2112622973
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -35437,6 +35493,22 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7603348486216895692, guid: 1b3fe60eb0b3d0c4b9b1e28d6a9d7f30, type: 3}
   m_PrefabInstance: {fileID: 7854983181078636514}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2202205423317477993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 785762782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c056ed87caad7194c9a3f728c0efe845, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyHearingDetector
+  hearingMultiplier: 1
+  showDebugLogs: 1
+  lastHeardNoisePosition: {x: 0, y: 0, z: 0}
+  lastHeardNoiseTime: 0
 --- !u!1001 &3227861009903692788
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -35698,6 +35770,9 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8903983273562572519, guid: cbde6f98b1791b541867b97d34472364, type: 3}
+      insertIndex: 4
+      addedObject: {fileID: 7899819685120886283}
     - targetCorrespondingSourceObject: {fileID: 6104632386458057411, guid: cbde6f98b1791b541867b97d34472364, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7851277090793837468}
@@ -37225,19 +37300,38 @@ PrefabInstance:
     - {fileID: 4351547334174229746, guid: 1b3fe60eb0b3d0c4b9b1e28d6a9d7f30, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7335453236581871755, guid: 1b3fe60eb0b3d0c4b9b1e28d6a9d7f30, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2202205423317477993}
   m_SourcePrefab: {fileID: 100100000, guid: 1b3fe60eb0b3d0c4b9b1e28d6a9d7f30, type: 3}
 --- !u!114 &7899819685120886278 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7008107247267527280, guid: cbde6f98b1791b541867b97d34472364, type: 3}
   m_PrefabInstance: {fileID: 4038055958801473409}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 2105544484}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e00b029906eec204b82c90899d4343a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Synty.AnimationBaseLocomotion.Samples.InputSystem.InputReader
+--- !u!114 &7899819685120886283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2105544484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 891f39ee977d4e644a7dd4f1bf1f98ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NoiseEmitter
+  config: {fileID: 11400000, guid: 115b124c02a033b43ba5ecc7a6ea6911, type: 2}
+  timeSinceLastFootstep: 0
+  isMoving: 0
+  isRunning: 0
 --- !u!1001 &9071966115493123864
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -37349,6 +37443,7 @@ SceneRoots:
   - {fileID: 72763324}
   - {fileID: 1247254112}
   - {fileID: 379739583}
+  - {fileID: 933032097}
   - {fileID: 3227861009903692788}
   - {fileID: 9071966115493123864}
   - {fileID: 36559939}
