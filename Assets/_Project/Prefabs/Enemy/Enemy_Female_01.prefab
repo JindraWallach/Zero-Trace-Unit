@@ -4942,9 +4942,10 @@ GameObject:
   - component: {fileID: 4268686923446831012}
   - component: {fileID: 3933652696158182901}
   - component: {fileID: 8667230992594436704}
-  - component: {fileID: 4351547334174229746}
   - component: {fileID: 951525750589466212}
   - component: {fileID: 6065662293146351252}
+  - component: {fileID: 3248968376757155472}
+  - component: {fileID: 4075762864551286475}
   m_Layer: 9
   m_Name: Enemy_Female_01
   m_TagString: Untagged
@@ -5068,18 +5069,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e719cb8acd444a4595125d1411db82c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMovementController
---- !u!114 &4351547334174229746
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7335453236581871755}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3c9e1ef77c3aac4aab9075f8bd4d222, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyVisionDetector
 --- !u!114 &951525750589466212
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5110,7 +5099,36 @@ MonoBehaviour:
   patrolRoute: {fileID: 0}
   playerTransform: {fileID: 0}
   currentStateName: 
-  showDebugLogs: 1
+  currentSuspicionDebug: 0
+--- !u!114 &3248968376757155472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7335453236581871755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa4359e2d5866074a97dd1e9b2905b58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySuspicionSystem
+--- !u!114 &4075762864551286475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7335453236581871755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ca4d14f5b12fdc4388b9bedd0d293e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyMultiPointVision
+  playerBodyPoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1 &7339924920590654070
 GameObject:
   m_ObjectHideFlags: 0
