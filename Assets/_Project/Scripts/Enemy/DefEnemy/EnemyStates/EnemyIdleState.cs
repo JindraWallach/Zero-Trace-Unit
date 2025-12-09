@@ -59,6 +59,15 @@ public class EnemyIdleState : EnemyState
         machine.SetState(new EnemyAlertState(machine, playerPosition));
     }
 
+    public override void OnNoiseHeard(Vector3 noisePosition)
+    {
+        // Heard noise while idle - investigate
+        machine.SetState(new EnemyAlertState(machine, noisePosition));
+
+        if (machine.Config.debugStates)
+            Debug.Log($"[EnemyIdle] {machine.gameObject.name} heard noise, investigating {noisePosition}", machine);
+    }
+
     private void LookAround()
     {
         // Slowly rotate to random direction (adds life to idle)

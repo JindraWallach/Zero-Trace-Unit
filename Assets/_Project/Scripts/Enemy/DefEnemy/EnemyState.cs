@@ -46,7 +46,7 @@ public abstract class EnemyState
     public virtual void OnPlayerLost(Vector3 lastKnownPosition) { }
 
     /// <summary>
-    /// Called when enemy hears a noise (for Phase 2 - Noise Detection).
+    /// Called when enemy hears a noise.
     /// Override to handle noise detection.
     /// </summary>
     public virtual void OnNoiseHeard(Vector3 noisePosition) { }
