@@ -92,6 +92,18 @@ public class EnemyMovementController : MonoBehaviour
     }
 
     /// <summary>
+    /// Check if current path is blocked (for door detection).
+    /// </summary>
+    public bool IsPathBlocked()
+    {
+        if (!agent.isOnNavMesh)
+            return true;
+
+        // Check if path is partial (blocked by obstacle)
+        return agent.pathStatus == UnityEngine.AI.NavMeshPathStatus.PathPartial;
+    }
+
+    /// <summary>
     /// Resume movement after stopping.
     /// </summary>
     public void Resume()

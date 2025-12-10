@@ -17,6 +17,8 @@ GameObject:
   - component: {fileID: 7371815972592028288}
   - component: {fileID: 4930989083550011045}
   - component: {fileID: 6400673175810272358}
+  - component: {fileID: 4318298922891100478}
+  - component: {fileID: 6196058147302966211}
   - component: {fileID: 8352087749016847735}
   m_Layer: 6
   m_Name: DoorFramePrefab
@@ -167,11 +169,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c476fa80542c59148b5b3c20098dab00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LockSystem
-  startLocked: 1
-  enableAutoLock: 1
+  startLocked: 0
+  enableAutoLock: 0
   enableAutoClose: 1
   autoLockDelay: 15
   autoCloseDelay: 15
+  securityLevel: 0
   openAfterUnlock: 1
   isLockedDebug: 0
 --- !u!114 &4930989083550011045
@@ -206,6 +209,45 @@ MonoBehaviour:
   pivot: {fileID: 3534796878057523427}
   config: {fileID: 11400000, guid: 038466aa5ff19034b8442d5765b84c6c, type: 2}
   updateInterval: 0.2
+--- !u!135 &4318298922891100478
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1543695114780030}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 512
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 1527
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 2.5000014
+  m_Center: {x: -2.5000014, y: 1.5, z: 0}
+--- !u!114 &6196058147302966211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1543695114780030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa9495f1691ea0e4380f978754f76251, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DoorEnemyAutoOpen
+  doorMachine: {fileID: 0}
+  detectionRadius: 2.5
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  showDebugLogs: 1
 --- !u!95 &8352087749016847735
 Animator:
   serializedVersion: 7

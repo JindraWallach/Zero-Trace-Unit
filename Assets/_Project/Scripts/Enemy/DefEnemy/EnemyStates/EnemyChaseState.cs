@@ -1,27 +1,26 @@
 using UnityEngine;
 
-/// <summary>
-/// Chase state - enemy actively pursues player.
-/// Continuously follows player while in vision.
-/// Checks for catch range to trigger game over.
-/// Transitions to Search if player lost.
-/// UPDATED: Uses suspicion system for detection.
-/// </summary>
 public class EnemyChaseState : EnemyState
 {
     private float chaseTimer;
     private float lastSeenTimer;
-    private const float LOSE_PLAYER_DELAY = 2f; // Grace period before giving up
+    private const float LOSE_PLAYER_DELAY = 2f;
+
+    // Path blocking detection
+    private float blockedTimer;
+    private float pathCheckTimer;
+    private const float BLOCKED_TIMEOUT = 5f;
+    private const float PATH_CHECK_INTERVAL = 0.5f;
 
     public EnemyChaseState(EnemyStateMachine machine) : base(machine) { }
 
     public override void Enter()
     {
-        // Set chase speed and alert animation
         machine.Animation.SetAlert(true);
-
         chaseTimer = 0f;
         lastSeenTimer = 0f;
+        blockedTimer = 0f;
+        pathCheckTimer = 0f;
 
         if (machine.Config.debugStates)
             Debug.Log($"[EnemyChase] {machine.gameObject.name} started chasing player!", machine);
@@ -30,41 +29,42 @@ public class EnemyChaseState : EnemyState
     public override void Update()
     {
         chaseTimer += Time.deltaTime;
+        pathCheckTimer += Time.deltaTime;
 
-        // Check if player is in vision
-        bool canSeePlayer = CanSeePlayer();
-
-        if (canSeePlayer)
+        // === PATH BLOCKING CHECK (optimized - every 0.5s) ===
+        if (pathCheckTimer >= PATH_CHECK_INTERVAL)
         {
-            // Player visible - chase actively
-            lastSeenTimer = 0f;
+            pathCheckTimer = 0f;
 
-            if (machine.PlayerTransform != null)
+            if (machine.Movement.IsPathBlocked())
             {
-                Vector3 playerPos = machine.PlayerTransform.position;
-                float distanceToPlayer = GetDistanceToPlayer();
+                blockedTimer += PATH_CHECK_INTERVAL;
 
-                // Check for CATCH range (game over)
-                if (distanceToPlayer <= machine.Config.catchRange)
+                // Path blocked too long - give up and patrol
+                if (blockedTimer >= BLOCKED_TIMEOUT)
                 {
-                    machine.SetState(new EnemyCatchState(machine));
+                    if (machine.Config.debugStates)
+                    {
+                        Debug.Log($"[EnemyChase] {machine.gameObject.name} path blocked for {BLOCKED_TIMEOUT}s, " +
+                                 $"returning to patrol", machine);
+                    }
+
+                    machine.SetState(new EnemyPatrolState(machine));
                     return;
                 }
-
-                // Check for attack range
-                if (distanceToPlayer <= machine.Config.attackRange)
-                {
-                    machine.SetState(new EnemyAttackState(machine));
-                    return;
-                }
-
-                // Chase player
-                machine.Movement.ChaseTarget(machine.PlayerTransform, machine.Config.chaseSpeed);
+            }
+            else
+            {
+                blockedTimer = 0f;
             }
         }
-        else
+
+        // === VISION CHECK ===
+        bool canSeePlayer = CanSeePlayer();
+
+        // Player NOT visible - handle lost sight
+        if (!canSeePlayer)
         {
-            // Player not visible - continue to last known position
             lastSeenTimer += Time.deltaTime;
 
             // Move to last known position
@@ -73,17 +73,46 @@ public class EnemyChaseState : EnemyState
                 machine.Movement.MoveToPosition(machine.LastKnownPlayerPosition, machine.Config.chaseSpeed);
             }
 
-            // If lost sight for too long, transition to search
+            // Lost sight too long - transition to search
             if (lastSeenTimer >= LOSE_PLAYER_DELAY)
             {
                 machine.SetState(new EnemySearchState(machine, machine.LastKnownPlayerPosition));
             }
+
+            return;
         }
+
+        // === PLAYER VISIBLE - chase logic ===
+        lastSeenTimer = 0f;
+
+        // Early exit: no player transform
+        if (machine.PlayerTransform == null)
+            return;
+
+        Vector3 playerPos = machine.PlayerTransform.position;
+        float distanceToPlayer = GetDistanceToPlayer();
+
+        // Check catch range (highest priority)
+        if (distanceToPlayer <= machine.Config.catchRange)
+        {
+            machine.SetState(new EnemyCatchState(machine));
+            return;
+        }
+
+        // Check attack range
+        if (distanceToPlayer <= machine.Config.attackRange)
+        {
+            machine.SetState(new EnemyAttackState(machine));
+            return;
+        }
+
+        // Chase player
+        machine.Movement.ChaseTarget(machine.PlayerTransform, machine.Config.chaseSpeed);
     }
 
     public override void OnPlayerDetected(Vector3 playerPosition)
     {
-        // Already chasing, just reset timer
+        // Already chasing, reset timer
         lastSeenTimer = 0f;
     }
 
@@ -95,7 +124,6 @@ public class EnemyChaseState : EnemyState
 
     public override void Exit()
     {
-        // Stop chasing
         machine.Movement.Stop();
     }
 }

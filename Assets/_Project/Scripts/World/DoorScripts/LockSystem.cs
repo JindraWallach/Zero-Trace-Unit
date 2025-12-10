@@ -15,6 +15,10 @@ public class LockSystem : MonoBehaviour
     [SerializeField] private float autoLockDelay = 30f;
     [SerializeField] private float autoCloseDelay = 30f;
 
+    [Header("Security Level")]
+    [Tooltip("Security clearance required to open this door")]
+    [SerializeField] private DoorSecurityLevel securityLevel = DoorSecurityLevel.Low;
+
     [Header("Hack Behavior")]
     [SerializeField] private bool openAfterUnlock = true; // BONUS feature
 
@@ -32,6 +36,7 @@ public class LockSystem : MonoBehaviour
     public bool EnableAutoClose => enableAutoClose;
     public float AutoCloseDelay => autoCloseDelay;
     public bool OpenAfterUnlock => openAfterUnlock;
+    public DoorSecurityLevel SecurityLevel => securityLevel;
 
     private void Awake()
     {
@@ -64,6 +69,21 @@ public class LockSystem : MonoBehaviour
         OnLockStateChanged?.Invoke(false); // Notify listeners
 
         Debug.Log("[LockSystem] Door unlocked");
+    }
+
+    /// <summary>
+    /// Check if enemy can open this door based on security level.
+    /// </summary>
+    public bool CanEnemyOpen()
+    {
+        // Locked doors: check security level
+        if (isLocked)
+        {
+            return securityLevel.CanEnemyOpen();
+        }
+
+        // Unlocked doors: always allow
+        return true;
     }
 
     public void StartAutoLock()
