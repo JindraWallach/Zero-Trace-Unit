@@ -51,6 +51,11 @@ public class NoiseConfig : ScriptableObject
     [Range(3f, 15f)]
     public float doorCloseRadius = 6f;
 
+    [Header("Flashlight")]
+    [Tooltip("Noise radius when toggling flashlight")]
+    [Range(3f, 10f)]
+    public float flashlightToggleRadius = 5f;
+
     [Header("Debug")]
     [Tooltip("Show noise gizmos in Scene view")]
     public bool debugNoise = true;

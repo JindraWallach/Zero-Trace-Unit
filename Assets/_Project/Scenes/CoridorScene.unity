@@ -720,12 +720,6 @@ MonoBehaviour:
       alarmu a p\u0159il\xE1k\xE1n\xED nep\u0159\xE1tel p\u0159i ne\xFAsp\u011Bchu
       v minih\u0159e)"
     done: 0
-  - name: 
-    done: 0
-  - name: Upravit pokud zavru za hrace enemy v mistnosti (No way Out) - fix
-    done: 0
-  - name: Alert state rozbiji kroky a koukani na hrace
-    done: 0
 --- !u!4 &36559939
 Transform:
   m_ObjectHideFlags: 0
@@ -37672,6 +37666,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1141314288770350665, guid: cbde6f98b1791b541867b97d34472364, type: 3}
+      propertyPath: noiseConfig
+      value: 
+      objectReference: {fileID: 11400000, guid: 115b124c02a033b43ba5ecc7a6ea6911, type: 2}
+    - target: {fileID: 1141314288770350665, guid: cbde6f98b1791b541867b97d34472364, type: 3}
+      propertyPath: noiseOrigin
+      value: 
+      objectReference: {fileID: 7853577938338958500}
+    - target: {fileID: 1141314288770350665, guid: cbde6f98b1791b541867b97d34472364, type: 3}
+      propertyPath: noiseEmitter
+      value: 
+      objectReference: {fileID: 7899819685120886283}
     - target: {fileID: 1852821211297802252, guid: cbde6f98b1791b541867b97d34472364, type: 3}
       propertyPath: m_LocalPosition.z
       value: -2.5

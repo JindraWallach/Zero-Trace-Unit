@@ -8,6 +8,11 @@ public class FlashlightController : MonoBehaviour, IInitializable
     [SerializeField] private Material _offMat;
     [SerializeField] private Material _onMat;
 
+    [Header("Noise")]
+    [SerializeField] private NoiseConfig noiseConfig;
+    [SerializeField] private NoiseEmitter noiseEmitter;
+    [SerializeField] private Transform noiseOrigin;
+
     private bool _isOn;
     private InputReader _inputReader;
 
@@ -23,11 +28,23 @@ public class FlashlightController : MonoBehaviour, IInitializable
             _inputReader.onFlashlightToggled -= ToggleFlashlight;
     }
 
+    private void Start()
+    {
+        // Initialize state from the Light component so we don't start out-of-sync
+        _isOn = _light != null && _light.enabled;
+
+        if (_renderer != null)
+            _renderer.material = _isOn ? _onMat : _offMat;
+    }
+
     private void ToggleFlashlight()
     {
         _isOn = !_isOn;
 
         _light.enabled = _isOn;
         _renderer.material = _isOn ? _onMat : _offMat;
+
+        noiseEmitter.EmitFlashlightSound(noiseOrigin.position);
+        //Debug.Log($"[FlashlightController] Flashlight toggled {_isOn}. Emitted noise: {noiseType}");
     }
 }

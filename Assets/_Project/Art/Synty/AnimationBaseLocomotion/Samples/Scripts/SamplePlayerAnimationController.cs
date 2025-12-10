@@ -277,15 +277,6 @@ namespace Synty.AnimationBaseLocomotion.Samples
 
         #endregion
 
-        #region Flashlight Settings
-
-        [Header("Flashlight Settings")]
-        [Tooltip("Flashlight GO")]
-        [SerializeField]
-        private GameObject _flashlight;
-
-        #endregion
-
         #endregion
 
         #region Runtime Properties

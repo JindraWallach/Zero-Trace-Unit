@@ -97,6 +97,13 @@ MonoBehaviour:
     isAsset: 1
     _typeString: SuspicionConfig, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+  - _obj: {fileID: 11400000, guid: 115b124c02a033b43ba5ecc7a6ea6911, type: 2}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-3-115b124c02a033b43ba5ecc7a6ea6911-11400000-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: NoiseConfig, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
   - _obj: {fileID: 9100000, guid: 3dcbb7ff605184746be82d748741383f, type: 2}
     globalId:
       globalObjectIdString: GlobalObjectId_V1-3-3dcbb7ff605184746be82d748741383f-9100000-0

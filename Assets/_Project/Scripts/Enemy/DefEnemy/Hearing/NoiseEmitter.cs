@@ -98,4 +98,9 @@ public class NoiseEmitter : MonoBehaviour
     {
         NoiseSystem.Instance?.EmitNoise(doorPosition, config.doorCloseRadius, NoiseType.DoorClose);
     }
+
+    public void EmitFlashlightSound(Vector3 playerPos) 
+    { 
+        NoiseSystem.Instance?.EmitNoise(playerPos, config.flashlightToggleRadius, NoiseType.FlashlightToggle);
+    }
 }

@@ -19,15 +19,13 @@ MonoBehaviour:
   visionObstacleMask:
     serializedVersion: 2
     m_Bits: 128
-  patrolSpeed: 1.5
+  patrolSpeed: 2
   chaseSpeed: 6.5
   waypointReachDistance: 1
   waypointWaitTime: 5
   alertDuration: 6
   alertToSearchDelay: 3
-  attackRange: 1.5
   catchRange: 2
-  attackCooldown: 1
   searchDuration: 8
   searchRadius: 5
   searchSpeed: 2

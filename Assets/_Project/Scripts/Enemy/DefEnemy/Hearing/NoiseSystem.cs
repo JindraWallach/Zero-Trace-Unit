@@ -88,6 +88,9 @@ public class NoiseSystem : MonoBehaviour
     /// <summary>
     /// Get noise color for debug visualization.
     /// </summary>
+    /// <summary>
+    /// Get noise color for debug visualization.
+    /// </summary>
     private Color GetNoiseColor(NoiseType type)
     {
         switch (type)
@@ -102,6 +105,8 @@ public class NoiseSystem : MonoBehaviour
                 return Color.cyan;
             case NoiseType.DoorClose:
                 return Color.blue;
+            case NoiseType.FlashlightToggle:
+                return Color.green;
             default:
                 return Color.white;
         }
@@ -154,11 +159,15 @@ public class NoiseSystem : MonoBehaviour
 /// <summary>
 /// Types of noise that can be emitted.
 /// </summary>
+/// <summary>
+/// Types of noise that can be emitted.
+/// </summary>
 public enum NoiseType
 {
-    Footsteps,  // Walking footsteps
-    Running,    // Running footsteps
-    Landing,    // Landing from jump/fall
-    DoorOpen,   // Opening door
-    DoorClose   // Closing door
+    Footsteps,      // Walking footsteps
+    Running,        // Running footsteps
+    Landing,        // Landing from jump/fall
+    DoorOpen,       // Opening door
+    DoorClose,      // Closing door
+    FlashlightToggle   // Flashlight 
 }
