@@ -720,11 +720,11 @@ MonoBehaviour:
       alarmu a p\u0159il\xE1k\xE1n\xED nep\u0159\xE1tel p\u0159i ne\xFAsp\u011Bchu
       v minih\u0159e)"
     done: 0
-  - name: "3.  Roz\u0161\xED\u0159en\xED nep\u0159\xE1tel (detekce podle hluku)"
-    done: 0
   - name: 
     done: 0
-  - name: Upravit pokud zavru za hrace enemy v mistnosti (No way Out)
+  - name: Upravit pokud zavru za hrace enemy v mistnosti (No way Out) - fix
+    done: 0
+  - name: Alert state rozbiji kroky a koukani na hrace
     done: 0
 --- !u!4 &36559939
 Transform:
@@ -30151,14 +30151,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4950033287718502, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7371815972592028288, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
-      propertyPath: startLocked
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7371815972592028288, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
-      propertyPath: enableAutoLock
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

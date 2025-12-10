@@ -227,7 +227,7 @@ public class EnemyStateMachine : MonoBehaviour
     private void HandleSuspicionChase()
     {
         // 100% suspicion → Chase state
-        if (!(currentState is EnemyChaseState || currentState is EnemyAttackState || currentState is EnemyCatchState))
+        if (!(currentState is EnemyChaseState || currentState is EnemyCatchState))
         {
             SetState(new EnemyChaseState(this));
         }

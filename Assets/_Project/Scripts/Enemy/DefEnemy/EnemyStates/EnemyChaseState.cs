@@ -99,13 +99,6 @@ public class EnemyChaseState : EnemyState
             return;
         }
 
-        // Check attack range
-        if (distanceToPlayer <= machine.Config.attackRange)
-        {
-            machine.SetState(new EnemyAttackState(machine));
-            return;
-        }
-
         // Chase player
         machine.Movement.ChaseTarget(machine.PlayerTransform, machine.Config.chaseSpeed);
     }

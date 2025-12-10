@@ -22,5 +22,5 @@ MonoBehaviour:
   maxFallVelocity: 20
   doorOpenRadius: 8
   doorCloseRadius: 6
-  debugNoise: 1
+  debugNoise: 0
   debugNoiseDuration: 2

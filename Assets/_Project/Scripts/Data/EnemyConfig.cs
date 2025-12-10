@@ -53,18 +53,9 @@ public class EnemyConfig : ScriptableObject
     [Range(0.5f, 5f)]
     public float alertToSearchDelay = 1.5f;
 
-    [Header("Chase Settings")]
-    [Tooltip("Distance to start attacking")]
-    [Range(0.5f, 3f)]
-    public float attackRange = 1.2f;
-
     [Tooltip("How close before catching player (instant game over)")]
     [Range(0.3f, 2f)]
     public float catchRange = 1.2f;
-
-    [Tooltip("Time between attack attempts")]
-    [Range(0.5f, 3f)]
-    public float attackCooldown = 1f;
 
     [Header("Search Settings")]
     [Tooltip("How long to search last known position")]
@@ -100,16 +91,6 @@ public class EnemyConfig : ScriptableObject
         if (chaseSpeed <= patrolSpeed)
         {
             Debug.LogWarning($"[EnemyConfig] Chase speed ({chaseSpeed}) should be > patrol speed ({patrolSpeed})");
-        }
-
-        if (catchRange > attackRange)
-        {
-            Debug.LogWarning($"[EnemyConfig] Catch range ({catchRange}) should be <= attack range ({attackRange})");
-        }
-
-        if (visionRange < attackRange)
-        {
-            Debug.LogWarning($"[EnemyConfig] Vision range ({visionRange}) should be >= attack range ({attackRange})");
         }
 
         // Warn if suspicion enabled but config missing
