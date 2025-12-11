@@ -45,6 +45,23 @@ public class SuspicionConfig : ScriptableObject
     [Range(0.1f, 0.5f)]
     public float visionCheckInterval = 0.2f;
 
+    [Header("Suspicious State Settings")]
+    [Tooltip("How long to investigate noise location before giving up (seconds)")]
+    [Range(3f, 15f)]
+    public float suspiciousInvestigationDuration = 5f;
+
+    [Tooltip("How long to face noise position before moving (seconds)")]
+    [Range(0.5f, 3f)]
+    public float suspiciousFaceDuration = 1f;
+
+    [Tooltip("Initial suspicion percentage when hearing noise")]
+    [Range(10f, 50f)]
+    public float noiseInitialSuspicion = 30f;
+
+    [Tooltip("Suspicion added when hearing additional noise while investigating")]
+    [Range(10f, 50f)]
+    public float noiseAdditionalSuspicion = 20f;
+
     [Header("Debug")]
     [Tooltip("Show suspicion bar gizmo in Scene view")]
     public bool showDebugBar = true;

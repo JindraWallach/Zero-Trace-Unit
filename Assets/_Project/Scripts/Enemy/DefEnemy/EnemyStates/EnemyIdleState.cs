@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// Idle state - enemy stands still and looks around.
@@ -61,11 +61,15 @@ public class EnemyIdleState : EnemyState
 
     public override void OnNoiseHeard(Vector3 noisePosition)
     {
-        // Heard noise while idle - investigate
-        machine.SetState(new EnemyAlertState(machine, noisePosition));
+        // Heard noise while idle → investigate (suspicious state)
+        var suspiciousState = new EnemySuspiciousState(machine, noisePosition);
+        machine.SetState(suspiciousState);
 
         if (machine.Config.debugStates)
-            Debug.Log($"[EnemyIdle] {machine.gameObject.name} heard noise, investigating {noisePosition}", machine);
+        {
+            Debug.Log($"[EnemyIdle] {machine.gameObject.name} heard noise at {noisePosition}, " +
+                     $"entering suspicious state", machine);
+        }
     }
 
     private void LookAround()

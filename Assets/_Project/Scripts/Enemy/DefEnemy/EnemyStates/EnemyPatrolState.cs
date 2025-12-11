@@ -76,11 +76,15 @@ public class EnemyPatrolState : EnemyState
 
     public override void OnNoiseHeard(Vector3 noisePosition)
     {
-        // Heard noise during patrol - investigate
-        machine.SetState(new EnemyAlertState(machine, noisePosition));
+        // Heard noise during patrol → investigate (suspicious state)
+        var suspiciousState = new EnemySuspiciousState(machine, noisePosition);
+        machine.SetState(suspiciousState);
 
         if (machine.Config.debugStates)
-            Debug.Log($"[EnemyPatrol] {machine.gameObject.name} heard noise, investigating {noisePosition}", machine);
+        {
+            Debug.Log($"[EnemyPatrol] {machine.gameObject.name} heard noise at {noisePosition}, " +
+                     $"entering suspicious state", machine);
+        }
     }
 
     private void MoveToCurrentWaypoint()

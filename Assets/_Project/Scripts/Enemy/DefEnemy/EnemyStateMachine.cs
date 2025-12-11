@@ -106,6 +106,13 @@ public class EnemyStateMachine : MonoBehaviour
                 return;
             }
         }
+
+        suspicionSystem = GetComponent<EnemySuspicionSystem>();
+        if (suspicionSystem == null)
+        {
+            Debug.LogWarning($"[EnemyStateMachine] {gameObject.name} missing EnemySuspicionSystem, adding...", this);
+            suspicionSystem = gameObject.AddComponent<EnemySuspicionSystem>();
+        }
     }
 
     private void Start()
