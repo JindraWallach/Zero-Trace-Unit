@@ -12,16 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dadd20a73e436fb438bddc8a9f74bd07, type: 3}
   m_Name: NoiseConfig
   m_EditorClassIdentifier: Assembly-CSharp::NoiseConfig
-  walkNoiseRadius: 3
-  runNoiseRadius: 10
+  walkNoiseRadius: 6
+  runNoiseRadius: 20
   walkFootstepInterval: 0.5
   runFootstepInterval: 0.3
   minFallVelocityForNoise: 5
   minLandingRadius: 5
   maxLandingRadius: 15
-  maxFallVelocity: 20
-  doorOpenRadius: 8
-  doorCloseRadius: 6
-  flashlightToggleRadius: 7
+  maxFallVelocity: 30
+  doorOpenRadius: 15
+  doorCloseRadius: 12
+  flashlightToggleRadius: 10
   debugNoise: 1
   debugNoiseDuration: 2
