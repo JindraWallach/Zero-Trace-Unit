@@ -48,11 +48,7 @@ public class DoorEnemyAutoOpen : MonoBehaviour
         // Early exit: door not closed
         if (!(doorMachine.CurrentState is DoorClosedState))
             return;
-
-        // Check if enemy is chasing
-        EnemyStateMachine enemyMachine = other.GetComponent<EnemyStateMachine>();
-        bool isChasing = enemyMachine != null && enemyMachine.CurrentState is EnemyChaseState;
-
+       
         // Check security clearance
         if (!doorMachine.Lock.CanEnemyOpen())
         {

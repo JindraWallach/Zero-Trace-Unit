@@ -13358,7 +13358,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NoiseSystem
   config: {fileID: 11400000, guid: 115b124c02a033b43ba5ecc7a6ea6911, type: 2}
-  showDebugLogs: 1
+  showDebugLogs: 0
 --- !u!1 &938499998 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5238299185647453024, guid: cbde6f98b1791b541867b97d34472364, type: 3}
@@ -30147,6 +30147,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6196058147302966211, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+      propertyPath: detectionRadius
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -36324,7 +36328,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHearingDetector
   hearingMultiplier: 1
-  showDebugLogs: 1
+  showDebugLogs: 0
   lastHeardNoisePosition: {x: 0, y: 0, z: 0}
   lastHeardNoiseTime: 0
 --- !u!23 &2204652396868007689

@@ -15,7 +15,7 @@ MonoBehaviour:
   enableSuspicionSystem: 1
   suspicionConfig: {fileID: 11400000, guid: d4520402759172e4692e9f85b73d9839, type: 2}
   visionAngle: 120
-  visionRange: 10
+  visionRange: 16
   visionObstacleMask:
     serializedVersion: 2
     m_Bits: 128

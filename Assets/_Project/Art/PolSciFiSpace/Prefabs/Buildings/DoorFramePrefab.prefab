@@ -242,7 +242,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa9495f1691ea0e4380f978754f76251, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorEnemyAutoOpen
-  doorMachine: {fileID: 0}
+  doorMachine: {fileID: -3455294810283630252}
   detectionRadius: 2.5
   enemyLayer:
     serializedVersion: 2
