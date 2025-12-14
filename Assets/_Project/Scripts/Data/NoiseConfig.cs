@@ -44,11 +44,11 @@ public class NoiseConfig : ScriptableObject
 
     [Header("Doors")]
     [Tooltip("Noise radius when opening door")]
-    [Range(3f, 15f)]
+    [Range(0f, 15f)]
     public float doorOpenRadius = 8f;
 
     [Tooltip("Noise radius when closing door")]
-    [Range(3f, 15f)]
+    [Range(0f, 15f)]
     public float doorCloseRadius = 6f;
 
     [Header("Flashlight")]

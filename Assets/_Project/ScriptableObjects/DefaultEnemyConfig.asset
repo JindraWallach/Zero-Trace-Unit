@@ -15,7 +15,7 @@ MonoBehaviour:
   enableSuspicionSystem: 1
   suspicionConfig: {fileID: 11400000, guid: d4520402759172e4692e9f85b73d9839, type: 2}
   visionAngle: 120
-  visionRange: 16
+  visionRange: 20
   visionObstacleMask:
     serializedVersion: 2
     m_Bits: 128
@@ -24,12 +24,12 @@ MonoBehaviour:
   waypointReachDistance: 1
   waypointWaitTime: 5
   alertDuration: 6
-  alertToSearchDelay: 3
+  alertToSearchDelay: 1
   catchRange: 2
-  searchDuration: 8
-  searchRadius: 5
-  searchSpeed: 2
-  memoryDuration: 8
+  searchDuration: 10
+  searchRadius: 8
+  searchSpeed: 3
+  memoryDuration: 10
   debugVision: 1
   debugStates: 0
   debugMovement: 0

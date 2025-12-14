@@ -25,5 +25,9 @@ MonoBehaviour:
   chaseThreshold: 100
   updateInterval: 0.1
   visionCheckInterval: 0.2
+  suspiciousInvestigationDuration: 10
+  suspiciousFaceDuration: 1
+  noiseInitialSuspicion: 30
+  noiseAdditionalSuspicion: 20
   showDebugBar: 1
   showSuspicionValue: 1
