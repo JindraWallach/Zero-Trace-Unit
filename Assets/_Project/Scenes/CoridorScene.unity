@@ -724,8 +724,6 @@ MonoBehaviour:
     done: 0
   - name: kamera by se melo otacet a pak na hrace kdyz ho vidi
     done: 0
-  - name: mabe insta open door anim
-    done: 0
 --- !u!4 &36559939
 Transform:
   m_ObjectHideFlags: 0
@@ -30141,6 +30139,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 426273068360489134, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1979766344020887386, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
       propertyPath: m_ExcludeLayers.m_Bits
       value: 1527
@@ -30148,6 +30150,10 @@ PrefabInstance:
     - target: {fileID: 1979766344020887386, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
       propertyPath: m_IncludeLayers.m_Bits
       value: 512
+      objectReference: {fileID: 0}
+    - target: {fileID: 3228656309687181517, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+      propertyPath: m_Convex
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
