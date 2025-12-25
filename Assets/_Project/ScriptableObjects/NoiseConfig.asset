@@ -20,8 +20,8 @@ MonoBehaviour:
   minLandingRadius: 6
   maxLandingRadius: 15
   maxFallVelocity: 20
-  doorOpenRadius: 3
-  doorCloseRadius: 3
+  doorOpenRadius: 9
+  doorCloseRadius: 9
   flashlightToggleRadius: 8
   debugNoise: 1
   debugNoiseDuration: 1.5
