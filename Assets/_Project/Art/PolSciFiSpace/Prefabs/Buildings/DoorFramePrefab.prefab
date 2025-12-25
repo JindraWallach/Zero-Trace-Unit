@@ -17,8 +17,6 @@ GameObject:
   - component: {fileID: 7371815972592028288}
   - component: {fileID: 4930989083550011045}
   - component: {fileID: 6400673175810272358}
-  - component: {fileID: 4318298922891100478}
-  - component: {fileID: 6196058147302966211}
   - component: {fileID: 8352087749016847735}
   m_Layer: 6
   m_Name: DoorFramePrefab
@@ -41,6 +39,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5409800490393911707}
+  - {fileID: 5883741459631737839}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &33357041334664418
@@ -209,45 +208,6 @@ MonoBehaviour:
   pivot: {fileID: 3534796878057523427}
   config: {fileID: 11400000, guid: 038466aa5ff19034b8442d5765b84c6c, type: 2}
   updateInterval: 0.2
---- !u!135 &4318298922891100478
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1543695114780030}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 512
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 1527
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 2.5000014
-  m_Center: {x: -2.5000014, y: 1.5, z: 0}
---- !u!114 &6196058147302966211
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1543695114780030}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa9495f1691ea0e4380f978754f76251, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DoorEnemyAutoOpen
-  doorMachine: {fileID: -3455294810283630252}
-  detectionRadius: 2
-  enemyLayer:
-    serializedVersion: 2
-    m_Bits: 512
-  showDebugLogs: 1
 --- !u!95 &8352087749016847735
 Animator:
   serializedVersion: 7
@@ -1645,6 +1605,78 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &8646759607694256404
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5883741459631737839}
+  - component: {fileID: 6357180734719191935}
+  - component: {fileID: 1979766344020887386}
+  m_Layer: 11
+  m_Name: AutoOpenCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5883741459631737839
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8646759607694256404}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4950033287718502}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6357180734719191935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8646759607694256404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa9495f1691ea0e4380f978754f76251, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DoorEnemyAutoOpen
+  doorMachine: {fileID: -3455294810283630252}
+  detectionRadius: 2
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  showDebugLogs: 1
+--- !u!135 &1979766344020887386
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8646759607694256404}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 2048
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 2039
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 2.5
+  m_Center: {x: -2.5, y: 1.5, z: 0}
 --- !u!1 &9189638341915482026
 GameObject:
   m_ObjectHideFlags: 0

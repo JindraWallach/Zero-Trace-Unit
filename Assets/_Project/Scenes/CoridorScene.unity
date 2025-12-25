@@ -722,8 +722,6 @@ MonoBehaviour:
     done: 0
   - name: 
     done: 0
-  - name: colliderr na dverich interaguje s camerou
-    done: 0
   - name: 'dokumentace ma: alart system, '
     done: 0
   - name: kamera by se melo otacet a pak na hrace kdyz ho vidi
@@ -30146,14 +30144,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7371815972592028288, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
-      propertyPath: startLocked
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7371815972592028288, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
-      propertyPath: enableAutoLock
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -37674,6 +37664,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 139339903943931486, guid: cbde6f98b1791b541867b97d34472364, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 150139404751688430, guid: cbde6f98b1791b541867b97d34472364, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 170020326814190022, guid: cbde6f98b1791b541867b97d34472364, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1141314288770350665, guid: cbde6f98b1791b541867b97d34472364, type: 3}
       propertyPath: noiseConfig
       value: 
@@ -37686,6 +37688,10 @@ PrefabInstance:
       propertyPath: noiseEmitter
       value: 
       objectReference: {fileID: 7899819685120886283}
+    - target: {fileID: 1270741095589028019, guid: cbde6f98b1791b541867b97d34472364, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1852821211297802252, guid: cbde6f98b1791b541867b97d34472364, type: 3}
       propertyPath: m_LocalPosition.z
       value: -2.5
@@ -37704,6 +37710,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1852821211297802252, guid: cbde6f98b1791b541867b97d34472364, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2664173727244734560, guid: cbde6f98b1791b541867b97d34472364, type: 3}
+      propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6223549208303972588, guid: cbde6f98b1791b541867b97d34472364, type: 3}
@@ -37758,6 +37768,10 @@ PrefabInstance:
       propertyPath: 'ragdollRigidbodies.Array.data[10]'
       value: 
       objectReference: {fileID: 7853591884196351529}
+    - target: {fileID: 6292918821276498874, guid: cbde6f98b1791b541867b97d34472364, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6431903787909670398, guid: cbde6f98b1791b541867b97d34472364, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -37802,9 +37816,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8244077445716958271, guid: cbde6f98b1791b541867b97d34472364, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8281411833202048739, guid: cbde6f98b1791b541867b97d34472364, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8367991581569643434, guid: cbde6f98b1791b541867b97d34472364, type: 3}
       propertyPath: m_Name
       value: PolygonPlayer
+      objectReference: {fileID: 0}
+    - target: {fileID: 8367991581569643434, guid: cbde6f98b1791b541867b97d34472364, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8537683933691266394, guid: cbde6f98b1791b541867b97d34472364, type: 3}
+      propertyPath: m_OcclusionCulling
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6450575538306350066, guid: cbde6f98b1791b541867b97d34472364, type: 3}
