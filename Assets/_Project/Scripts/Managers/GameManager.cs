@@ -78,9 +78,6 @@ public class GameManager : MonoBehaviour, IInitializable
         if (currentState == GameState.Dead)
             return; // Already dead
 
-        if (currentState == GameState.InPuzzle)
-            return; // Ignore during puzzle
-
         Debug.Log("[GameManager] Player caught by enemy!");
 
         // Transition to Dead state

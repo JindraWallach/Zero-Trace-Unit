@@ -242,7 +242,7 @@ public class EnemySuspicionSystem : MonoBehaviour
                 new GUIStyle()
                 {
                     normal = new GUIStyleState() { textColor = barColor },
-                    fontSize = 10,
+                    fontSize = 14,
                     fontStyle = FontStyle.Bold,
                     alignment = TextAnchor.MiddleCenter
                 }

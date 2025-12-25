@@ -22,5 +22,5 @@ MonoBehaviour:
   suspicionDecayTime: 3
   alertDelay: 0.5
   alertCooldown: 10
-  debugVision: 1
+  debugVision: 0
   debugStates: 0

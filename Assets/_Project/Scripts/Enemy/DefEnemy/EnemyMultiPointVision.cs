@@ -409,7 +409,7 @@ public class EnemyMultiPointVision : MonoBehaviour
                             new GUIStyle()
                             {
                                 normal = new GUIStyleState() { textColor = Color.red },
-                                fontSize = 9,
+                                fontSize = 14,
                                 fontStyle = FontStyle.Bold
                             }
                         );
@@ -443,7 +443,7 @@ public class EnemyMultiPointVision : MonoBehaviour
                 new GUIStyle()
                 {
                     normal = new GUIStyleState() { textColor = canSeePlayer ? Color.green : Color.yellow },
-                    fontSize = 10,
+                    fontSize = 14,
                     fontStyle = FontStyle.Bold,
                     alignment = TextAnchor.MiddleLeft
                 }
