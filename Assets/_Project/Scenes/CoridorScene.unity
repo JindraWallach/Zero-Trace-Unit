@@ -698,15 +698,15 @@ MonoBehaviour:
     done: 0
   - name: "Zlep\u0161en\xED z\xE1bavnosti hran\xED (ka\u017Ed\xFD dve\u0159e hack?)"
     done: 0
-  - name: 
+  - name: mabe insta open door anim
     done: 0
-  - name: 'Enemies: dvere jsou interactible layer a ten neni mask ale hrac ma collider
-      ja te vrstve - block'
+  - name: 
     done: 0
   - name: "Zm\u011Bnit catch an\xE1maci na taser, udelat raycast with trail pak zapnout
       ragdoll a force ze strany"
     done: 0
-  - name: 
+  - name: 'Enemies: dvere jsou interactible layer a ten neni mask ale hrac ma collider
+      ja te vrstve - block'
     done: 0
   - name: "1.  Roz\u0161\xED\u0159en\xED HackSystemu (p\u0159id\xE1n\xED 2. a 3.
       puzzlu)"
@@ -722,12 +722,9 @@ MonoBehaviour:
     done: 0
   - name: 
     done: 0
-  - name: 'dokumentace ma: alart system, '
-    done: 0
   - name: kamera by se melo otacet a pak na hrace kdyz ho vidi
     done: 0
-  - name: nejaka chyba v mukltipointraycast hned na zacatku do range jde hrat viodet
-      i za prekazkami
+  - name: mabe insta open door anim
     done: 0
 --- !u!4 &36559939
 Transform:
@@ -30144,6 +30141,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1979766344020887386, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 1527
+      objectReference: {fileID: 0}
+    - target: {fileID: 1979766344020887386, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+      propertyPath: m_IncludeLayers.m_Bits
+      value: 512
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -40383,7 +40388,7 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 576
+    m_Bits: 2624
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 1463

@@ -41,11 +41,11 @@ public class DoorEnemyAutoOpen : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-
+        Debug.Log($"[DoorEnemyAutoOpen] 1", this);
         // Early exit: not an enemy
         if (((1 << other.gameObject.layer) & enemyLayer) == 0)
             return;
-
+        Debug.Log($"[DoorEnemyAutoOpen] 2", this);
         // Early exit: door not closed
         //if (!(doorMachine.CurrentState is DoorClosedState))
         //    return;
