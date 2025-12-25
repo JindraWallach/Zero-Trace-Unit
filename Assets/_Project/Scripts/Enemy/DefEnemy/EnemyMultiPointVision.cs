@@ -227,6 +227,7 @@ public class EnemyMultiPointVision : MonoBehaviour
 
         lastRayStarts[pointIndex] = rayStart;
 
+        // Raycast na překážky - pokud něco trefí = blokuje výhled
         bool hitObstacle = Physics.Raycast(
             rayStart,
             directionToPoint,
@@ -236,28 +237,30 @@ public class EnemyMultiPointVision : MonoBehaviour
         );
 
         lastRaycastHits[pointIndex] = hitObstacle;
-        lastHitInfo[pointIndex] = hit;
 
         if (hitObstacle)
         {
-            // Check if we hit player body part (should be visible)
-            bool hitPlayer = hit.collider.CompareTag("Player") ||
-                           hit.collider.transform.root == playerTransform.root;
+            lastHitInfo[pointIndex] = hit;
 
             if (config.debugStates)
             {
-                Debug.Log($"[EnemyMultiPointVision] Point {pointIndex}: Raycast hit {hit.collider.name} " +
-                         $"(IsPlayer: {hitPlayer}, Dist: {hit.distance:F2}m)", this);
+                Debug.Log($"[EnemyMultiPointVision] Point {pointIndex}: BLOCKED by {hit.collider.name} " +
+                         $"(Layer: {LayerMask.LayerToName(hit.collider.gameObject.layer)}, Dist: {hit.distance:F2}m)", this);
             }
 
-            return hitPlayer;
+            return false; // Překážka = NEVIDÍ
         }
 
-        // Clear line of sight
+        // Žádná překážka neblokuje + je v range + je v FOV = VIDÍ
+        if (config.debugStates)
+        {
+            Debug.Log($"[EnemyMultiPointVision] Point {pointIndex}: CLEAR LINE OF SIGHT (no obstacles)", this);
+        }
+
         return true;
     }
 
-    // === VALIDATION ===
+    // === VALIDATION ===-
 
     private bool ValidateSetup()
     {
