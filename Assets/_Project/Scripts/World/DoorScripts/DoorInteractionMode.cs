@@ -22,6 +22,10 @@ public class DoorInteractionMode : MonoBehaviour
     [Header("Update Settings")]
     [SerializeField] private float updateInterval = 0.2f; // Update prompts 5x per second
 
+    [Header("Alarm System (Optional)")]
+    [SerializeField] private SecurityAlarmSystem alarmSystem;
+
+
     private Transform player;
     private bool isPlayerInRange;
     private InteractionResult currentResult;
@@ -195,6 +199,26 @@ public class DoorInteractionMode : MonoBehaviour
             },
             onFail: () =>
             {
+                // TRIGGER ALARM ON HACK FAILURE
+                if (alarmSystem != null)
+                {
+                    alarmSystem.TriggerAlarm(pivot.position);
+                    Debug.Log($"[DoorInteraction] Hack failed - alarm triggered at {pivot.position}", this);
+                }
+                else
+                {
+                    // Auto-find alarm system if not assigned
+                    alarmSystem = FindFirstObjectByType<SecurityAlarmSystem>();
+                    if (alarmSystem != null)
+                    {
+                        alarmSystem.TriggerAlarm(pivot.position);
+                    }
+                    else
+                    {
+                        Debug.LogError("[DoorInteraction] No SecurityAlarmSystem found in scene!", this);
+                    }
+                }
+
                 if (isPlayerInRange)
                     UpdateInteraction();
             }
