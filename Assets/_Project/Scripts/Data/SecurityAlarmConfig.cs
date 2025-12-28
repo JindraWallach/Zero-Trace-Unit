@@ -27,18 +27,6 @@ public class SecurityAlarmConfig : ScriptableObject
     [Tooltip("Light color during alarm")]
     public Color alarmColor = Color.red;
 
-    [Header("Visual Effects - UI Overlay")]
-    [Tooltip("Enable red screen edge vignette")]
-    public bool enableScreenOverlay = true;
-
-    [Tooltip("Max overlay alpha (0-1)")]
-    [Range(0f, 0.5f)]
-    public float overlayMaxAlpha = 0.3f;
-
-    [Tooltip("Overlay pulse speed")]
-    [Range(0.5f, 5f)]
-    public float overlayPulseSpeed = 1.5f;
-
     [Header("Enemy Alert")]
     [Tooltip("Radius to alert enemies (meters)")]
     [Range(10f, 100f)]

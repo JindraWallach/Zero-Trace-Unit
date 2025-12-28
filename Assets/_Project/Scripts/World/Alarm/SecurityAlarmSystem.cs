@@ -194,7 +194,7 @@ public class SecurityAlarmSystem : MonoBehaviour
 
     private void AlertEnemy(EnemyStateMachine enemy, Vector3 alarmPosition)
     {
-        // Check if enemy is already in critical state (chase, catch)
+        // Check if enemy is already in critical state (chase, attack, catch)
         if (enemy.CurrentState is EnemyChaseState ||
             enemy.CurrentState is EnemyCatchState)
         {
