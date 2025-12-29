@@ -8,5 +8,5 @@ public interface IHackTarget
 {
     string TargetID { get; }
     bool IsHackable { get; }
-    void RequestHack(Action onSuccess, Action onFail);
+    void RequestHack(Action onSuccess, Action onFail, Action onCancel = null);
 }

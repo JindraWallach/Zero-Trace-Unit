@@ -41,7 +41,7 @@ public class HackableDoor : InteractableBase, IHackTarget, IInitializable
         interactionMode.ExecuteInteraction();
     }
 
-    public void RequestHack(Action onSuccess, Action onFail)
+    public void RequestHack(Action onSuccess, Action onFail, Action onCancel = null)
     {
         if (PlayerModeController.Instance.CurrentMode != PlayerMode.Hack)
         {
@@ -55,7 +55,7 @@ public class HackableDoor : InteractableBase, IHackTarget, IInitializable
             return;
         }
 
-        bool started = HackManager.Instance.RequestHack(this, onSuccess, onFail);
+        bool started = HackManager.Instance.RequestHack(this, onSuccess, onFail, onCancel);
 
         if (!started)
             onFail?.Invoke();

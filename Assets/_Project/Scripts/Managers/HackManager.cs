@@ -59,7 +59,7 @@ public class HackManager : MonoBehaviour
     }
 
     // === Hack Request ===
-    public bool RequestHack(IHackTarget target, Action onSuccess, Action onFail)
+    public bool RequestHack(IHackTarget target, Action onSuccess, Action onFail, Action onCancel = null)
     {
         if (activePuzzle != null)
         {
@@ -94,7 +94,7 @@ public class HackManager : MonoBehaviour
         // Setup callbacks
         activePuzzle.OnSuccess += () => HandlePuzzleSuccess(onSuccess);
         activePuzzle.OnFail += () => HandlePuzzleFail(onFail);
-        activePuzzle.OnCancel += () => HandlePuzzleCancel(onFail);
+        activePuzzle.OnCancel += () => HandlePuzzleCancel(onCancel);
 
         GameManager.Instance?.EnterPuzzleMode();
         UIManager.Instance?.EnterHackMode();
@@ -128,6 +128,7 @@ public class HackManager : MonoBehaviour
 
     private void HandlePuzzleCancel(Action callback)
     {
+        Debug.Log("[HackManager] Puzzle CANCELLED");
         CleanupPuzzle();
 
         GameManager.Instance?.ExitPuzzleMode();

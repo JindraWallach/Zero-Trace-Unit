@@ -221,6 +221,14 @@ public class DoorInteractionMode : MonoBehaviour
 
                 if (isPlayerInRange)
                     UpdateInteraction();
+            },
+            onCancel: () =>
+            {
+            // Player cancelled - NO ALARM
+            if (isPlayerInRange)
+                UpdateInteraction();
+
+                Debug.Log("[DoorInteraction] Hack cancelled by player - no alarm", this);
             }
         );
     }
