@@ -17,6 +17,9 @@ public class SecurityCamera : MonoBehaviour
     [SerializeField] private Transform player;
     [SerializeField] private bool autoFindPlayer = true;
 
+    [Header("Alarm System")]
+    [SerializeField] private SecurityAlarmSystem alarmSystem;
+
     [Header("Debug - Current State")]
     [SerializeField] private CameraState currentStateDebug;
     [SerializeField] private float suspicionMeterDebug;
@@ -77,6 +80,9 @@ public class SecurityCamera : MonoBehaviour
     {
         // Initialize vision
         vision.Initialize(config, player);
+
+        if (alarmSystem == null)
+            alarmSystem = FindFirstObjectByType<SecurityAlarmSystem>();
 
         // Calculate rates once
         suspicionBuildRate = 100f / config.suspicionBuildTime;
@@ -263,11 +269,15 @@ public class SecurityCamera : MonoBehaviour
             Debug.Log($"[SecurityCamera] {name} ALERT TRIGGERED at position {transform.position}", this);
         }
 
-        // FÁZE 2: HUD warning
-        // SecurityCameraHUD.Instance?.ShowWarning();
-
-        // FÁZE 3: Alarm system
-        // AlarmSystem.Instance?.TriggerAlarm(transform.position);
+        // Trigger alarm system
+        if (alarmSystem != null)
+        {
+            alarmSystem.TriggerAlarm(transform.position);
+        }
+        else
+        {
+            Debug.LogError($"[SecurityCamera] {name} No SecurityAlarmSystem found!", this);
+        }
     }
 
     // === PUBLIC API ===
