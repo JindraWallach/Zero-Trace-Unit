@@ -20,6 +20,9 @@ public class SecurityCameraRotation : MonoBehaviour
     private Transform player;
     private Coroutine activeCoroutine;
 
+    // Track current behavior to avoid repeatedly stopping/starting coroutines every event call
+    private bool isTracking;
+
     // Pooled objects to avoid allocations
     private readonly RaycastHit[] raycastHits = new RaycastHit[1];
     private WaitForSeconds sweepPauseWait;
@@ -63,6 +66,9 @@ public class SecurityCameraRotation : MonoBehaviour
             securityCamera.OnSuspicionChanged -= OnSuspicionChanged;
 
         StopAllCoroutines();
+        isTracking = false;
+        activeCoroutine = null;
+
         if (laserPoint != null) laserPoint.SetActive(false);
     }
 
@@ -70,17 +76,18 @@ public class SecurityCameraRotation : MonoBehaviour
 
     private void OnSuspicionChanged(float suspicion)
     {
-        // Threshold-based state switch (no Update spam)
-        if (suspicion > 0f && activeCoroutine == null)
+        if (suspicion > 0f && !isTracking)
         {
             // Entered suspicious state - start tracking
             StopAllCoroutines();
+            isTracking = true;
             activeCoroutine = StartCoroutine(TrackingCoroutine());
         }
-        else if (suspicion <= 0f && activeCoroutine != null)
+        else if (suspicion <= 0f && isTracking)
         {
             // Back to idle - resume sweep
             StopAllCoroutines();
+            isTracking = false;
             activeCoroutine = null;
             StartSweeping();
             if (laserPoint != null) laserPoint.SetActive(false);
@@ -92,6 +99,7 @@ public class SecurityCameraRotation : MonoBehaviour
     private void StartSweeping()
     {
         StopAllCoroutines();
+        isTracking = false;
         activeCoroutine = StartCoroutine(SweepCoroutine());
     }
 
@@ -127,8 +135,12 @@ public class SecurityCameraRotation : MonoBehaviour
     {
         if (player == null) yield break;
 
+        Debug.Log("[SecurityCameraRotation] Starting to track player.");
+
         // Enable laser
         if (laserPoint != null) laserPoint.SetActive(true);
+
+        Debug.Log("[SecurityCameraRotation] Tracking player.");
 
         // Cache to avoid repeated calculations
         Vector3 dirToPlayer;
