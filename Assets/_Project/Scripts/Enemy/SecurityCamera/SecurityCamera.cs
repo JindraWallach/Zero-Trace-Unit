@@ -7,7 +7,6 @@ using UnityEngine;
 /// Uses switch-based state updates for performance.
 /// </summary>
 [RequireComponent(typeof(SecurityCameraVision))]
-[RequireComponent(typeof(SecurityCameraIndicator))]
 public class SecurityCamera : MonoBehaviour
 {
     [Header("Configuration")]
