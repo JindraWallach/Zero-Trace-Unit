@@ -2,19 +2,39 @@ using UnityEngine;
 
 /// <summary>
 /// Factory for spawning puzzle prefabs.
-/// Handles pooling and puzzle selection logic.
+/// Handles puzzle selection based on target configuration.
 /// </summary>
 public class PuzzleFactory : MonoBehaviour
 {
-    [Header("Puzzle Prefabs")]
+    [Header("Fallback")]
     [SerializeField] private GameObject defaultPuzzlePrefab;
 
-    // TODO: Add pooling, difficulty selection
-
+    /// <summary>
+    /// Get puzzle prefab for target.
+    /// Priority: Target's PuzzleDefinition > Default fallback
+    /// </summary>
     public GameObject GetPuzzlePrefab(IHackTarget target)
     {
-        // For now, return default puzzle
-        // Future: select based on target type, difficulty, etc.
-        return defaultPuzzlePrefab;
+        // Try to get PuzzleDefinition from HackableDoor
+        if (target is HackableDoor hackableDoor)
+        {
+            var puzzleDef = hackableDoor.GetPuzzleDefinition();
+
+            if (puzzleDef != null && puzzleDef.puzzlePrefab != null)
+            {
+                Debug.Log($"[PuzzleFactory] Using puzzle from definition: {puzzleDef.puzzleName}");
+                return puzzleDef.puzzlePrefab;
+            }
+        }
+
+        // Fallback to default
+        if (defaultPuzzlePrefab != null)
+        {
+            Debug.Log("[PuzzleFactory] Using default puzzle prefab");
+            return defaultPuzzlePrefab;
+        }
+
+        Debug.LogError("[PuzzleFactory] No puzzle prefab available!");
+        return null;
     }
 }

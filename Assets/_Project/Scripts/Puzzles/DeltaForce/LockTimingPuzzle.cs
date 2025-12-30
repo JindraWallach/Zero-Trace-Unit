@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -6,8 +6,7 @@ using UnityEngine.UI;
 
 /// <summary>
 /// Lock timing puzzle: align rotating symbols with center zone.
-/// Player must press button when correct symbol is aligned.
-/// Uses coroutine for smooth rotation without Update().
+/// Symbols scroll infinitely in a circular buffer with wraparound.
 /// </summary>
 public class LockTimingPuzzle : PuzzleBase
 {
@@ -16,9 +15,10 @@ public class LockTimingPuzzle : PuzzleBase
 
     [Header("UI Elements")]
     [SerializeField] private RectTransform symbolColumn;
+    [SerializeField] private RectTransform scrollViewport; // Mask area
     [SerializeField] private GameObject symbolPrefab;
     [SerializeField] private Button submitButton;
-    [SerializeField] private RectTransform centerZone;
+    [SerializeField] private RectTransform centerZoneMarker; // Fixed green line
     [SerializeField] private TMP_Text progressText;
 
     [Header("Visual Feedback")]
@@ -26,11 +26,18 @@ public class LockTimingPuzzle : PuzzleBase
     [SerializeField] private float feedbackDuration = 0.3f;
 
     private List<char> correctSequence = new();
-    private List<TMP_Text> symbolTexts = new();
-    private int currentIndex;
+    private List<SymbolItem> symbolItems = new();
+    private int currentTargetIndex;
     private Coroutine rotationCoroutine;
     private bool canInput = true;
-    private float currentOffset;
+
+    private class SymbolItem
+    {
+        public GameObject gameObject;
+        public TMP_Text text;
+        public RectTransform rectTransform;
+        public char character;
+    }
 
     protected override void Awake()
     {
@@ -78,7 +85,7 @@ public class LockTimingPuzzle : PuzzleBase
     private void GenerateSequence()
     {
         correctSequence.Clear();
-        currentIndex = 0;
+        currentTargetIndex = 0;
 
         char[] pool = config.GetSymbolPool();
 
@@ -88,7 +95,7 @@ public class LockTimingPuzzle : PuzzleBase
             correctSequence.Add(symbol);
         }
 
-        Debug.Log($"[LockTimingPuzzle] Generated sequence: {string.Join("", correctSequence)}");
+        Debug.Log($"[LockTimingPuzzle] Sequence: {string.Join("", correctSequence)}");
     }
 
     // === Symbol Column Creation ===
@@ -100,29 +107,53 @@ public class LockTimingPuzzle : PuzzleBase
         char[] pool = config.GetSymbolPool();
         int totalSymbols = config.visibleSymbolsInColumn;
 
-        // Create circular buffer of symbols
+        // Create fixed circular buffer with random symbols
+        List<char> symbolBuffer = new List<char>();
+
+        // Fill with random symbols from pool
+        for (int i = 0; i < totalSymbols; i++)
+        {
+            symbolBuffer.Add(pool[Random.Range(0, pool.Length)]);
+        }
+
+        // Ensure ALL correct sequence symbols are present in buffer
+        foreach (char target in correctSequence)
+        {
+            if (!symbolBuffer.Contains(target))
+            {
+                // Replace random symbol with missing target
+                int replaceIndex = Random.Range(0, symbolBuffer.Count);
+                symbolBuffer[replaceIndex] = target;
+            }
+        }
+
+        // Create UI elements (these stay for entire puzzle)
         for (int i = 0; i < totalSymbols; i++)
         {
             GameObject go = Instantiate(symbolPrefab, symbolColumn);
             TMP_Text text = go.GetComponent<TMP_Text>();
-
-            if (text != null)
-            {
-                // Fill with random symbols (target will align during rotation)
-                char symbol = pool[Random.Range(0, pool.Length)];
-                text.text = symbol.ToString();
-                text.color = config.neutralColor;
-                symbolTexts.Add(text);
-            }
-
-            // Position vertically
             RectTransform rt = go.GetComponent<RectTransform>();
-            rt.anchoredPosition = new Vector2(0, -i * config.symbolSpacing);
+
+            if (text != null && rt != null)
+            {
+                SymbolItem item = new SymbolItem
+                {
+                    gameObject = go,
+                    text = text,
+                    rectTransform = rt,
+                    character = symbolBuffer[i]
+                };
+
+                item.text.text = item.character.ToString();
+                item.text.color = config.neutralColor;
+                symbolItems.Add(item);
+
+                // Initial position (staggered vertically)
+                rt.anchoredPosition = new Vector2(0, -i * config.symbolSpacing);
+            }
         }
 
-        // Ensure first correct symbol is in the sequence
-        if (symbolTexts.Count > 0)
-            symbolTexts[0].text = correctSequence[currentIndex].ToString();
+        Debug.Log($"[LockTimingPuzzle] Created {symbolItems.Count} symbols: {string.Join("", symbolBuffer)}");
     }
 
     private void ClearSymbols()
@@ -133,10 +164,10 @@ public class LockTimingPuzzle : PuzzleBase
                 Destroy(symbolColumn.GetChild(i).gameObject);
         }
 
-        symbolTexts.Clear();
+        symbolItems.Clear();
     }
 
-    // === Rotation Logic ===
+    // === Rotation Logic (Infinite Wraparound) ===
 
     private void StartRotation()
     {
@@ -155,38 +186,64 @@ public class LockTimingPuzzle : PuzzleBase
 
     private IEnumerator RotateSymbolsCoroutine()
     {
-        currentOffset = 0f;
-
         while (true)
         {
-            currentOffset += config.rotationSpeed * config.symbolSpacing * Time.deltaTime;
+            float moveSpeed = config.rotationSpeed * config.symbolSpacing * Time.deltaTime;
 
-            // Wrap around when exceeding total height
-            float totalHeight = config.visibleSymbolsInColumn * config.symbolSpacing;
-            if (currentOffset >= config.symbolSpacing)
-                currentOffset -= config.symbolSpacing;
+            char currentTarget = correctSequence[currentTargetIndex];
 
-            // Update positions
-            for (int i = 0; i < symbolTexts.Count; i++)
+            for (int i = 0; i < symbolItems.Count; i++)
             {
-                RectTransform rt = symbolTexts[i].transform as RectTransform;
-                float baseY = -i * config.symbolSpacing;
-                float newY = baseY + currentOffset;
+                var item = symbolItems[i];
+                Vector2 pos = item.rectTransform.anchoredPosition;
+                pos.y += moveSpeed; // Move UP (scrolling down visually)
 
-                // Wrap symbols that go off screen
-                if (newY > config.symbolSpacing)
-                    newY -= totalHeight;
+                // Wraparound: if symbol goes above viewport, teleport to bottom
+                float viewportHeight = config.visibleSymbolsInColumn * config.symbolSpacing;
+                if (pos.y > config.symbolSpacing)
+                {
+                    pos.y -= viewportHeight;
 
-                rt.anchoredPosition = new Vector2(0, newY);
+                    // Refresh symbol with random char (keep one correct target)
+                    char[] pool = config.GetSymbolPool();
+                    item.character = pool[Random.Range(0, pool.Length)];
+                    item.text.text = item.character.ToString();
+                }
 
-                // Highlight symbol near center
-                float distanceFromCenter = Mathf.Abs(newY);
-                symbolTexts[i].color = distanceFromCenter < config.alignmentTolerance
-                    ? config.targetColor
-                    : config.neutralColor;
+                item.rectTransform.anchoredPosition = pos;
+
+                // Highlight ONLY the correct target symbol (green)
+                bool isTargetSymbol = item.character == currentTarget;
+                item.text.color = isTargetSymbol ? config.targetColor : config.neutralColor;
             }
 
+            // Ensure at least one correct target exists in buffer
+            EnsureCorrectTargetExists();
+
             yield return null;
+        }
+    }
+
+    private void EnsureCorrectTargetExists()
+    {
+        char target = correctSequence[currentTargetIndex];
+        bool hasTarget = false;
+
+        foreach (var item in symbolItems)
+        {
+            if (item.character == target)
+            {
+                hasTarget = true;
+                break;
+            }
+        }
+
+        // If target missing, replace a random symbol
+        if (!hasTarget && symbolItems.Count > 0)
+        {
+            var randomItem = symbolItems[Random.Range(0, symbolItems.Count)];
+            randomItem.character = target;
+            randomItem.text.text = target.ToString();
         }
     }
 
@@ -196,7 +253,7 @@ public class LockTimingPuzzle : PuzzleBase
     {
         if (!isActive || !canInput) return;
 
-        char targetSymbol = correctSequence[currentIndex];
+        char targetSymbol = correctSequence[currentTargetIndex];
         bool isCorrect = CheckAlignment(targetSymbol);
 
         if (isCorrect)
@@ -213,26 +270,25 @@ public class LockTimingPuzzle : PuzzleBase
 
     private bool CheckAlignment(char targetSymbol)
     {
-        // Find symbol closest to center (y = 0)
+        // Find symbol closest to center (y ≈ 0)
         float closestDistance = float.MaxValue;
-        TMP_Text closestSymbol = null;
+        SymbolItem closestItem = null;
 
-        foreach (var text in symbolTexts)
+        foreach (var item in symbolItems)
         {
-            RectTransform rt = text.transform as RectTransform;
-            float distance = Mathf.Abs(rt.anchoredPosition.y);
+            float distance = Mathf.Abs(item.rectTransform.anchoredPosition.y);
 
             if (distance < closestDistance)
             {
                 closestDistance = distance;
-                closestSymbol = text;
+                closestItem = item;
             }
         }
 
-        // Check if within tolerance and correct symbol
+        // Check tolerance and correct symbol
         if (closestDistance <= config.alignmentTolerance &&
-            closestSymbol != null &&
-            closestSymbol.text[0] == targetSymbol)
+            closestItem != null &&
+            closestItem.character == targetSymbol)
         {
             return true;
         }
@@ -242,27 +298,25 @@ public class LockTimingPuzzle : PuzzleBase
 
     private void OnCorrectInput()
     {
-        Debug.Log($"[LockTimingPuzzle] Correct! {currentIndex + 1}/{config.sequenceLength}");
+        Debug.Log($"[LockTimingPuzzle] ✓ Correct! {currentTargetIndex + 1}/{config.sequenceLength}");
 
         ShowFeedback(config.targetColor);
-        currentIndex++;
+        currentTargetIndex++;
 
-        if (currentIndex >= config.sequenceLength)
+        if (currentTargetIndex >= config.sequenceLength)
         {
             CompletePuzzle();
         }
         else
         {
             UpdateProgress();
-            // Update column with next target symbol
-            if (symbolTexts.Count > 0)
-                symbolTexts[Random.Range(0, symbolTexts.Count)].text = correctSequence[currentIndex].ToString();
+            // Next target will be ensured by EnsureCorrectTargetExists()
         }
     }
 
     private void OnIncorrectInput()
     {
-        Debug.Log("[LockTimingPuzzle] Incorrect alignment!");
+        Debug.Log("[LockTimingPuzzle] ✗ Wrong symbol!");
         ShowFeedback(config.errorColor);
         FailPuzzle();
     }
@@ -279,7 +333,7 @@ public class LockTimingPuzzle : PuzzleBase
     private void UpdateProgress()
     {
         if (progressText != null)
-            progressText.text = $"{currentIndex}/{config.sequenceLength}";
+            progressText.text = $"{currentTargetIndex}/{config.sequenceLength}";
     }
 
     private void ShowFeedback(Color color)

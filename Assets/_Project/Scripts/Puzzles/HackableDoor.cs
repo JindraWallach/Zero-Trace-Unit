@@ -4,6 +4,7 @@ using UnityEngine;
 /// <summary>
 /// Bridge between door system and hack manager.
 /// Validates player mode before allowing hack requests.
+/// Provides PuzzleDefinition to PuzzleFactory.
 /// </summary>
 public class HackableDoor : InteractableBase, IHackTarget, IInitializable
 {
@@ -59,6 +60,14 @@ public class HackableDoor : InteractableBase, IHackTarget, IInitializable
 
         if (!started)
             onFail?.Invoke();
+    }
+
+    /// <summary>
+    /// Public accessor for PuzzleFactory.
+    /// </summary>
+    public PuzzleDefinition GetPuzzleDefinition()
+    {
+        return puzzleDefinition;
     }
 
     public override void ShowPromptForPlayer(Transform player)
