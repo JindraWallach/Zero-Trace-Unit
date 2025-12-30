@@ -6,7 +6,7 @@ using UnityEngine;
 /// Event-driven architecture: reacts to SecurityCamera state changes.
 /// Performance: Coroutines only when needed, batch operations.
 /// </summary>
-public class SecurityCameraRotation : MonoBehaviour
+public class SecurityCameraRotation : MonoBehaviour, IInitializable
 {
     [Header("Configuration")]
     [SerializeField] private SecurityCameraRotationConfig config;
@@ -15,9 +15,8 @@ public class SecurityCameraRotation : MonoBehaviour
     [SerializeField] private Transform cameraHead;
     [SerializeField] private SecurityCamera securityCamera;
     [SerializeField] private GameObject laserPoint;
-
-    // Cached data (no repeated GetComponent)
     private Transform player;
+
     private Coroutine activeCoroutine;
 
     // Track current behavior to avoid repeatedly stopping/starting coroutines every event call
@@ -42,8 +41,7 @@ public class SecurityCameraRotation : MonoBehaviour
         if (securityCamera == null) securityCamera = GetComponent<SecurityCamera>();
         if (laserPoint != null) laserPoint.SetActive(false);
 
-        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-        if (playerObj != null) player = playerObj.transform;
+        // NOTE: player reference is provided via DependencyInjector.Initialize(...) — no tag-based search here.
 
         // Pre-allocate WaitForSeconds (avoids GC)
         sweepPauseWait = new WaitForSeconds(config.pauseAtEnd);
@@ -70,6 +68,13 @@ public class SecurityCameraRotation : MonoBehaviour
         activeCoroutine = null;
 
         if (laserPoint != null) laserPoint.SetActive(false);
+    }
+
+    // Called by DependencyInjector to inject dependencies (player transform, etc.)
+    public void Initialize(DependencyInjector dependencyInjector)
+    {
+        if (dependencyInjector == null) return;
+        player = dependencyInjector.PlayerPosition;
     }
 
     // === EVENT-DRIVEN STATE CHANGES ===
