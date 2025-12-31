@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1907313380703633994}
   - component: {fileID: 970210035006822931}
   - component: {fileID: 3864607216318489061}
+  - component: {fileID: 4767071378388178505}
   m_Layer: 5
   m_Name: FX
   m_TagString: Untagged
@@ -30,12 +31,12 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1.05, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3255080966319867274}
+  m_Father: {fileID: 5475042891306505908}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -400, y: -200}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &970210035006822931
 CanvasRenderer:
@@ -75,6 +76,26 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1.72
+--- !u!114 &4767071378388178505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 27927122298791800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.LayoutElement
+  m_IgnoreLayout: 1
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!1 &1090735915616746388
 GameObject:
   m_ObjectHideFlags: 0
@@ -105,7 +126,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4552572708600846600}
-  - {fileID: 1907313380703633994}
   - {fileID: 1180872638675299134}
   - {fileID: 553900990518880149}
   - {fileID: 5490047529920810731}
@@ -157,13 +177,14 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1907313380703633994}
   m_Father: {fileID: 3255080966319867274}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 500, y: 250}
+  m_SizeDelta: {x: 650, y: 275}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &5618843779435604823
 GameObject:
@@ -424,6 +445,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3255080966319867274}
     m_Modifications:
+    - target: {fileID: 2976486619677821664, guid: 6295fd3bad2245e4fa5ce45406db7faf, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 5180841066948393736}
+    - target: {fileID: 2976486619677821664, guid: 6295fd3bad2245e4fa5ce45406db7faf, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: CancelPuzzle
+      objectReference: {fileID: 0}
+    - target: {fileID: 2976486619677821664, guid: 6295fd3bad2245e4fa5ce45406db7faf, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: PacketTracingPuzzle, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 6462772925969245479, guid: 6295fd3bad2245e4fa5ce45406db7faf, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -529,6 +562,10 @@ PrefabInstance:
     - target: {fileID: 2398823934502583079, guid: 5c8fac0d5f7267e4db243f43ef390910, type: 3}
       propertyPath: m_Name
       value: Background
+      objectReference: {fileID: 0}
+    - target: {fileID: 2398823934502583079, guid: 5c8fac0d5f7267e4db243f43ef390910, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5721831501995058951, guid: 5c8fac0d5f7267e4db243f43ef390910, type: 3}
       propertyPath: m_Pivot.x

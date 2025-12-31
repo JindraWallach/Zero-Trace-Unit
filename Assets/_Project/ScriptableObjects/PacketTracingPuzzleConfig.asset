@@ -12,19 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97f887af8e6a6304797eff0971ffb1b7, type: 3}
   m_Name: PacketTracingPuzzleConfig
   m_EditorClassIdentifier: Assembly-CSharp::PacketTracingPuzzleConfig
-  gridColumns: 3
+  gridColumns: 5
   gridRows: 3
-  nodeSpacing: 80
+  nodeSpacing: 90
   startNodeIndex: 0
-  goalNodeIndex: 8
-  disabledNodes: 04000000
-  correctPath: 0000000001000000020000000500000008000000
+  goalNodeIndex: 14
+  disabledNodes: 010000000200000006000000080000000a0000000c000000
+  correctPath: 00000000050000000b000000070000000300000004000000090000000e000000
   neutralColor: {r: 1, g: 1, b: 1, a: 1}
   connectedColor: {r: 0.2, g: 0.8, b: 1, a: 1}
   startColor: {r: 0, g: 1, b: 0, a: 1}
   goalColor: {r: 1, g: 0.8, b: 0, a: 1}
   disabledColor: {r: 0.3, g: 0.3, b: 0.3, a: 1}
-  lineColor: {r: 0.2, g: 1, b: 0.2, a: 1}
+  lineColor: {r: 0.14404595, g: 0.7830189, b: 0.14404595, a: 1}
   errorColor: {r: 1, g: 0, b: 0, a: 1}
-  lineWidth: 4
-  debugShowSolution: 1
+  lineWidth: 5
+  debugShowSolution: 0
