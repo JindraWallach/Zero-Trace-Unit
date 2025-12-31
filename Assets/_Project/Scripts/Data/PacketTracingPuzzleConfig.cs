@@ -129,12 +129,13 @@ public class PacketTracingPuzzleConfig : ScriptableObject
         int rowB = indexB / gridColumns;
         int colB = indexB % gridColumns;
 
-        // Adjacent horizontally or vertically (not diagonal)
-        bool horizontal = (Mathf.Abs(colA - colB) == 1) && (rowA == rowB);
-        bool vertical = (Mathf.Abs(rowA - rowB) == 1) && (colA == colB);
+        int dx = Mathf.Abs(colA - colB);
+        int dy = Mathf.Abs(rowA - rowB);
 
-        return horizontal || vertical;
+        // povol horizontální, vertikální i diagonální 45°
+        return (dx <= 1 && dy <= 1) && !(dx == 0 && dy == 0);
     }
+
 
     /// <summary>
     /// Get grid position (row, col) from index.

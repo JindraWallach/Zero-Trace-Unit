@@ -17,7 +17,7 @@ MonoBehaviour:
   nodeSpacing: 90
   startNodeIndex: 0
   goalNodeIndex: 14
-  disabledNodes: 010000000200000006000000080000000a0000000c000000
+  disabledNodes: 010000000200000006000000080000000a0000000c0000000d000000
   correctPath: 00000000050000000b000000070000000300000004000000090000000e000000
   neutralColor: {r: 1, g: 1, b: 1, a: 1}
   connectedColor: {r: 0.2, g: 0.8, b: 1, a: 1}
