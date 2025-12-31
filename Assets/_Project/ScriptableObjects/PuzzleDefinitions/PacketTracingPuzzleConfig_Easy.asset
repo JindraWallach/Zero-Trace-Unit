@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb21632f834d4ce469c53cd8c56f75bb, type: 3}
   m_Name: PacketTracingPuzzleConfig_Easy
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleDefinition
-  puzzlePrefab: {fileID: 0}
+  puzzlePrefab: {fileID: 5618843779435604823, guid: 7a4d82452a6a2d14486b4757cf9add3d, type: 3}
   puzzleName: Packeta
-  difficulty: 1
+  difficulty: 2

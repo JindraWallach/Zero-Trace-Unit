@@ -10771,6 +10771,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4930989083550011045, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+      propertyPath: puzzleDefinition
+      value: 
+      objectReference: {fileID: 11400000, guid: bf28f6f2d953a6a4ab521fe7648ce8f1, type: 2}
     - target: {fileID: 6400673175810272358, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
       propertyPath: alarmSystem
       value: 
