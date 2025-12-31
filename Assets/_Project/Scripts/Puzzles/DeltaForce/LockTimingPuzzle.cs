@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -6,6 +7,7 @@ using UnityEngine.UI;
 
 /// <summary>
 /// Lock timing puzzle: align rotating symbols with center zone.
+/// Supports multiple columns (only the active column rotates / accepts input).
 /// Symbols scroll infinitely in a circular buffer with wraparound.
 /// </summary>
 public class LockTimingPuzzle : PuzzleBase
@@ -14,26 +16,37 @@ public class LockTimingPuzzle : PuzzleBase
     [SerializeField] private LockTimingPuzzleConfig config;
 
     [Header("UI Elements")]
-    [SerializeField] private RectTransform symbolColumn;
-    [SerializeField] private RectTransform scrollViewport; // Mask area
+    [Tooltip("If you provide multiple columns, each column will be created and only the active one will rotate.")]
+    [Header("Multi-Column Setup")]
+    [SerializeField] private List<LockColumn> columns = new();
+    private int activeColumnIndex = 0;
+
+    [SerializeField] private RectTransform scrollViewport; // Mask area (shared)
     [SerializeField] private GameObject symbolPrefab;
     [SerializeField] private Button submitButton;
-    [SerializeField] private RectTransform centerZoneMarker; // Fixed green line
     [SerializeField] private TMP_Text progressText;
 
     [Header("Visual Feedback")]
     [SerializeField] private Image feedbackImage;
     [SerializeField] private float feedbackDuration = 0.3f;
 
-
-
     private List<char> correctSequence = new();
-    private List<SymbolItem> symbolItems = new();
     private int currentTargetIndex;
     private Coroutine rotationCoroutine;
     private bool canInput = true;
 
-    private class SymbolItem
+    [System.Serializable]
+    public class LockColumn
+    {
+        public RectTransform symbolColumn;
+        public RectTransform centerZoneMarker;
+
+        [NonSerialized] public List<SymbolItem> symbolItems;
+    }
+
+
+    // symbol item (runtime only)
+    public class SymbolItem
     {
         public GameObject gameObject;
         public TMP_Text text;
@@ -58,9 +71,18 @@ public class LockTimingPuzzle : PuzzleBase
     protected override void OnPuzzleStart()
     {
         GenerateSequence();
-        CreateSymbolColumn();
+
+        // Create symbols for ALL configured columns (they remain in scene),
+        // but only the active column will rotate / accept alignment checks.
+        for (int i = 0; i < columns.Count; i++)
+        {
+            CreateSymbolColumnForIndex(i);
+        }
+
+        // Ensure active index starts at 0
+        activeColumnIndex = 0;
         UpdateProgress();
-        StartRotation();
+        StartRotationForColumn(activeColumnIndex);
 
         if (feedbackImage != null)
             feedbackImage.gameObject.SetActive(false);
@@ -93,7 +115,7 @@ public class LockTimingPuzzle : PuzzleBase
 
         for (int i = 0; i < config.sequenceLength; i++)
         {
-            char symbol = pool[Random.Range(0, pool.Length)];
+            char symbol = pool[UnityEngine.Random.Range(0, pool.Length)];
             correctSequence.Add(symbol);
         }
 
@@ -102,79 +124,83 @@ public class LockTimingPuzzle : PuzzleBase
 
     // === Symbol Column Creation ===
 
-    private void CreateSymbolColumn()
+    private void CreateSymbolColumnForIndex(int columnIndex)
     {
-        ClearSymbols();
+        if (columnIndex < 0 || columnIndex >= columns.Count) return;
+
+        var column = columns[columnIndex];
+
+        if (column.symbolColumn == null || symbolPrefab == null)
+        {
+            Debug.LogError($"[LockTimingPuzzle] Column {columnIndex} is missing references!");
+            return;
+        }
+
+        // INIT LISTU (KRITICKÉ)
+        column.symbolItems = new List<SymbolItem>();
+
+        // clear children
+        for (int i = column.symbolColumn.childCount - 1; i >= 0; i--)
+            Destroy(column.symbolColumn.GetChild(i).gameObject);
 
         char[] pool = config.GetSymbolPool();
         int totalSymbols = config.visibleSymbolsInColumn;
 
-        // Create fixed circular buffer with random symbols
-        List<char> symbolBuffer = new List<char>();
-
-        // Fill with random symbols from pool
         for (int i = 0; i < totalSymbols; i++)
         {
-            symbolBuffer.Add(pool[Random.Range(0, pool.Length)]);
-        }
-
-        // Ensure ALL correct sequence symbols are present in buffer
-        foreach (char target in correctSequence)
-        {
-            if (!symbolBuffer.Contains(target))
-            {
-                // Replace random symbol with missing target
-                int replaceIndex = Random.Range(0, symbolBuffer.Count);
-                symbolBuffer[replaceIndex] = target;
-            }
-        }
-
-        // Create UI elements (these stay for entire puzzle)
-        for (int i = 0; i < totalSymbols; i++)
-        {
-            GameObject go = Instantiate(symbolPrefab, symbolColumn);
+            GameObject go = Instantiate(symbolPrefab, column.symbolColumn);
             TMP_Text text = go.GetComponent<TMP_Text>();
             RectTransform rt = go.GetComponent<RectTransform>();
 
-            if (text != null && rt != null)
+            char symbol = pool[UnityEngine.Random.Range(0, pool.Length)];
+
+            var item = new SymbolItem
             {
-                SymbolItem item = new SymbolItem
-                {
-                    gameObject = go,
-                    text = text,
-                    rectTransform = rt,
-                    character = symbolBuffer[i]
-                };
+                gameObject = go,
+                text = text,
+                rectTransform = rt,
+                character = symbol
+            };
 
-                item.text.text = item.character.ToString();
-                item.text.color = config.neutralColor;
-                symbolItems.Add(item);
+            text.text = symbol.ToString();
+            text.color = config.neutralColor;
 
-                // Initial position (staggered vertically)
-                rt.anchoredPosition = new Vector2(0, -i * config.symbolSpacing);
-            }
+            // SPAWN SHORA
+            rt.anchoredPosition = new Vector2(0, -i * config.symbolSpacing);
+
+            column.symbolItems.Add(item);
         }
 
-        Debug.Log($"[LockTimingPuzzle] Created {symbolItems.Count} symbols: {string.Join("", symbolBuffer)}");
+        Debug.Log($"[LockTimingPuzzle] Spawned {column.symbolItems.Count} symbols in column {columnIndex}");
     }
+
 
     private void ClearSymbols()
     {
-        if (symbolColumn != null)
+        foreach (var column in columns)
         {
-            for (int i = symbolColumn.childCount - 1; i >= 0; i--)
-                Destroy(symbolColumn.GetChild(i).gameObject);
-        }
+            if (column.symbolColumn != null)
+            {
+                for (int i = column.symbolColumn.childCount - 1; i >= 0; i--)
+                    Destroy(column.symbolColumn.GetChild(i).gameObject);
+            }
 
-        symbolItems.Clear();
+            column.symbolItems.Clear();
+        }
     }
 
-    // === Rotation Logic (Infinite Wraparound) ===
+    // === Rotation Logic (per-column, infinite wraparound) ===
 
-    private void StartRotation()
+    private void StartRotationForColumn(int columnIndex)
     {
         StopRotation();
-        rotationCoroutine = StartCoroutine(RotateSymbolsCoroutine());
+
+        if (columnIndex < 0 || columnIndex >= columns.Count) return;
+
+        // Ensure the target symbol exists in the newly active column
+        EnsureCorrectTargetExistsForColumn(columnIndex);
+
+        rotationCoroutine = StartCoroutine(RotateSymbolsCoroutineForColumn(columnIndex));
     }
 
     private void StopRotation()
@@ -186,16 +212,25 @@ public class LockTimingPuzzle : PuzzleBase
         }
     }
 
-    private IEnumerator RotateSymbolsCoroutine()
+    private IEnumerator RotateSymbolsCoroutineForColumn(int columnIndex)
     {
+        var column = columns[columnIndex];
+
         while (true)
         {
-            float moveSpeed = config.rotationSpeed * config.symbolSpacing * Time.deltaTime;
-            char currentTarget = correctSequence[currentTargetIndex];
-
-            for (int i = 0; i < symbolItems.Count; i++)
+            if (column.symbolItems == null || column.symbolItems.Count == 0)
             {
-                var item = symbolItems[i];
+                yield return null;
+                continue;
+            }
+
+
+            float moveSpeed = config.rotationSpeed * config.symbolSpacing * Time.deltaTime;
+            char currentTarget = correctSequence[Mathf.Clamp(currentTargetIndex, 0, correctSequence.Count - 1)];
+
+            for (int i = 0; i < column.symbolItems.Count; i++)
+            {
+                var item = column.symbolItems[i];
                 Vector2 pos = item.rectTransform.anchoredPosition;
 
                 // Move DOWN (scrolling down visually)
@@ -207,13 +242,12 @@ public class LockTimingPuzzle : PuzzleBase
 
                 if (pos.y < bottomThreshold)
                 {
-                    // Teleport to top - DON'T change the character!
                     pos.y += viewportHeight;
                 }
 
                 item.rectTransform.anchoredPosition = pos;
 
-                // Highlight ONLY the correct target symbol (green)
+                // Highlight ONLY the correct target symbol (green) for this column
                 bool isTargetSymbol = item.character == currentTarget;
                 item.text.color = isTargetSymbol ? config.targetColor : config.neutralColor;
             }
@@ -222,12 +256,15 @@ public class LockTimingPuzzle : PuzzleBase
         }
     }
 
-    private void EnsureCorrectTargetExists()
+    private void EnsureCorrectTargetExistsForColumn(int columnIndex)
     {
-        char target = correctSequence[currentTargetIndex];
+        if (columnIndex < 0 || columnIndex >= columns.Count) return;
+
+        var column = columns[columnIndex];
+        char target = correctSequence[Mathf.Clamp(currentTargetIndex, 0, correctSequence.Count - 1)];
         bool hasTarget = false;
 
-        foreach (var item in symbolItems)
+        foreach (var item in column.symbolItems)
         {
             if (item.character == target)
             {
@@ -237,9 +274,9 @@ public class LockTimingPuzzle : PuzzleBase
         }
 
         // If target missing, replace a random symbol
-        if (!hasTarget && symbolItems.Count > 0)
+        if (!hasTarget && column.symbolItems.Count > 0)
         {
-            var randomItem = symbolItems[Random.Range(0, symbolItems.Count)];
+            var randomItem = column.symbolItems[UnityEngine.Random.Range(0, column.symbolItems.Count)];
             randomItem.character = target;
             randomItem.text.text = target.ToString();
         }
@@ -251,7 +288,7 @@ public class LockTimingPuzzle : PuzzleBase
     {
         if (!isActive || !canInput) return;
 
-        char targetSymbol = correctSequence[currentTargetIndex];
+        char targetSymbol = correctSequence[Mathf.Clamp(currentTargetIndex, 0, correctSequence.Count - 1)];
         bool isCorrect = CheckAlignment(targetSymbol);
 
         if (isCorrect)
@@ -268,22 +305,31 @@ public class LockTimingPuzzle : PuzzleBase
 
     private bool CheckAlignment(char targetSymbol)
     {
-        if (centerZoneMarker == null)
+        // Use active column's center marker and items
+        if (activeColumnIndex < 0 || activeColumnIndex >= columns.Count)
         {
-            Debug.LogError("[LockTimingPuzzle] Center zone marker is missing!");
+            Debug.LogError("[LockTimingPuzzle] Active column index out of range!");
+            return false;
+        }
+
+        var column = columns[activeColumnIndex];
+
+        if (column.centerZoneMarker == null)
+        {
+            Debug.LogError("[LockTimingPuzzle] Center zone marker is missing for active column!");
             return false;
         }
 
         // Get center zone position in local space
-        float centerY = centerZoneMarker.anchoredPosition.y;
+        float centerY = column.centerZoneMarker.anchoredPosition.y;
 
-        Debug.Log($"[LockTimingPuzzle] Center zone Y: {centerY}, Tolerance: {config.alignmentTolerance}");
+        Debug.Log($"[LockTimingPuzzle] Column {activeColumnIndex} center zone Y: {centerY}, Tolerance: {config.alignmentTolerance}");
 
         // Find symbol closest to center zone
         float closestDistance = float.MaxValue;
         SymbolItem closestItem = null;
 
-        foreach (var item in symbolItems)
+        foreach (var item in column.symbolItems)
         {
             float symbolY = item.rectTransform.anchoredPosition.y;
             float distance = Mathf.Abs(symbolY - centerY);
@@ -309,19 +355,23 @@ public class LockTimingPuzzle : PuzzleBase
 
     private void OnCorrectInput()
     {
-        Debug.Log($"[LockTimingPuzzle] ✓ Correct! {currentTargetIndex + 1}/{config.sequenceLength}");
+        Debug.Log($"[LockTimingPuzzle] ✓ Correct! Column {activeColumnIndex + 1} unlocked!");
 
+        StopRotation();
         ShowFeedback(config.targetColor);
+
+        activeColumnIndex++;
         currentTargetIndex++;
 
-        if (currentTargetIndex >= config.sequenceLength)
+        // Complete if we've satisfied the configured sequence length or ran out of columns
+        if (currentTargetIndex >= config.sequenceLength || activeColumnIndex >= columns.Count)
         {
             CompletePuzzle();
         }
         else
         {
             UpdateProgress();
-            // Next target will be ensured by EnsureCorrectTargetExists()
+            StartRotationForColumn(activeColumnIndex); // Start next column
         }
     }
 
@@ -344,7 +394,10 @@ public class LockTimingPuzzle : PuzzleBase
     private void UpdateProgress()
     {
         if (progressText != null)
+        {
+            // show current symbol progress and active column info
             progressText.text = $"{currentTargetIndex}/{config.sequenceLength}";
+        }
     }
 
     private void ShowFeedback(Color color)
