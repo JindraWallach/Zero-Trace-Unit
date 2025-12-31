@@ -111,6 +111,13 @@ MonoBehaviour:
     isAsset: 1
     _typeString: NoiseConfig, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+  - _obj: {fileID: 11400000, guid: cd473707c8b5fcb4d88777f29cc90a2e, type: 2}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-3-cd473707c8b5fcb4d88777f29cc90a2e-11400000-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: LockTimingPuzzleConfig, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
   - _obj: {fileID: 9100000, guid: 3dcbb7ff605184746be82d748741383f, type: 2}
     globalId:
       globalObjectIdString: GlobalObjectId_V1-3-3dcbb7ff605184746be82d748741383f-9100000-0

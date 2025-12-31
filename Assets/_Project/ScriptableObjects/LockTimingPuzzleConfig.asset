@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9a0d70fcf00477418129b5a1bcf3dcf, type: 3}
   m_Name: LockTimingPuzzleConfig
   m_EditorClassIdentifier: Assembly-CSharp::LockTimingPuzzleConfig
-  sequenceLength: 5
-  visibleSymbolsInColumn: 8
+  sequenceLength: 4
+  visibleSymbolsInColumn: 5
   symbolPool: 0
   rotationSpeed: 3
-  symbolSpacing: 80
+  symbolSpacing: 50
   alignmentTolerance: 20
   targetColor: {r: 0, g: 1, b: 0, a: 1}
   errorColor: {r: 1, g: 0, b: 0, a: 1}

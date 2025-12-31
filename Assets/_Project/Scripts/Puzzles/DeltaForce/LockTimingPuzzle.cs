@@ -189,25 +189,24 @@ public class LockTimingPuzzle : PuzzleBase
         while (true)
         {
             float moveSpeed = config.rotationSpeed * config.symbolSpacing * Time.deltaTime;
-
             char currentTarget = correctSequence[currentTargetIndex];
 
             for (int i = 0; i < symbolItems.Count; i++)
             {
                 var item = symbolItems[i];
                 Vector2 pos = item.rectTransform.anchoredPosition;
-                pos.y += moveSpeed; // Move UP (scrolling down visually)
 
-                // Wraparound: if symbol goes above viewport, teleport to bottom
+                // Move DOWN (scrolling down visually)
+                pos.y -= moveSpeed;
+
+                // Wraparound: if symbol goes below bottom, teleport to top
                 float viewportHeight = config.visibleSymbolsInColumn * config.symbolSpacing;
-                if (pos.y > config.symbolSpacing)
-                {
-                    pos.y -= viewportHeight;
+                float bottomThreshold = -viewportHeight;
 
-                    // Refresh symbol with random char (keep one correct target)
-                    char[] pool = config.GetSymbolPool();
-                    item.character = pool[Random.Range(0, pool.Length)];
-                    item.text.text = item.character.ToString();
+                if (pos.y < bottomThreshold)
+                {
+                    // Teleport to top - DON'T change the character!
+                    pos.y += viewportHeight;
                 }
 
                 item.rectTransform.anchoredPosition = pos;
@@ -216,9 +215,6 @@ public class LockTimingPuzzle : PuzzleBase
                 bool isTargetSymbol = item.character == currentTarget;
                 item.text.color = isTargetSymbol ? config.targetColor : config.neutralColor;
             }
-
-            // Ensure at least one correct target exists in buffer
-            EnsureCorrectTargetExists();
 
             yield return null;
         }

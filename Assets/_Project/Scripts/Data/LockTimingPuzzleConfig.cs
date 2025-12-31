@@ -27,7 +27,7 @@ public class LockTimingPuzzleConfig : ScriptableObject
     public float rotationSpeed = 3f;
 
     [Tooltip("Distance between symbols (Unity units)")]
-    [Range(50f, 150f)]
+    [Range(20f, 150f)]
     public float symbolSpacing = 80f;
 
     [Header("Alignment Settings")]
