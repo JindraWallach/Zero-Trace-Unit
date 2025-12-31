@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: LockTimingPuzzleConfig
   m_EditorClassIdentifier: Assembly-CSharp::LockTimingPuzzleConfig
   sequenceLength: 4
-  visibleSymbolsInColumn: 5
+  visibleSymbolsInColumn: 6
   symbolPool: 0
   rotationSpeed: 3
   symbolSpacing: 50

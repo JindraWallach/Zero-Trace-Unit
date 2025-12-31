@@ -717,6 +717,8 @@ MonoBehaviour:
     done: 0
   - name: kamera by se melo otacet a pak na hrace kdyz ho vidi
     done: 0
+  - name: fix timing puzzle vice column
+    done: 0
 --- !u!4 &36559939
 Transform:
   m_ObjectHideFlags: 0

@@ -25,6 +25,8 @@ public class LockTimingPuzzle : PuzzleBase
     [SerializeField] private Image feedbackImage;
     [SerializeField] private float feedbackDuration = 0.3f;
 
+
+
     private List<char> correctSequence = new();
     private List<SymbolItem> symbolItems = new();
     private int currentTargetIndex;
@@ -266,13 +268,27 @@ public class LockTimingPuzzle : PuzzleBase
 
     private bool CheckAlignment(char targetSymbol)
     {
-        // Find symbol closest to center (y ≈ 0)
+        if (centerZoneMarker == null)
+        {
+            Debug.LogError("[LockTimingPuzzle] Center zone marker is missing!");
+            return false;
+        }
+
+        // Get center zone position in local space
+        float centerY = centerZoneMarker.anchoredPosition.y;
+
+        Debug.Log($"[LockTimingPuzzle] Center zone Y: {centerY}, Tolerance: {config.alignmentTolerance}");
+
+        // Find symbol closest to center zone
         float closestDistance = float.MaxValue;
         SymbolItem closestItem = null;
 
         foreach (var item in symbolItems)
         {
-            float distance = Mathf.Abs(item.rectTransform.anchoredPosition.y);
+            float symbolY = item.rectTransform.anchoredPosition.y;
+            float distance = Mathf.Abs(symbolY - centerY);
+
+            Debug.Log($"  Symbol '{item.character}' at Y={symbolY:F1}, distance={distance:F1}");
 
             if (distance < closestDistance)
             {
@@ -281,15 +297,14 @@ public class LockTimingPuzzle : PuzzleBase
             }
         }
 
-        // Check tolerance and correct symbol
-        if (closestDistance <= config.alignmentTolerance &&
-            closestItem != null &&
-            closestItem.character == targetSymbol)
-        {
-            return true;
-        }
+        // Check if within tolerance AND correct symbol
+        bool inZone = closestDistance <= config.alignmentTolerance;
+        bool correctChar = closestItem != null && closestItem.character == targetSymbol;
 
-        return false;
+        Debug.Log($"[LockTimingPuzzle] Closest: '{closestItem?.character}' (dist={closestDistance:F1}), " +
+                  $"Target: '{targetSymbol}', InZone: {inZone}, CorrectChar: {correctChar}");
+
+        return inZone && correctChar;
     }
 
     private void OnCorrectInput()
