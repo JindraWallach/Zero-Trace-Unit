@@ -147,13 +147,35 @@ public class LockTimingPuzzle : PuzzleBase
         char[] pool = config.GetSymbolPool();
         int totalSymbols = config.visibleSymbolsInColumn;
 
+        // Create a shuffled list of unique symbols for this column
+        List<char> availableSymbols = new List<char>(pool);
+        List<char> columnSymbols = new List<char>();
+
+        for (int i = 0; i < totalSymbols; i++)
+        {
+            // If we've used all available symbols, reshuffle the pool
+            if (availableSymbols.Count == 0)
+            {
+                availableSymbols = new List<char>(pool);
+            }
+
+            // Pick a random symbol and remove it from available pool to ensure uniqueness
+            int randomIndex = UnityEngine.Random.Range(0, availableSymbols.Count);
+            char symbol = availableSymbols[randomIndex];
+            availableSymbols.RemoveAt(randomIndex);
+            columnSymbols.Add(symbol);
+        }
+
+        // Calculate starting position so middle symbol is at Y=0
+        float startY = ((totalSymbols - 1) / 2f) * config.symbolSpacing;
+
         for (int i = 0; i < totalSymbols; i++)
         {
             GameObject go = Instantiate(symbolPrefab, column.symbolColumn);
             TMP_Text text = go.GetComponent<TMP_Text>();
             RectTransform rt = go.GetComponent<RectTransform>();
 
-            char symbol = pool[UnityEngine.Random.Range(0, pool.Length)];
+            char symbol = columnSymbols[i];
 
             var item = new SymbolItem
             {
@@ -166,8 +188,8 @@ public class LockTimingPuzzle : PuzzleBase
             text.text = symbol.ToString();
             text.color = config.neutralColor;
 
-            // SPAWN SHORA
-            rt.anchoredPosition = new Vector2(0, -i * config.symbolSpacing);
+            // SPAWN centered around Y=0 (middle symbol at Y=0)
+            rt.anchoredPosition = new Vector2(0, startY - (i * config.symbolSpacing));
 
             column.symbolItems.Add(item);
         }
@@ -229,6 +251,9 @@ public class LockTimingPuzzle : PuzzleBase
             float moveSpeed = config.rotationSpeed * config.symbolSpacing * Time.deltaTime;
             char currentTarget = correctSequence[Mathf.Clamp(currentTargetIndex, 0, correctSequence.Count - 1)];
 
+            float viewportHeight = config.visibleSymbolsInColumn * config.symbolSpacing;
+            float halfHeight = viewportHeight / 2f;
+
             for (int i = 0; i < column.symbolItems.Count; i++)
             {
                 var item = column.symbolItems[i];
@@ -238,10 +263,8 @@ public class LockTimingPuzzle : PuzzleBase
                 pos.y -= moveSpeed;
 
                 // Wraparound: if symbol goes below bottom, teleport to top
-                float viewportHeight = config.visibleSymbolsInColumn * config.symbolSpacing;
-                float bottomThreshold = -viewportHeight;
-
-                if (pos.y < bottomThreshold)
+                // Bottom threshold: -halfHeight, Top position: +halfHeight
+                if (pos.y < -halfHeight)
                 {
                     pos.y += viewportHeight;
                 }
@@ -321,23 +344,21 @@ public class LockTimingPuzzle : PuzzleBase
             return false;
         }
 
-        // Convert center zone position to world space, then to the symbol column's local space
-        Vector3 centerWorldPos = centerZoneMarker.TransformPoint(Vector3.zero);
-        Vector3 centerLocalToColumn = column.symbolColumn.InverseTransformPoint(centerWorldPos);
-        float centerY = centerLocalToColumn.y;
+        // Use screen space positions for accurate comparison across different parents
+        Vector3 centerScreenPos = RectTransformUtility.WorldToScreenPoint(null, centerZoneMarker.position);
 
-        Debug.Log($"[LockTimingPuzzle] Column {activeColumnIndex} | Center zone Y in column space: {centerY:F1}, Tolerance: {config.alignmentTolerance}");
+        Debug.Log($"[LockTimingPuzzle] Column {activeColumnIndex} | Center zone screen Y: {centerScreenPos.y:F1}, Tolerance: {config.alignmentTolerance}");
 
-        // Find symbol closest to center zone
+        // Find symbol closest to center zone using screen positions
         float closestDistance = float.MaxValue;
         SymbolItem closestItem = null;
 
         foreach (var item in column.symbolItems)
         {
-            float symbolY = item.rectTransform.anchoredPosition.y;
-            float distance = Mathf.Abs(symbolY - centerY);
+            Vector3 symbolScreenPos = RectTransformUtility.WorldToScreenPoint(null, item.rectTransform.position);
+            float distance = Mathf.Abs(symbolScreenPos.y - centerScreenPos.y);
 
-            Debug.Log($"  Symbol '{item.character}' at Y={symbolY:F1}, distance={distance:F1}");
+            Debug.Log($"  Symbol '{item.character}' at screen Y={symbolScreenPos.y:F1}, local Y={item.rectTransform.anchoredPosition.y:F1}, distance={distance:F1}");
 
             if (distance < closestDistance)
             {
