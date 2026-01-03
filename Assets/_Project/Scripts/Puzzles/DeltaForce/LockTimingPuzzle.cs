@@ -9,6 +9,7 @@ using UnityEngine.UI;
 /// Lock timing puzzle: align rotating symbols with center zone.
 /// Supports multiple columns (only the active column rotates / accepts input).
 /// Symbols scroll infinitely in a circular buffer with wraparound.
+/// Uses a single shared center zone marker for all columns.
 /// </summary>
 public class LockTimingPuzzle : PuzzleBase
 {
@@ -22,6 +23,7 @@ public class LockTimingPuzzle : PuzzleBase
     private int activeColumnIndex = 0;
 
     [SerializeField] private RectTransform scrollViewport; // Mask area (shared)
+    [SerializeField] private RectTransform centerZoneMarker; // SHARED center zone for all columns
     [SerializeField] private GameObject symbolPrefab;
     [SerializeField] private Button submitButton;
     [SerializeField] private TMP_Text progressText;
@@ -39,7 +41,6 @@ public class LockTimingPuzzle : PuzzleBase
     public class LockColumn
     {
         public RectTransform symbolColumn;
-        public RectTransform centerZoneMarker;
 
         [NonSerialized] public List<SymbolItem> symbolItems;
     }
@@ -305,7 +306,7 @@ public class LockTimingPuzzle : PuzzleBase
 
     private bool CheckAlignment(char targetSymbol)
     {
-        // Use active column's center marker and items
+        // Use active column's items with shared center zone marker
         if (activeColumnIndex < 0 || activeColumnIndex >= columns.Count)
         {
             Debug.LogError("[LockTimingPuzzle] Active column index out of range!");
@@ -314,16 +315,18 @@ public class LockTimingPuzzle : PuzzleBase
 
         var column = columns[activeColumnIndex];
 
-        if (column.centerZoneMarker == null)
+        if (centerZoneMarker == null)
         {
-            Debug.LogError("[LockTimingPuzzle] Center zone marker is missing for active column!");
+            Debug.LogError("[LockTimingPuzzle] Shared center zone marker is missing!");
             return false;
         }
 
-        // Get center zone position in local space
-        float centerY = column.centerZoneMarker.anchoredPosition.y;
+        // Convert center zone position to world space, then to the symbol column's local space
+        Vector3 centerWorldPos = centerZoneMarker.TransformPoint(Vector3.zero);
+        Vector3 centerLocalToColumn = column.symbolColumn.InverseTransformPoint(centerWorldPos);
+        float centerY = centerLocalToColumn.y;
 
-        Debug.Log($"[LockTimingPuzzle] Column {activeColumnIndex} center zone Y: {centerY}, Tolerance: {config.alignmentTolerance}");
+        Debug.Log($"[LockTimingPuzzle] Column {activeColumnIndex} | Center zone Y in column space: {centerY:F1}, Tolerance: {config.alignmentTolerance}");
 
         // Find symbol closest to center zone
         float closestDistance = float.MaxValue;
