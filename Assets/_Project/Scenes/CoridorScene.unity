@@ -705,20 +705,6 @@ MonoBehaviour:
   - name: "Zm\u011Bnit catch an\xE1maci na taser, udelat raycast with trail pak zapnout
       ragdoll a force ze strany"
     done: 0
-  - name: "1.  Roz\u0161\xED\u0159en\xED HackSystemu (p\u0159id\xE1n\xED 2. a 3.
-      puzzlu)"
-    done: 0
-  - name: "1.1  brute force puzzle (puzzle s omezen\xFDm po\u010Dtem pokus\u016F)"
-    done: 0
-  - name: "1.2  packet tracing puzzle (propojen\xED uzl\u016F, aby se packet dostal
-      do c\xEDle)"
-    done: 0
-  - name: 
-    done: 0
-  - name: kamera by se melo otacet a pak na hrace kdyz ho vidi
-    done: 0
-  - name: fix timing puzzle vice column
-    done: 0
 --- !u!4 &36559939
 Transform:
   m_ObjectHideFlags: 0
@@ -8562,11 +8548,11 @@ PrefabInstance:
       objectReference: {fileID: 1931417453}
     - target: {fileID: 7371815972592028288, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
       propertyPath: startLocked
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7371815972592028288, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
       propertyPath: enableAutoLock
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

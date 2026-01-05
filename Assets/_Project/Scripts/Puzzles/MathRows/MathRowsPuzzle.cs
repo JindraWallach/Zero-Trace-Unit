@@ -107,7 +107,7 @@ public class MathRowsPuzzle : PuzzleBase
         if (expressions == null) expressions = new List<string>();
 
         while (expressions.Count < count)
-            expressions.Add(GenerateRandomExpression());
+            expressions.Add($"( {GenerateRandomExpression()} ) mod 10");
     }
 
     private string GenerateRandomExpression()
