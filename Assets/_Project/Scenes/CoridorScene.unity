@@ -705,6 +705,8 @@ MonoBehaviour:
   - name: "Zm\u011Bnit catch an\xE1maci na taser, udelat raycast with trail pak zapnout
       ragdoll a force ze strany"
     done: 0
+  - name: Stale potrebuji fix na multipoint vision u nejakych zdi
+    done: 0
 --- !u!4 &36559939
 Transform:
   m_ObjectHideFlags: 0

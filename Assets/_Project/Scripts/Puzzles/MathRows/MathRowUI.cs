@@ -23,7 +23,7 @@ public class MathRowUI : MonoBehaviour
         this.submitCallback = submitCallback;
 
         if (expressionText != null)
-            expressionText.text = expression;
+            expressionText.text = $"( {expression} ) mod10";
 
         CreateDigitButtons(digitButtonPrefab);
 
