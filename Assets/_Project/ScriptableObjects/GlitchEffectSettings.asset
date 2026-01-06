@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GlitchEffectSettings
   intensity: 0.01
   timeScale: 0.5
-  colorShift: 0.003
+  colorShift: 0.008
   blockSize: 0
-  scanlineIntensity: 0.3
-  inversionIntensity: 0.1
-  verticalShift: 0
+  scanlineIntensity: 0.5
+  inversionIntensity: 0.3
+  verticalShift: 0.01
   noiseFrequency: 1
   enabled: 0
   updateFrequency: 4
-  currentPreset: 4
+  currentPreset: 5

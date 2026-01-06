@@ -88,8 +88,8 @@ public class GameManager : MonoBehaviour, IInitializable
         if (inputReader != null)
             inputReader.DisableInputs();
 
-        // 1. Spawn vizuální efekty (delegováno na spawner)
-        if (taserEffects != null && playerDeath != null)
+        // 1. Spawn vizuální efekty HNED (taser trail/electric FX)
+        if (taserEffects != null && playerDeath != null && enemyTransform != null)
         {
             Vector3 enemyEye = enemyTransform.position + Vector3.up * 1.6f;
             Vector3 playerChest = playerDeath.transform.position + Vector3.up * 1f;
@@ -97,7 +97,7 @@ public class GameManager : MonoBehaviour, IInitializable
             taserEffects.SpawnTaserEffect(enemyEye, playerChest);
         }
 
-        // 2. Execute death s force (delegováno na PlayerDeath)
+        // 2. Execute death s force (PlayerDeath dostane force, aplikuje ho hned po disable controlleru)
         if (playerDeath != null)
         {
             playerDeath.ExecuteDeathWithForce(forceDirection, forceMagnitude, deathSceneReloadDelay);

@@ -75,6 +75,19 @@ public class EnemyConfig : ScriptableObject
     [Range(1f, 10f)]
     public float memoryDuration = 5f;
 
+    [Header("Catch Settings")]
+    [Tooltip("Force magnitude applied to player ragdoll on catch")]
+    [Range(1f, 100f)]
+    public float catchForceMagnitude = 800f;
+
+    [Tooltip("Vertical force component (0 = horizontal, 1 = upward)")]
+    [Range(0f, 1f)]
+    public float catchForceVertical = 0.2f;
+
+    [Tooltip("Delay after taser hit before applying force (visual timing)")]
+    [Range(0f, 0.5f)]
+    public float taserHitDelay = 0.15f;
+
     [Header("Debug")]
     [Tooltip("Show vision cone in Scene view")]
     public bool debugVision = true;

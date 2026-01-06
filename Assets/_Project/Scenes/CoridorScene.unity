@@ -702,10 +702,9 @@ MonoBehaviour:
     done: 0
   - name: 
     done: 0
-  - name: "Zm\u011Bnit catch an\xE1maci na taser, udelat raycast with trail pak zapnout
-      ragdoll a force ze strany"
-    done: 0
   - name: Stale potrebuji fix na multipoint vision u nejakych zdi
+    done: 0
+  - name: CELAD EATH SEQQUENCE NEED FIX
     done: 0
 --- !u!4 &36559939
 Transform:
@@ -7750,8 +7749,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a60abfe39c661514a9d7ab433c5f9598, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TaserEffectSpawner
-  taserTrailPrefab: {fileID: 100000, guid: fa1cc62529212804ea8de0a970610dcd, type: 3}
-  electricImpactPrefab: {fileID: 1997773235792374, guid: ca1b1da5e83888f49b3a1148500975b9, type: 3}
+  taserTrailPrefab: {fileID: 100000, guid: 3f2e9472a855c094cb1e804b020a1887, type: 3}
+  electricImpactPrefab: {fileID: 1997773235792374, guid: 0e81a7abfc8187146b86713624f5f3a3, type: 3}
   trailDuration: 0.3
   impactDuration: 1
 --- !u!1 &530824080

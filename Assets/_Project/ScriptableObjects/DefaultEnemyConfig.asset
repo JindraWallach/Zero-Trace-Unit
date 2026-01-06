@@ -30,6 +30,9 @@ MonoBehaviour:
   searchRadius: 8
   searchSpeed: 3
   memoryDuration: 10
+  catchForceMagnitude: 20
+  catchForceVertical: 0.2
+  taserHitDelay: 0.5
   debugVision: 1
   debugStates: 0
   debugMovement: 0
