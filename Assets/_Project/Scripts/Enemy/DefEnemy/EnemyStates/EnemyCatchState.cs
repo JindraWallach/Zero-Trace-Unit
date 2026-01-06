@@ -12,37 +12,29 @@ public class EnemyCatchState : EnemyState
 
     public override void Enter()
     {
-        // Stop enemy movement
         machine.Movement.Stop();
-
-        // Play catch animation (visual feedback only)
         machine.Animation.SetMoveSpeed(0f);
-        machine.Animation.PlayCatch();
-
-        deathTriggered = false;
 
         if (machine.Config.debugStates)
             Debug.Log($"[EnemyCatch] {machine.gameObject.name} CAUGHT PLAYER!", machine);
 
-        // Immediately trigger death (GameManager handles timing)
+        // Deleguj na DeathExecutor
         TriggerDeath();
     }
 
     private void TriggerDeath()
     {
-        if (deathTriggered)
-            return;
-
+        if (deathTriggered) return;
         deathTriggered = true;
 
-        // Single responsibility: Just notify coordinator
+        // Vypočítej force směr
+        Vector3 forceDir = (machine.PlayerTransform.position - machine.transform.position).normalized;
+        forceDir.y = 0.2f; // mírně nahoru
+
+        // Notifikuj GameManager s force daty
         if (GameManager.Instance != null)
         {
-            GameManager.Instance.OnPlayerCaught();
-        }
-        else
-        {
-            Debug.LogError("[EnemyCatch] GameManager.Instance is null!");
+            GameManager.Instance.OnPlayerCaught(machine.transform, forceDir, 80f);
         }
     }
 

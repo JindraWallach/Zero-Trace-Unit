@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 
 /// <summary>
-/// Handles player death execution: ragdoll, camera effects, scene reload.
+/// Handles player death execution: ragdoll, force application, scene reload.
 /// Pure execution component - triggered by GameManager.
 /// SRP: Only handles death sequence, doesn't decide when to die.
 /// 
@@ -26,8 +26,6 @@ public class PlayerDeath : MonoBehaviour
 
     private CharacterController characterController;
     private Coroutine deathSequenceCoroutine;
-
-    // Cache player controller reference
     private Synty.AnimationBaseLocomotion.Samples.SamplePlayerAnimationController playerController;
 
     private void Awake()
@@ -43,19 +41,47 @@ public class PlayerDeath : MonoBehaviour
     }
 
     /// <summary>
-    /// Execute death sequence with optional delay before scene reload.
-    /// Called by GameManager.OnPlayerCaught().
-    /// NOTE: GameManager should call InputReader.DisableInputs() BEFORE this method.
+    /// Execute death with ragdoll force applied.
+    /// Called by GameManager after taser effect spawned.
     /// </summary>
-    /// <param name="reloadDelay">Delay in seconds before reloading scene</param>
-    public void ExecuteDeath(float reloadDelay = 2f)
+    public void ExecuteDeathWithForce(Vector3 forceDirection, float forceMagnitude, float reloadDelay)
     {
-        if (isDead)
-            return; // Already dead
-
+        if (isDead) return;
         isDead = true;
 
-        // Stop any existing sequence
+        Debug.Log($"[PlayerDeath] Executing death with force: {forceDirection} x {forceMagnitude}");
+
+        // CRITICAL: Disable SamplePlayerAnimationController FIRST
+        if (playerController != null)
+        {
+            playerController.enabled = false;
+            Debug.Log("[PlayerDeath] SamplePlayerAnimationController disabled");
+        }
+
+        // Disable character controller (now safe)
+        if (characterController != null)
+            characterController.enabled = false;
+
+        // Disable animator
+        if (animator != null)
+            animator.enabled = false;
+
+        // Enable ragdoll
+        SetRagdollEnabled(true);
+
+        // Apply force to torso
+        Rigidbody torso = GetTorsoRigidbody();
+        if (torso != null)
+        {
+            torso.AddForce(forceDirection * forceMagnitude, ForceMode.Impulse);
+            Debug.Log($"[PlayerDeath] Force applied to {torso.name}");
+        }
+        else
+        {
+            Debug.LogWarning("[PlayerDeath] Torso rigidbody not found!");
+        }
+
+        // Start reload sequence
         if (deathSequenceCoroutine != null)
             StopCoroutine(deathSequenceCoroutine);
 
@@ -66,44 +92,25 @@ public class PlayerDeath : MonoBehaviour
     {
         Debug.Log("[PlayerDeath] Death sequence started");
 
-        // Step 1: CRITICAL - Disable SamplePlayerAnimationController FIRST
-        // This prevents "CharacterController.Move called on inactive controller" error
-        if (playerController != null)
-        {
-            playerController.enabled = false;
-            Debug.Log("[PlayerDeath] SamplePlayerAnimationController disabled");
-        }
-
-        // Step 2: Disable character controller (now safe - nothing calls Move())
-        if (characterController != null)
-            characterController.enabled = false;
-
-        // Step 3: Disable animator (stop walk/run animations)
-        if (animator != null)
-            animator.enabled = false;
-
-        // Step 4: Enable ragdoll physics
-        SetRagdollEnabled(true);
-
-        // Step 5: Optional slow-motion effect
+        // Optional slow-motion effect
         if (enableSlowMotion)
         {
             Time.timeScale = slowMotionScale;
-            Time.fixedDeltaTime = 0.02f * slowMotionScale; // Keep physics stable
+            Time.fixedDeltaTime = 0.02f * slowMotionScale;
 
             yield return new WaitForSecondsRealtime(slowMotionDuration);
 
-            // Restore normal time (for UI/reload)
+            // Restore normal time
             Time.timeScale = 1f;
             Time.fixedDeltaTime = 0.02f;
         }
 
-        // Step 6: Wait before reload
+        // Wait before reload
         float remainingDelay = reloadDelay - (enableSlowMotion ? slowMotionDuration : 0f);
         if (remainingDelay > 0f)
             yield return new WaitForSecondsRealtime(remainingDelay);
 
-        // Step 7: Reload scene
+        // Reload scene
         Debug.Log("[PlayerDeath] Reloading scene");
 
         if (SceneManager.Instance != null)
@@ -112,6 +119,36 @@ public class PlayerDeath : MonoBehaviour
             UnityEngine.SceneManagement.SceneManager.LoadScene(
                 UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex
             );
+    }
+
+    /// <summary>
+    /// Find torso rigidbody for force application.
+    /// Searches for Spine/Chest/Torso by name.
+    /// </summary>
+    private Rigidbody GetTorsoRigidbody()
+    {
+        if (ragdollRigidbodies == null || ragdollRigidbodies.Length == 0)
+        {
+            Debug.LogWarning("[PlayerDeath] No ragdoll rigidbodies assigned!");
+            return null;
+        }
+
+        // Search for torso by name
+        foreach (var rb in ragdollRigidbodies)
+        {
+            if (rb == null) continue;
+
+            string name = rb.name.ToLower();
+            if (name.Contains("spine") || name.Contains("chest") || name.Contains("torso"))
+            {
+                Debug.Log($"[PlayerDeath] Found torso: {rb.name}");
+                return rb;
+            }
+        }
+
+        // Fallback: use first rigidbody
+        Debug.LogWarning("[PlayerDeath] Torso not found by name, using first rigidbody");
+        return ragdollRigidbodies[0];
     }
 
     private void SetRagdollEnabled(bool enabled)
@@ -135,21 +172,13 @@ public class PlayerDeath : MonoBehaviour
     }
 
     /// <summary>
-    /// Manual death trigger for testing or traps.
-    /// </summary>
-    public void Die()
-    {
-        ExecuteDeath(2f);
-    }
-
-    /// <summary>
     /// Check if player is currently dead.
     /// </summary>
     public bool IsDead => isDead;
 
     private void OnDestroy()
     {
-        // Ensure time scale is reset if object destroyed during death
+        // Ensure time scale is reset
         Time.timeScale = 1f;
         Time.fixedDeltaTime = 0.02f;
     }

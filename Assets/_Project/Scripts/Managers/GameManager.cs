@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviour, IInitializable
     [Header("UI References")]
     [SerializeField] private GameObject pauseMenuUI;
 
+
+
     // Events for game state changes
     public event Action<GameState> OnGameStateChanged;
     public event Action OnPlayerDied; // NEW: Notify listeners about player death
@@ -31,6 +33,7 @@ public class GameManager : MonoBehaviour, IInitializable
 
     private InputReader inputReader;
     private PlayerDeath playerDeath;
+    private TaserEffectSpawner taserEffects;
 
     private void Awake()
     {
@@ -41,6 +44,9 @@ public class GameManager : MonoBehaviour, IInitializable
             return;
         }
         Instance = this;
+
+        playerDeath = FindFirstObjectByType<PlayerDeath>();
+        taserEffects = FindFirstObjectByType<TaserEffectSpawner>();
     }
 
     public void Initialize(DependencyInjector dependencyInjector)
@@ -73,37 +79,38 @@ public class GameManager : MonoBehaviour, IInitializable
     /// Called by EnemyCatchState when player is caught.
     /// Delegates to PlayerDeath for execution.
     /// </summary>
-    public void OnPlayerCaught()
+    public void OnPlayerCaught(Transform enemyTransform, Vector3 forceDirection, float forceMagnitude)
     {
-        if (currentState == GameState.Dead)
-            return; // Already dead
+        if (currentState == GameState.Dead) return;
 
-        Debug.Log("[GameManager] Player caught by enemy!");
-
-        // Transition to Dead state
         ChangeState(GameState.Dead);
 
-        // Disable player inputs immediately
         if (inputReader != null)
-        {
             inputReader.DisableInputs();
-            Debug.Log("[GameManager] Player inputs disabled");
+
+        // 1. Spawn vizuální efekty (delegováno na spawner)
+        if (taserEffects != null && playerDeath != null)
+        {
+            Vector3 enemyEye = enemyTransform.position + Vector3.up * 1.6f;
+            Vector3 playerChest = playerDeath.transform.position + Vector3.up * 1f;
+
+            taserEffects.SpawnTaserEffect(enemyEye, playerChest);
         }
 
-        // Execute death sequence via PlayerDeath
+        // 2. Execute death s force (delegováno na PlayerDeath)
         if (playerDeath != null)
         {
-            playerDeath.ExecuteDeath(deathSceneReloadDelay);
-        }
-        else
-        {
-            // Fallback: immediate reload if PlayerDeath missing
-            Debug.LogWarning("[GameManager] PlayerDeath not found, reloading scene immediately");
-            SceneManager.Instance?.ReloadCurrentScene();
+            playerDeath.ExecuteDeathWithForce(forceDirection, forceMagnitude, deathSceneReloadDelay);
         }
 
-        // Notify listeners
         OnPlayerDied?.Invoke();
+    }
+
+    // Zachovej starou signaturu pro zpětnou kompatibilitu (pokud ji používáš jinde)
+    public void OnPlayerCaught()
+    {
+        Vector3 defaultForce = Vector3.back; // fallback
+        OnPlayerCaught(null, defaultForce, 800f);
     }
 
     // === GAME STATE MANAGEMENT ===
