@@ -12,13 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ea9be6812008994f86a4a4d336e0ff2, type: 3}
   m_Name: ScreenGlitchFeature
   m_EditorClassIdentifier: Assembly-CSharp::ScreenGlitchFeature
-  m_Active: 0
-  settings:
-    intensity: 0.02
-    timeScale: 1
-    colorShift: 0.01
-    blockSize: 20
-    renderPassEvent: 600
+  m_Active: 1
+  settingsAsset: {fileID: 11400000, guid: 2e77080a9aeb3324c837eaa3a9f48524, type: 2}
+  useFallbackSettings: 0
+  fallbackIntensity: 0.02
   glitchShader: {fileID: 4800000, guid: 65bd675507477cd4a8bd2e83be28397c, type: 3}
 --- !u!114 &11400000
 MonoBehaviour:

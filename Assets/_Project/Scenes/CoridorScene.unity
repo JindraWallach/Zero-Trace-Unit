@@ -37693,6 +37693,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5976232876346402333, guid: cbde6f98b1791b541867b97d34472364, type: 3}
+      propertyPath: hackModeGlitchSettings
+      value: 
+      objectReference: {fileID: 11400000, guid: 2e77080a9aeb3324c837eaa3a9f48524, type: 2}
     - target: {fileID: 6223549208303972588, guid: cbde6f98b1791b541867b97d34472364, type: 3}
       propertyPath: slowMotionDuration
       value: 5
@@ -43359,6 +43363,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e98d0b7461155544384dd5e229e5a045, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GlitchController
+  glitchSettings: {fileID: 11400000, guid: 2e77080a9aeb3324c837eaa3a9f48524, type: 2}
   rendererData: {fileID: 11400000, guid: f288ae1f4751b564a96ac7587541f7a2, type: 2}
   deathGlitchDuration: 2
   deathGlitchCurve:
@@ -43385,9 +43390,10 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  maxDeathIntensity: 0.08
+  deathPreset: 5
   pulseDuration: 0.5
-  pulseIntensity: 0.05
+  pulseIntensityMultiplier: 2
+  transitionSpeed: 2
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

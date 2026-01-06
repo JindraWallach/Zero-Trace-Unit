@@ -1,32 +1,31 @@
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.RenderGraphModule;
-using UnityEngine.Rendering.RenderGraphModule.Util;
 using UnityEngine.Rendering.Universal;
 
 /// <summary>
-/// Modern URP Render Feature for screen glitch effect.
-/// Compatible with Unity 6 / URP 17+ using RenderGraph API.
+/// Optimized URP Render Feature for screen glitch effect.
+/// Uses ScriptableObject for settings and frame skipping for performance.
 /// </summary>
 public class ScreenGlitchFeature : ScriptableRendererFeature
 {
-    [System.Serializable]
-    public class Settings
-    {
-        [Range(0f, 0.1f)] public float intensity = 0.02f;
-        [Range(0f, 10f)] public float timeScale = 1f;
-        [Range(0f, 0.05f)] public float colorShift = 0.01f;
-        [Range(1f, 100f)] public float blockSize = 20f;
-        public RenderPassEvent renderPassEvent = RenderPassEvent.AfterRenderingPostProcessing;
-    }
+    [Header("Settings")]
+    [SerializeField] private GlitchEffectSettings settingsAsset;
 
-    [SerializeField] private Settings settings = new Settings();
+    [Header("Fallback (if no SO assigned)")]
+    [SerializeField] private bool useFallbackSettings = true;
+    [SerializeField] private float fallbackIntensity = 0.02f;
+
+    [Header("Shader")]
     [SerializeField] private Shader glitchShader;
 
     private Material glitchMaterial;
     private GlitchRenderPass glitchPass;
 
-    public Settings GetSettings() => settings;
+    // Cache for performance
+    private int frameCounter = 0;
+
+    public GlitchEffectSettings SettingsAsset => settingsAsset;
 
     public override void Create()
     {
@@ -37,22 +36,51 @@ public class ScreenGlitchFeature : ScriptableRendererFeature
         }
 
         glitchMaterial = CoreUtils.CreateEngineMaterial(glitchShader);
-        glitchPass = new GlitchRenderPass(glitchMaterial, settings);
-        glitchPass.renderPassEvent = settings.renderPassEvent;
+
+        if (glitchMaterial == null)
+        {
+            Debug.LogError("[ScreenGlitchFeature] Failed to create material!");
+            return;
+        }
+
+        glitchPass = new GlitchRenderPass(glitchMaterial);
+        glitchPass.renderPassEvent = RenderPassEvent.AfterRenderingPostProcessing;
+
+      //  Debug.Log("[ScreenGlitchFeature] Created successfully");
     }
 
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {
         if (glitchMaterial == null)
-        {
-            Debug.LogWarning("[ScreenGlitchFeature] Material not created!");
             return;
-        }
 
-        // Skip for scene view if desired
+        // Skip for scene view
         if (renderingData.cameraData.isSceneViewCamera)
             return;
 
+        // Get settings (SO or fallback)
+        GlitchEffectSettings settings = settingsAsset;
+
+        if (settings == null)
+        {
+            if (!useFallbackSettings)
+                return;
+
+            // Use fallback values
+            settings = ScriptableObject.CreateInstance<GlitchEffectSettings>();
+            settings.intensity = fallbackIntensity;
+        }
+
+        // Skip if disabled
+        if (!settings.enabled || settings.intensity < 0.001f)
+            return;
+
+        // Frame skipping for performance
+        frameCounter++;
+        if (frameCounter % settings.updateFrequency != 0)
+            return;
+
+        glitchPass.Setup(settings);
         glitchPass.ConfigureInput(ScriptableRenderPassInput.Color);
         renderer.EnqueuePass(glitchPass);
     }
@@ -63,22 +91,39 @@ public class ScreenGlitchFeature : ScriptableRendererFeature
         CoreUtils.Destroy(glitchMaterial);
     }
 
-    // === RENDER PASS ===
+    // === RENDER PASS (OPTIMIZED) ===
     private class GlitchRenderPass : ScriptableRenderPass
     {
         private Material material;
-        private Settings settings;
+        private GlitchEffectSettings currentSettings;
 
+        // Cached property IDs (faster than string lookups)
         private static readonly int intensityID = Shader.PropertyToID("_Intensity");
         private static readonly int timeScaleID = Shader.PropertyToID("_TimeScale");
         private static readonly int colorShiftID = Shader.PropertyToID("_ColorShift");
         private static readonly int blockSizeID = Shader.PropertyToID("_BlockSize");
+        private static readonly int scanlineIntensityID = Shader.PropertyToID("_ScanlineIntensity");
+        private static readonly int inversionIntensityID = Shader.PropertyToID("_InversionIntensity");
+        private static readonly int verticalShiftID = Shader.PropertyToID("_VerticalShift");
+        private static readonly int noiseFrequencyID = Shader.PropertyToID("_NoiseFrequency");
+        private static readonly int blitTextureID = Shader.PropertyToID("_BlitTexture");
 
-        public GlitchRenderPass(Material mat, Settings settings)
+        private class PassData
+        {
+            internal Material material;
+            internal TextureHandle source;
+            internal GlitchEffectSettings settings;
+        }
+
+        public GlitchRenderPass(Material mat)
         {
             this.material = mat;
-            this.settings = settings;
             profilingSampler = new ProfilingSampler("ScreenGlitch");
+        }
+
+        public void Setup(GlitchEffectSettings settings)
+        {
+            currentSettings = settings;
         }
 
         public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
@@ -86,22 +131,24 @@ public class ScreenGlitchFeature : ScriptableRendererFeature
             UniversalResourceData resourceData = frameData.Get<UniversalResourceData>();
             UniversalCameraData cameraData = frameData.Get<UniversalCameraData>();
 
-            // Check if source texture is valid (FIXED: removed .rt check)
-            if (material == null || !resourceData.activeColorTexture.IsValid())
+            if (material == null || currentSettings == null)
                 return;
 
-            // Setup material properties
-            material.SetFloat(intensityID, settings.intensity);
-            material.SetFloat(timeScaleID, settings.timeScale);
-            material.SetFloat(colorShiftID, settings.colorShift);
-            material.SetFloat(blockSizeID, settings.blockSize);
+            if (!resourceData.activeColorTexture.IsValid())
+                return;
 
-            // Create temporary texture descriptor
+            // Early exit if intensity is zero (skip entire pass)
+            if (currentSettings.intensity < 0.001f)
+                return;
+
+            // Get source
+            TextureHandle source = resourceData.activeColorTexture;
+
+            // Create temp texture (reuse descriptor for efficiency)
             RenderTextureDescriptor descriptor = cameraData.cameraTargetDescriptor;
             descriptor.depthBufferBits = 0;
             descriptor.msaaSamples = 1;
 
-            TextureHandle source = resourceData.activeColorTexture;
             TextureHandle destination = UniversalRenderer.CreateRenderGraphTexture(
                 renderGraph,
                 descriptor,
@@ -109,30 +156,56 @@ public class ScreenGlitchFeature : ScriptableRendererFeature
                 false
             );
 
-            // Add blit pass with material
-            RenderGraphUtils.BlitMaterialParameters blitParams = new RenderGraphUtils.BlitMaterialParameters(
-                source,
-                destination,
-                material,
-                0
-            );
+            // === MAIN GLITCH PASS ===
+            using (var builder = renderGraph.AddRasterRenderPass<PassData>("ScreenGlitchPass", out var passData, profilingSampler))
+            {
+                passData.material = material;
+                passData.source = source;
+                passData.settings = currentSettings;
 
-            renderGraph.AddBlitPass(blitParams, passName: "ScreenGlitchBlit");
+                builder.UseTexture(source, AccessFlags.Read);
+                builder.SetRenderAttachment(destination, 0, AccessFlags.Write);
 
-            // Copy result back to camera target
-            RenderGraphUtils.BlitMaterialParameters copyParams = new RenderGraphUtils.BlitMaterialParameters(
-                destination,
-                source,
-                null,
-                0
-            );
+                builder.SetRenderFunc((PassData data, RasterGraphContext context) =>
+                {
+                    if (data.material == null || data.settings == null)
+                        return;
 
-            renderGraph.AddBlitPass(copyParams, passName: "ScreenGlitchCopy");
+                    // Batch property updates (fewer state changes)
+                    data.material.SetFloat(intensityID, data.settings.intensity);
+                    data.material.SetFloat(timeScaleID, data.settings.timeScale);
+                    data.material.SetFloat(colorShiftID, data.settings.colorShift);
+                    data.material.SetFloat(blockSizeID, data.settings.blockSize);
+                    data.material.SetFloat(scanlineIntensityID, data.settings.scanlineIntensity);
+                    data.material.SetFloat(inversionIntensityID, data.settings.inversionIntensity);
+                    data.material.SetFloat(verticalShiftID, data.settings.verticalShift);
+                    data.material.SetFloat(noiseFrequencyID, data.settings.noiseFrequency);
+                    data.material.SetTexture(blitTextureID, data.source);
+
+                    // Single blit call
+                    Blitter.BlitTexture(context.cmd, data.source, new Vector4(1, 1, 0, 0), data.material, 0);
+                });
+            }
+
+            // === COPY BACK (optimized) ===
+            using (var builder = renderGraph.AddRasterRenderPass<PassData>("ScreenGlitchCopy", out var passData, profilingSampler))
+            {
+                passData.source = destination;
+
+                builder.UseTexture(destination, AccessFlags.Read);
+                builder.SetRenderAttachment(source, 0, AccessFlags.Write);
+
+                builder.SetRenderFunc((PassData data, RasterGraphContext context) =>
+                {
+                    // Fast copy without material
+                    Blitter.BlitTexture(context.cmd, data.source, new Vector4(1, 1, 0, 0), 0, false);
+                });
+            }
         }
 
         public void Dispose()
         {
-            // RTHandle cleanup no longer needed with RenderGraph
+            // Cleanup handled by RenderGraph
         }
     }
 }

@@ -118,6 +118,13 @@ MonoBehaviour:
     isAsset: 1
     _typeString: LockTimingPuzzleConfig, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+  - _obj: {fileID: 11400000, guid: 2e77080a9aeb3324c837eaa3a9f48524, type: 2}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-3-2e77080a9aeb3324c837eaa3a9f48524-11400000-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: GlitchEffectSettings, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
   - _obj: {fileID: 9100000, guid: 3dcbb7ff605184746be82d748741383f, type: 2}
     globalId:
       globalObjectIdString: GlobalObjectId_V1-3-3dcbb7ff605184746be82d748741383f-9100000-0
