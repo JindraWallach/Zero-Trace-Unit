@@ -132,3 +132,10 @@ MonoBehaviour:
     isAsset: 1
     _typeString: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  - _obj: {fileID: 11400000, guid: f288ae1f4751b564a96ac7587541f7a2, type: 2}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-3-f288ae1f4751b564a96ac7587541f7a2-11400000-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: UnityEngine.Rendering.Universal.UniversalRendererData, Unity.RenderPipelines.Universal.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
