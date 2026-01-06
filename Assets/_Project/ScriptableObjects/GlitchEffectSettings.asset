@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: accc68c374592114da82f7c1c1099d20, type: 3}
   m_Name: GlitchEffectSettings
   m_EditorClassIdentifier: Assembly-CSharp::GlitchEffectSettings
-  intensity: 0.08
-  timeScale: 3
-  colorShift: 0.02
+  intensity: 0.01
+  timeScale: 0.5
+  colorShift: 0.003
   blockSize: 0
-  scanlineIntensity: 0.8
-  inversionIntensity: 0.6
-  verticalShift: 0.05
-  noiseFrequency: 2
+  scanlineIntensity: 0.3
+  inversionIntensity: 0.1
+  verticalShift: 0
+  noiseFrequency: 1
   enabled: 0
   updateFrequency: 1
-  currentPreset: 6
+  currentPreset: 4

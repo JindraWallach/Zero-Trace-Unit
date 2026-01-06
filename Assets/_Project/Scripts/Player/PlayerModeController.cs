@@ -6,7 +6,8 @@ public enum PlayerMode { Normal, Hack }
 
 /// <summary>
 /// Controls player mode switching (Normal/Hack).
-/// Automatically applies glitch effect when entering Hack mode.
+/// SRP: Single responsibility - mode management only.
+/// Delegates glitch effect to GlitchController.
 /// </summary>
 public class PlayerModeController : MonoBehaviour, IInitializable
 {
@@ -14,20 +15,12 @@ public class PlayerModeController : MonoBehaviour, IInitializable
 
     [Header("Settings")]
     [SerializeField] private PlayerMode startMode = PlayerMode.Normal;
-    [SerializeField] private GlitchController glitchController;
-    [Header("Glitch Integration")]
-    [SerializeField] private GlitchEffectSettings hackModeGlitchSettings;
-
-    [SerializeField] private float glitchTransitionDuration = 0.5f;
-    [Tooltip("Apply None preset when in Normal mode")]
-    [SerializeField] private bool disableGlitchInNormalMode = true;
 
     public event Action<PlayerMode> OnModeChanged;
     public PlayerMode CurrentMode { get; private set; }
 
     private InputReader inputReader;
     private ToolController toolController;
-    
 
     private void Awake()
     {
@@ -44,11 +37,8 @@ public class PlayerModeController : MonoBehaviour, IInitializable
 
     private void Start()
     {
-        // Find GlitchController in scene
-        glitchController = GetComponent<GlitchController>();
-
-        // Apply initial glitch state based on start mode
-        ApplyModeGlitchEffect(CurrentMode, immediate: true);
+        // Apply initial glitch state
+        ApplyGlitchForMode(CurrentMode);
     }
 
     public void Initialize(DependencyInjector di)
@@ -90,8 +80,8 @@ public class PlayerModeController : MonoBehaviour, IInitializable
             toolController?.StopScan();
         }
 
-        // Apply glitch effect for mode
-        ApplyModeGlitchEffect(mode, immediate: false);
+        // Apply glitch effect
+        ApplyGlitchForMode(mode);
 
         OnModeChanged?.Invoke(mode);
         Debug.Log($"[PlayerModeController] Mode: {mode}");
@@ -99,162 +89,28 @@ public class PlayerModeController : MonoBehaviour, IInitializable
 
     /// <summary>
     /// Apply glitch effect based on current mode.
+    /// Normal Mode = Glitch disabled (SO stays with its values, just enabled = false)
+    /// Hack Mode = Glitch enabled (SO values are used)
     /// </summary>
-    private void ApplyModeGlitchEffect(PlayerMode mode, bool immediate)
+    private void ApplyGlitchForMode(PlayerMode mode)
     {
-        if (glitchController == null || hackModeGlitchSettings == null)
+        if (GlitchController.Instance == null)
+        {
+            Debug.LogWarning("[PlayerModeController] GlitchController not found in scene!");
             return;
+        }
 
         switch (mode)
         {
-            case PlayerMode.Hack:
-                // Apply hack mode glitch settings
-                if (immediate)
-                {
-                    CopySettingsToGlitchController(hackModeGlitchSettings);
-                }
-                else
-                {
-                    // Smooth transition to hack mode glitch
-                    StartCoroutine(TransitionToHackGlitch());
-                }
-                break;
-
             case PlayerMode.Normal:
-                // Disable or reset glitch
-                if (disableGlitchInNormalMode)
-                {
-                    if (immediate)
-                    {
-                        glitchController.SetEnabled(false);
-                    }
-                    else
-                    {
-                        glitchController.TransitionToPreset(
-                            GlitchEffectSettings.GlitchPreset.None,
-                            glitchTransitionDuration
-                        );
-                    }
-                }
+                // Just disable, keep SO values intact
+                GlitchController.Instance.DisableGlitch();
+                break;
+
+            case PlayerMode.Hack:
+                // Enable glitch (uses whatever is in SO)
+                GlitchController.Instance.EnableGlitch();
                 break;
         }
-    }
-
-    /// <summary>
-    /// Smooth transition to hack mode glitch effect.
-    /// </summary>
-    private System.Collections.IEnumerator TransitionToHackGlitch()
-    {
-        if (glitchController == null || hackModeGlitchSettings == null)
-            yield break;
-
-        // Get current settings reference
-        var currentSettings = glitchController.GetComponent<ScreenGlitchFeature>()?.SettingsAsset;
-        if (currentSettings == null)
-        {
-            // Fallback: instant apply
-            CopySettingsToGlitchController(hackModeGlitchSettings);
-            yield break;
-        }
-
-        // Store start values
-        float startIntensity = currentSettings.intensity;
-        float startTimeScale = currentSettings.timeScale;
-        float startColorShift = currentSettings.colorShift;
-        float startBlockSize = currentSettings.blockSize;
-
-        float elapsed = 0f;
-
-        // Enable if disabled
-        currentSettings.enabled = true;
-
-        while (elapsed < glitchTransitionDuration)
-        {
-            elapsed += Time.deltaTime;
-            float t = elapsed / glitchTransitionDuration;
-            float smoothT = Mathf.SmoothStep(0f, 1f, t);
-
-            // Interpolate values
-            currentSettings.intensity = Mathf.Lerp(startIntensity, hackModeGlitchSettings.intensity, smoothT);
-            currentSettings.timeScale = Mathf.Lerp(startTimeScale, hackModeGlitchSettings.timeScale, smoothT);
-            currentSettings.colorShift = Mathf.Lerp(startColorShift, hackModeGlitchSettings.colorShift, smoothT);
-            currentSettings.blockSize = Mathf.Lerp(startBlockSize, hackModeGlitchSettings.blockSize, smoothT);
-
-            yield return null;
-        }
-
-        // Final copy of all settings
-        CopySettingsToGlitchController(hackModeGlitchSettings);
-    }
-
-    /// <summary>
-    /// Copy settings from source SO to glitch controller's settings.
-    /// </summary>
-    private void CopySettingsToGlitchController(GlitchEffectSettings source)
-    {
-        if (glitchController == null || source == null)
-            return;
-
-        var feature = FindFirstObjectByType<ScreenGlitchFeature>();
-        if (feature == null)
-        {
-            Debug.LogWarning("[PlayerModeController] ScreenGlitchFeature not found!");
-            return;
-        }
-
-        var targetSettings = feature.SettingsAsset;
-        if (targetSettings == null)
-        {
-            Debug.LogWarning("[PlayerModeController] Target glitch settings not assigned!");
-            return;
-        }
-
-        // Copy all values
-        targetSettings.intensity = source.intensity;
-        targetSettings.timeScale = source.timeScale;
-        targetSettings.colorShift = source.colorShift;
-        targetSettings.blockSize = source.blockSize;
-        targetSettings.scanlineIntensity = source.scanlineIntensity;
-        targetSettings.inversionIntensity = source.inversionIntensity;
-        targetSettings.verticalShift = source.verticalShift;
-        targetSettings.noiseFrequency = source.noiseFrequency;
-        targetSettings.enabled = source.enabled;
-        targetSettings.updateFrequency = source.updateFrequency;
-
-#if UNITY_EDITOR
-        UnityEditor.EditorUtility.SetDirty(targetSettings);
-#endif
-    }
-
-    /// <summary>
-    /// Manually trigger glitch pulse (e.g., on successful hack).
-    /// </summary>
-    public void TriggerGlitchPulse()
-    {
-        if (glitchController != null)
-            glitchController.TriggerPulseGlitch();
-    }
-
-    // === EDITOR TESTING ===
-
-    [ContextMenu("Test Switch to Hack Mode")]
-    private void TestHackMode()
-    {
-        if (!Application.isPlaying) return;
-        SetMode(PlayerMode.Hack);
-    }
-
-    [ContextMenu("Test Switch to Normal Mode")]
-    private void TestNormalMode()
-    {
-        if (!Application.isPlaying) return;
-        SetMode(PlayerMode.Normal);
-    }
-
-    [ContextMenu("Test Glitch Pulse")]
-    private void TestGlitchPulse()
-    {
-        if (!Application.isPlaying) return;
-        TriggerGlitchPulse();
     }
 }

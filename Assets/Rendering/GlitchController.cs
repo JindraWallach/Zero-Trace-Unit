@@ -6,9 +6,12 @@ using UnityEngine.Rendering.Universal;
 /// <summary>
 /// Optimized runtime controller for screen glitch effect.
 /// Uses ScriptableObject for settings and supports preset transitions.
+/// SRP: Single responsibility - manages glitch effect state and animations only.
 /// </summary>
 public class GlitchController : MonoBehaviour
 {
+    public static GlitchController Instance { get; private set; }
+
     [Header("Settings")]
     [SerializeField] private GlitchEffectSettings glitchSettings;
 
@@ -24,6 +27,9 @@ public class GlitchController : MonoBehaviour
     [SerializeField] private float pulseDuration = 0.5f;
     [SerializeField] private float pulseIntensityMultiplier = 2f;
 
+    [Header("Transition Config")]
+    [SerializeField] private float transitionSpeed = 2f;
+
     private ScreenGlitchFeature glitchFeature;
     private Coroutine activeGlitchCoroutine;
     private Coroutine activeTransitionCoroutine;
@@ -32,6 +38,16 @@ public class GlitchController : MonoBehaviour
     private float baseIntensity;
     private float baseTimeScale;
     private bool isInitialized;
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
 
     private void Start()
     {
@@ -48,6 +64,15 @@ public class GlitchController : MonoBehaviour
     private void OnDestroy()
     {
         UnsubscribeFromEvents();
+
+        if (Instance == this)
+            Instance = null;
+    }
+
+    private void OnApplicationQuit()
+    {
+        if (glitchSettings != null)
+            glitchSettings.enabled = false;
     }
 
     // === SETUP ===
@@ -130,7 +155,60 @@ public class GlitchController : MonoBehaviour
         }
     }
 
-    // === PUBLIC API ===
+    // === PUBLIC API (Simple Enable/Disable) ===
+
+    /// <summary>
+    /// Enable glitch effect (sets enabled flag in SO).
+    /// </summary>
+    public void EnableGlitch()
+    {
+        if (glitchSettings == null)
+        {
+            Debug.LogWarning("[GlitchController] Glitch settings not assigned!");
+            return;
+        }
+
+        glitchSettings.enabled = true;
+        Debug.Log("[GlitchController] Glitch enabled");
+    }
+
+    /// <summary>
+    /// Disable glitch effect (sets enabled flag in SO).
+    /// </summary>
+    public void DisableGlitch()
+    {
+        if (glitchSettings == null)
+        {
+            Debug.LogWarning("[GlitchController] Glitch settings not assigned!");
+            return;
+        }
+
+        glitchSettings.enabled = false;
+        Debug.Log("[GlitchController] Glitch disabled");
+    }
+
+    /// <summary>
+    /// Toggle glitch effect on/off.
+    /// </summary>
+    public void ToggleGlitch()
+    {
+        if (glitchSettings == null) return;
+
+        if (glitchSettings.enabled)
+            DisableGlitch();
+        else
+            EnableGlitch();
+    }
+
+    /// <summary>
+    /// Check if glitch is currently enabled.
+    /// </summary>
+    public bool IsGlitchEnabled()
+    {
+        return glitchSettings != null && glitchSettings.enabled;
+    }
+
+    // === DEATH SEQUENCE ===
 
     /// <summary>
     /// Trigger death glitch sequence with preset.
@@ -149,6 +227,8 @@ public class GlitchController : MonoBehaviour
         activeGlitchCoroutine = StartCoroutine(DeathGlitchCoroutine());
     }
 
+    // === PULSE EFFECT ===
+
     /// <summary>
     /// Trigger short pulse glitch (intensity spike).
     /// </summary>
@@ -160,8 +240,14 @@ public class GlitchController : MonoBehaviour
             return;
         }
 
+        // Don't pulse if disabled
+        if (!glitchSettings.enabled)
+            return;
+
         StartCoroutine(PulseGlitchCoroutine());
     }
+
+    // === PRESET TRANSITIONS ===
 
     /// <summary>
     /// Smoothly transition to a preset over time.
@@ -176,6 +262,8 @@ public class GlitchController : MonoBehaviour
         activeTransitionCoroutine = StartCoroutine(TransitionToPresetCoroutine(preset, duration));
     }
 
+    // === DIRECT SETTERS (For runtime tweaking) ===
+
     /// <summary>
     /// Set intensity directly (0-1 range).
     /// </summary>
@@ -186,7 +274,7 @@ public class GlitchController : MonoBehaviour
     }
 
     /// <summary>
-    /// Enable/disable effect entirely.
+    /// Set enabled state directly.
     /// </summary>
     public void SetEnabled(bool enabled)
     {
@@ -222,8 +310,10 @@ public class GlitchController : MonoBehaviour
 
         // Store start values
         float startIntensity = glitchSettings.intensity;
+        bool wasEnabled = glitchSettings.enabled;
 
-        // Apply death preset immediately
+        // Enable and apply death preset
+        glitchSettings.enabled = true;
         glitchSettings.ApplyPreset(deathPreset);
 
         while (elapsed < deathGlitchDuration)
@@ -240,6 +330,8 @@ public class GlitchController : MonoBehaviour
 
         // Reset to base
         ResetToBase();
+        glitchSettings.enabled = wasEnabled; // Restore original state
+
         activeGlitchCoroutine = null;
     }
 
@@ -300,53 +392,5 @@ public class GlitchController : MonoBehaviour
         // Cleanup
         DestroyImmediate(tempSettings);
         activeTransitionCoroutine = null;
-    }
-
-    // === EDITOR TESTING ===
-
-    [ContextMenu("Test Death Glitch")]
-    private void TestDeathGlitch()
-    {
-        if (!Application.isPlaying)
-        {
-            Debug.LogWarning("Must be in Play Mode to test glitch!");
-            return;
-        }
-        TriggerDeathGlitch();
-    }
-
-    [ContextMenu("Test Pulse Glitch")]
-    private void TestPulseGlitch()
-    {
-        if (!Application.isPlaying) return;
-        TriggerPulseGlitch();
-    }
-
-    [ContextMenu("Transition to Extreme")]
-    private void TestExtremeTransition()
-    {
-        if (!Application.isPlaying) return;
-        TransitionToPreset(GlitchEffectSettings.GlitchPreset.Extreme, 2f);
-    }
-
-    [ContextMenu("Reset to Base")]
-    private void TestResetGlitch()
-    {
-        if (!Application.isPlaying) return;
-        ResetToBase();
-    }
-
-    [ContextMenu("Freeze Glitch")]
-    private void TestFreezeGlitch()
-    {
-        if (!Application.isPlaying) return;
-        FreezeGlitch(true);
-    }
-
-    [ContextMenu("Unfreeze Glitch")]
-    private void TestUnfreezeGlitch()
-    {
-        if (!Application.isPlaying) return;
-        FreezeGlitch(false);
     }
 }
