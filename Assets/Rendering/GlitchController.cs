@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -39,6 +39,11 @@ public class GlitchController : MonoBehaviour
     private float baseTimeScale;
     private bool isInitialized;
 
+    // State restoration - uložení presetu před smrtí
+    private static GlitchEffectSettings.GlitchPreset presetBeforeDeath = GlitchEffectSettings.GlitchPreset.Subtle;
+    private static bool wasEnabledBeforeDeath = true;
+    private static bool hasStateBeforeDeath = false;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -57,6 +62,7 @@ public class GlitchController : MonoBehaviour
         if (glitchSettings != null)
         {
             CacheBaseValues();
+            RestoreStateIfNeeded(); // Obnovení presetu po reloadu scény
             isInitialized = true;
         }
     }
@@ -73,6 +79,9 @@ public class GlitchController : MonoBehaviour
     {
         if (glitchSettings != null)
             glitchSettings.enabled = false;
+
+        // Clear saved state on quit
+        hasStateBeforeDeath = false;
     }
 
     // === SETUP ===
@@ -133,6 +142,38 @@ public class GlitchController : MonoBehaviour
             GameManager.Instance.OnPlayerDied -= TriggerDeathGlitch;
             GameManager.Instance.OnGameStateChanged -= OnGameStateChanged;
         }
+    }
+
+    // === STATE RESTORATION ===
+
+    /// <summary>
+    /// Uloží aktuální preset před smrtí
+    /// </summary>
+    private void SavePresetBeforeDeath()
+    {
+        if (glitchSettings == null) return;
+
+        presetBeforeDeath = glitchSettings.CurrentPreset;
+        wasEnabledBeforeDeath = glitchSettings.enabled;
+        hasStateBeforeDeath = true;
+
+        Debug.Log($"[GlitchController] Saved preset before death: {presetBeforeDeath}, enabled={wasEnabledBeforeDeath}");
+    }
+
+    /// <summary>
+    /// Obnoví preset z doby před smrtí (volá se při Start po reloadu scény)
+    /// </summary>
+    private void RestoreStateIfNeeded()
+    {
+        if (!hasStateBeforeDeath || glitchSettings == null) return;
+
+        glitchSettings.ApplyPreset(presetBeforeDeath);
+        glitchSettings.enabled = wasEnabledBeforeDeath;
+
+        Debug.Log($"[GlitchController] Restored preset after death: {presetBeforeDeath}, enabled={wasEnabledBeforeDeath}");
+
+        // Clear the saved state
+        hasStateBeforeDeath = false;
     }
 
     // === EVENT HANDLERS ===
@@ -221,6 +262,9 @@ public class GlitchController : MonoBehaviour
             return;
         }
 
+        // ULOŽIT PRESET PŘED SMRTÍ
+        SavePresetBeforeDeath();
+
         if (activeGlitchCoroutine != null)
             StopCoroutine(activeGlitchCoroutine);
 
@@ -307,14 +351,11 @@ public class GlitchController : MonoBehaviour
     private IEnumerator DeathGlitchCoroutine()
     {
         float elapsed = 0f;
-
-        // Store start values
         float startIntensity = glitchSettings.intensity;
-        bool wasEnabled = glitchSettings.enabled;
 
-        // Enable and apply death preset
+        // Enable glitch a nastav Death preset (CurrentPreset se změní v ApplyPreset)
         glitchSettings.enabled = true;
-        glitchSettings.ApplyPreset(deathPreset);
+        glitchSettings.ApplyPreset(deathPreset); // CurrentPreset = Death
 
         while (elapsed < deathGlitchDuration)
         {
@@ -328,9 +369,10 @@ public class GlitchController : MonoBehaviour
             yield return null;
         }
 
-        // Reset to base
-        ResetToBase();
-        glitchSettings.enabled = wasEnabled; // Restore original state
+        // NERESTORUJEME HNED - preset se obnoví až po reloadu scény v Start()
+        // Tady jen přepneme CurrentPreset na Medium pro death screen
+        glitchSettings.ApplyPreset(GlitchEffectSettings.GlitchPreset.Medium); // CurrentPreset = Medium
+        glitchSettings.enabled = true;
 
         activeGlitchCoroutine = null;
     }
