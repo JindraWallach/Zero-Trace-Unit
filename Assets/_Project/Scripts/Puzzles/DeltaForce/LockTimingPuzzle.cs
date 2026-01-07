@@ -10,6 +10,7 @@ using UnityEngine.UI;
 /// Supports multiple columns (only the active column rotates / accepts input).
 /// Symbols scroll infinitely in a circular buffer with wraparound.
 /// Uses a single shared center zone marker for all columns.
+/// Each column has its own feedback border that turns green when completed.
 /// </summary>
 public class LockTimingPuzzle : PuzzleBase
 {
@@ -29,7 +30,7 @@ public class LockTimingPuzzle : PuzzleBase
     [SerializeField] private TMP_Text progressText;
 
     [Header("Visual Feedback")]
-    [SerializeField] private Image feedbackImage;
+    [SerializeField] private Image feedbackImage; // Global feedback (optional)
     [SerializeField] private float feedbackDuration = 0.3f;
 
     private List<char> correctSequence = new();
@@ -40,11 +41,15 @@ public class LockTimingPuzzle : PuzzleBase
     [System.Serializable]
     public class LockColumn
     {
+        [Tooltip("The container/parent for symbols in this column")]
         public RectTransform symbolColumn;
 
-        [NonSerialized] public List<SymbolItem> symbolItems;
-    }
+        [Tooltip("Border image that will turn green when column is completed")]
+        public Image feedbackBorder;
 
+        [NonSerialized] public List<SymbolItem> symbolItems;
+        [NonSerialized] public bool isCompleted = false;
+    }
 
     // symbol item (runtime only)
     public class SymbolItem
@@ -78,6 +83,13 @@ public class LockTimingPuzzle : PuzzleBase
         for (int i = 0; i < columns.Count; i++)
         {
             CreateSymbolColumnForIndex(i);
+
+            // Reset feedback borders to neutral color
+            if (columns[i].feedbackBorder != null)
+            {
+                columns[i].feedbackBorder.color = config.neutralColor;
+                columns[i].isCompleted = false;
+            }
         }
 
         // Ensure active index starts at 0
@@ -197,7 +209,6 @@ public class LockTimingPuzzle : PuzzleBase
         Debug.Log($"[LockTimingPuzzle] Spawned {column.symbolItems.Count} symbols in column {columnIndex}");
     }
 
-
     private void ClearSymbols()
     {
         foreach (var column in columns)
@@ -247,7 +258,6 @@ public class LockTimingPuzzle : PuzzleBase
                 continue;
             }
 
-
             float moveSpeed = config.rotationSpeed * config.symbolSpacing * Time.deltaTime;
             char currentTarget = correctSequence[Mathf.Clamp(currentTargetIndex, 0, correctSequence.Count - 1)];
 
@@ -263,7 +273,6 @@ public class LockTimingPuzzle : PuzzleBase
                 pos.y -= moveSpeed;
 
                 // Wraparound: if symbol goes below bottom, teleport to top
-                // Bottom threshold: -halfHeight, Top position: +halfHeight
                 if (pos.y < -halfHeight)
                 {
                     pos.y += viewportHeight;
@@ -382,6 +391,19 @@ public class LockTimingPuzzle : PuzzleBase
         Debug.Log($"[LockTimingPuzzle] ✓ Correct! Column {activeColumnIndex + 1} unlocked!");
 
         StopRotation();
+
+        // Mark column as completed and turn its border GREEN
+        if (activeColumnIndex < columns.Count)
+        {
+            var column = columns[activeColumnIndex];
+            column.isCompleted = true;
+
+            if (column.feedbackBorder != null)
+            {
+                column.feedbackBorder.color = config.targetColor; // Green
+            }
+        }
+
         ShowFeedback(config.targetColor);
 
         activeColumnIndex++;
