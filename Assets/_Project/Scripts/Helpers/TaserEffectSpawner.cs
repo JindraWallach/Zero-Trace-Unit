@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 /// <summary>
 /// Spawns taser visual effects (trail + electric impact).
@@ -23,8 +24,7 @@ public class TaserEffectSpawner : MonoBehaviour
         if (taserTrailPrefab != null)
         {
             GameObject trail = Instantiate(taserTrailPrefab, startPos, Quaternion.identity);
-            trail.transform.LookAt(endPos);
-            Destroy(trail, trailDuration);
+            StartCoroutine(AnimateTrail(trail, startPos, endPos));
         }
         else
         {
@@ -34,12 +34,27 @@ public class TaserEffectSpawner : MonoBehaviour
         // Impact FX na hráče
         if (electricImpactPrefab != null)
         {
-            GameObject impact = Instantiate(electricImpactPrefab, endPos, Quaternion.identity);
+            GameObject impact = Instantiate(electricImpactPrefab, endPos, Quaternion.identity, gameObject.transform);
             Destroy(impact, impactDuration);
         }
         else
         {
             Debug.LogWarning("[TaserEffectSpawner] Impact prefab not assigned!");
         }
+    }
+
+    private IEnumerator AnimateTrail(GameObject trail, Vector3 start, Vector3 end)
+    {
+        float elapsed = 0f;
+
+        while (elapsed < trailDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / trailDuration;
+            trail.transform.position = Vector3.Lerp(start, end, t);
+            yield return null;
+        }
+
+        Destroy(trail, 0.5f); // extra čas na dofadnutí trailu
     }
 }
