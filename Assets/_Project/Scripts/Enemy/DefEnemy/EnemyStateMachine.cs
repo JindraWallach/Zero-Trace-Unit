@@ -25,6 +25,9 @@ public class EnemyStateMachine : MonoBehaviour
     [SerializeField] private string currentStateName;
     [SerializeField] private float currentSuspicionDebug;
 
+    [Header("Taser Effect")]
+    public Transform TaserSpawnPoint;
+
     // Events
     public event Action<EnemyState> OnStateChanged;
     public event Action<Vector3> OnPlayerDetected;

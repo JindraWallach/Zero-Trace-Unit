@@ -42,7 +42,7 @@ public class EnemyCatchState : EnemyState
         if (GameManager.Instance != null)
         {
             GameManager.Instance.OnPlayerCaught(
-                machine.transform,
+                machine.TaserSpawnPoint,
                 forceDir,
                 machine.Config.catchForceMagnitude
             );

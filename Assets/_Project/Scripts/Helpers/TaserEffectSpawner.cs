@@ -35,7 +35,7 @@ public class TaserEffectSpawner : MonoBehaviour, IInitializable
     /// <summary>
     /// Spawn taser line from enemy to player chest + electric impact on chest.
     /// </summary>
-    public void SpawnTaserEffect(Vector3 enemyPosition, Vector3 initialPlayerChestPosition)
+    public void SpawnTaserEffect(Vector3 EnemyTaserPos, Vector3 initialPlayerChestPosition)
     {
         // Use chest bone if assigned, otherwise fallback to root with offset
         Transform lineTarget = playerChestBone != null ? playerChestBone : playerRootTransform;
@@ -48,11 +48,11 @@ public class TaserEffectSpawner : MonoBehaviour, IInitializable
             LineRenderer lineRenderer = lineObject.GetComponent<LineRenderer>();
             if (lineRenderer != null)
             {
-                lineRenderer.SetPosition(0, enemyPosition);
+                lineRenderer.SetPosition(0, EnemyTaserPos);
                 lineRenderer.SetPosition(1, initialPlayerChestPosition);
 
                 // Start fade-out WITH chest tracking
-                StartCoroutine(FadeOutLine(lineRenderer, enemyPosition, lineTarget, lineDuration));
+                StartCoroutine(FadeOutLine(lineRenderer, EnemyTaserPos, lineTarget, lineDuration));
             }
             else
             {

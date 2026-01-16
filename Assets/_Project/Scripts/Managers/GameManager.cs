@@ -91,11 +91,11 @@ public class GameManager : MonoBehaviour, IInitializable
         // 1. Spawn vizuální efekty HNED (taser trail/electric FX)
         if (taserEffects != null && playerDeath != null && enemyTransform != null)
         {
-            Vector3 enemyEye = enemyTransform.position + Vector3.up * 1.6f;
-            Vector3 playerChest = playerDeath.transform.position + Vector3.up * 1f;
+            Vector3 taserPoint = enemyTransform.position;
+            Vector3 playerChest = playerDeath.transform.position;
 
             // TaserEffectSpawner automaticky použije playerTransform z DI
-            taserEffects.SpawnTaserEffect(enemyEye, playerChest);
+            taserEffects.SpawnTaserEffect(taserPoint, playerChest);
         }
 
         // 2. Execute death s force
@@ -105,14 +105,6 @@ public class GameManager : MonoBehaviour, IInitializable
         }
 
         OnPlayerDied?.Invoke();
-    }
-
-
-    // Zachovej starou signaturu pro zpětnou kompatibilitu (pokud ji používáš jinde)
-    public void OnPlayerCaught()
-    {
-        Vector3 defaultForce = Vector3.back; // fallback
-        OnPlayerCaught(null, defaultForce, 800f);
     }
 
     // === GAME STATE MANAGEMENT ===

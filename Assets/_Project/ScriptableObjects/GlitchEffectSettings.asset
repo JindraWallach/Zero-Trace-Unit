@@ -22,4 +22,4 @@ MonoBehaviour:
   noiseFrequency: 1
   enabled: 0
   updateFrequency: 4
-  currentPreset: 5
+  currentPreset: 0
