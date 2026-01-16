@@ -5,56 +5,120 @@ using UnityEngine;
 /// Spawns taser visual effects (trail + electric impact).
 /// SRP: Only handles VFX instantiation, no game logic.
 /// </summary>
-public class TaserEffectSpawner : MonoBehaviour
+public class TaserEffectSpawner : MonoBehaviour, IInitializable
 {
     [Header("Effect Prefabs")]
-    [SerializeField] private GameObject taserTrailPrefab;
+    [SerializeField] private GameObject taserLinePrefab;
     [SerializeField] private GameObject electricImpactPrefab;
 
+    [Header("Parent Transforms")]
+    [SerializeField] private Transform electricEffectsParent; // Pro electric impact efekty
+    [SerializeField] private Transform playerChestBone; // Bone hráče pro sledování a electric FX spawn
+
     [Header("Timings")]
-    [SerializeField] private float trailDuration = 0.3f;
-    [SerializeField] private float impactDuration = 1f;
+    [SerializeField] private float lineDuration = 0.3f;
+    [SerializeField] private float electricImpactDuration = 1f;
+
+    private Transform playerRootTransform;
+
+    public void Initialize(DependencyInjector dependencyInjector)
+    {
+        playerRootTransform = dependencyInjector.PlayerPosition;
+
+        if (playerRootTransform == null)
+            Debug.LogWarning("[TaserEffectSpawner] Player root transform not assigned in DependencyInjector!");
+
+        if (playerChestBone == null)
+            Debug.LogWarning("[TaserEffectSpawner] Player chest bone not assigned! Will use root transform with offset.");
+    }
 
     /// <summary>
-    /// Spawn taser trail from enemy to player.
+    /// Spawn taser line from enemy to player chest + electric impact on chest.
     /// </summary>
-    public void SpawnTaserEffect(Vector3 startPos, Vector3 endPos)
+    public void SpawnTaserEffect(Vector3 enemyPosition, Vector3 initialPlayerChestPosition)
     {
-        // Trail
-        if (taserTrailPrefab != null)
+        // Use chest bone if assigned, otherwise fallback to root with offset
+        Transform lineTarget = playerChestBone != null ? playerChestBone : playerRootTransform;
+
+        // 1. TASER LINE (enemy → player chest, sleduje chest bone během ragdollu)
+        if (taserLinePrefab != null)
         {
-            GameObject trail = Instantiate(taserTrailPrefab, startPos, Quaternion.identity);
-            StartCoroutine(AnimateTrail(trail, startPos, endPos));
+            GameObject lineObject = Instantiate(taserLinePrefab, Vector3.zero, Quaternion.identity);
+
+            LineRenderer lineRenderer = lineObject.GetComponent<LineRenderer>();
+            if (lineRenderer != null)
+            {
+                lineRenderer.SetPosition(0, enemyPosition);
+                lineRenderer.SetPosition(1, initialPlayerChestPosition);
+
+                // Start fade-out WITH chest tracking
+                StartCoroutine(FadeOutLine(lineRenderer, enemyPosition, lineTarget, lineDuration));
+            }
+            else
+            {
+                Debug.LogError("[TaserEffectSpawner] Taser line prefab missing LineRenderer component!");
+                Destroy(lineObject);
+            }
         }
         else
         {
-            Debug.LogWarning("[TaserEffectSpawner] Trail prefab not assigned!");
+            Debug.LogWarning("[TaserEffectSpawner] Taser line prefab not assigned!");
         }
 
-        // Impact FX na hráče
+        // 2. ELECTRIC IMPACT FX (spawn na chest bone pozici)
         if (electricImpactPrefab != null)
         {
-            GameObject impact = Instantiate(electricImpactPrefab, endPos, Quaternion.identity, gameObject.transform);
-            Destroy(impact, impactDuration);
+            Vector3 impactPosition = playerChestBone != null ? playerChestBone.position : initialPlayerChestPosition;
+
+            GameObject impactObject = Instantiate(
+                electricImpactPrefab,
+                impactPosition,
+                Quaternion.identity,
+                electricEffectsParent
+            );
+
+            Destroy(impactObject, electricImpactDuration);
         }
         else
         {
-            Debug.LogWarning("[TaserEffectSpawner] Impact prefab not assigned!");
+            Debug.LogWarning("[TaserEffectSpawner] Electric impact prefab not assigned!");
         }
     }
 
-    private IEnumerator AnimateTrail(GameObject trail, Vector3 start, Vector3 end)
+    /// <summary>
+    /// Gradually fades out line while tracking player chest bone during ragdoll.
+    /// </summary>
+    private IEnumerator FadeOutLine(LineRenderer lineRenderer, Vector3 enemyPosition, Transform chestTarget, float duration)
     {
         float elapsed = 0f;
+        Material lineMaterial = lineRenderer.material;
+        Color startColor = lineMaterial.color;
 
-        while (elapsed < trailDuration)
+        // Fallback offset if using root transform instead of chest bone
+        Vector3 chestOffset = (chestTarget == playerRootTransform && playerChestBone == null) ? Vector3.up * 1f : Vector3.zero;
+
+        while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
-            float t = elapsed / trailDuration;
-            trail.transform.position = Vector3.Lerp(start, end, t);
+            float alpha = 1f - (elapsed / duration); // 1 → 0
+
+            // Update alpha (fade out)
+            Color newColor = startColor;
+            newColor.a = alpha;
+            lineMaterial.color = newColor;
+
+            // Update line positions - enemy stays fixed, chest is tracked
+            lineRenderer.SetPosition(0, enemyPosition); // Enemy position (fixed)
+
+            if (chestTarget != null)
+            {
+                lineRenderer.SetPosition(1, chestTarget.position + chestOffset); // Track chest bone
+            }
+
             yield return null;
         }
 
-        Destroy(trail, 0.5f); // extra čas na dofadnutí trailu
+        // Destroy after fade-out complete
+        Destroy(lineRenderer.gameObject);
     }
 }

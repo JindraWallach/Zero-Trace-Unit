@@ -94,10 +94,11 @@ public class GameManager : MonoBehaviour, IInitializable
             Vector3 enemyEye = enemyTransform.position + Vector3.up * 1.6f;
             Vector3 playerChest = playerDeath.transform.position + Vector3.up * 1f;
 
+            // TaserEffectSpawner automaticky použije playerTransform z DI
             taserEffects.SpawnTaserEffect(enemyEye, playerChest);
         }
 
-        // 2. Execute death s force (PlayerDeath dostane force, aplikuje ho hned po disable controlleru)
+        // 2. Execute death s force
         if (playerDeath != null)
         {
             playerDeath.ExecuteDeathWithForce(forceDirection, forceMagnitude, deathSceneReloadDelay);
@@ -105,6 +106,7 @@ public class GameManager : MonoBehaviour, IInitializable
 
         OnPlayerDied?.Invoke();
     }
+
 
     // Zachovej starou signaturu pro zpětnou kompatibilitu (pokud ji používáš jinde)
     public void OnPlayerCaught()

@@ -7749,10 +7749,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a60abfe39c661514a9d7ab433c5f9598, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TaserEffectSpawner
-  taserTrailPrefab: {fileID: 1160080498521440, guid: e7c2ed10ab727e1449ec3953bd16ceff, type: 3}
+  taserLinePrefab: {fileID: 1160080498521440, guid: e7c2ed10ab727e1449ec3953bd16ceff, type: 3}
   electricImpactPrefab: {fileID: 1997773235792374, guid: 0e81a7abfc8187146b86713624f5f3a3, type: 3}
-  trailDuration: 0.3
-  impactDuration: 1
+  electricEffectsParent: {fileID: 5577728048927099797}
+  playerChestBone: {fileID: 5577728048927099797}
+  lineDuration: 1
+  electricImpactDuration: 3
 --- !u!1 &530824080
 GameObject:
   m_ObjectHideFlags: 0
