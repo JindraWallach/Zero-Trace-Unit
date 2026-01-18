@@ -698,13 +698,15 @@ MonoBehaviour:
     done: 0
   - name: "Zlep\u0161en\xED z\xE1bavnosti hran\xED (ka\u017Ed\xFD dve\u0159e hack?)"
     done: 0
-  - name: mabe insta open door anim
-    done: 0
   - name: 
     done: 0
   - name: Stale potrebuji fix na multipoint vision u nejakych zdi
     done: 0
   - name: CELAD EATH SEQQUENCE NEED FIX
+    done: 0
+  - name: RESTART ONDEATH IS BUGGED, REF DEL, SERIALIZEDFIELD? PAUSEMENU NOT ASSIGNED?
+    done: 0
+  - name: add resume button on esc
     done: 0
 --- !u!4 &36559939
 Transform:

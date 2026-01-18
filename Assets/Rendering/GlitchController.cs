@@ -191,7 +191,7 @@ public class GlitchController : MonoBehaviour
             case GameState.Playing:
                 // Restore base settings
                 if (isInitialized)
-                    TransitionToPreset(GlitchEffectSettings.GlitchPreset.Subtle, 0.5f);
+                    TransitionToPreset(GlitchEffectSettings.GlitchPreset.Minimal, 0.5f);
                 break;
         }
     }
