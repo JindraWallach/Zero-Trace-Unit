@@ -1,0 +1,155 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7915df4cd4da490ab52fc8fa9ee9127, type: 3}
+  m_Name: vInspector Data
+  m_EditorClassIdentifier: VInspector::VInspector.VInspectorData
+  bookmarks:
+  - _obj: {fileID: 102900000, guid: 223db587197b08446b261af28a0744b6, type: 3}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-1-223db587197b08446b261af28a0744b6-102900000-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: UnityEditor.SceneAsset, UnityEditor.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - _obj: {fileID: 102900000, guid: 60bc4c0d7fa81944290d3eaf8d44a851, type: 3}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-1-60bc4c0d7fa81944290d3eaf8d44a851-102900000-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: UnityEditor.SceneAsset, UnityEditor.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - _obj: {fileID: 102900000, guid: 72ab2cf903e120b4bac1bc3c5d1ec58a, type: 3}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-1-72ab2cf903e120b4bac1bc3c5d1ec58a-102900000-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: UnityEditor.SceneAsset, UnityEditor.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - _obj: {fileID: 102900000, guid: f29ddd06f84fc8f429ee69fe1b33f9d8, type: 3}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-1-f29ddd06f84fc8f429ee69fe1b33f9d8-102900000-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: UnityEditor.SceneAsset, UnityEditor.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - _obj: {fileID: 102900000, guid: 9253f80fc2f07b2419779996f230ba6b, type: 3}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-1-9253f80fc2f07b2419779996f230ba6b-102900000-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: UnityEditor.SceneAsset, UnityEditor.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - _obj: {fileID: 102900000, guid: baa9a1c212b5aea4c813f0b84bcc7707, type: 3}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-1-baa9a1c212b5aea4c813f0b84bcc7707-102900000-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: UnityEditor.SceneAsset, UnityEditor.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - _obj: {fileID: 102900000, guid: 24ac7a82bb9dfdb43a785bae85ff6691, type: 3}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-1-24ac7a82bb9dfdb43a785bae85ff6691-102900000-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: UnityEditor.SceneAsset, UnityEditor.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - _obj: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-1-052faaac586de48259a63d0c4782560b-17502115434096073164-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: UnityEngine.InputSystem.InputActionAsset, Unity.InputSystem, Version=1.14.2.0,
+      Culture=neutral, PublicKeyToken=null
+  - _obj: {fileID: -944628639613478452, guid: a7f8d78e4def66b45b53cbfc404ab4b4, type: 3}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-1-a7f8d78e4def66b45b53cbfc404ab4b4-17502115434096073164-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: UnityEngine.InputSystem.InputActionAsset, Unity.InputSystem, Version=1.14.2.0,
+      Culture=neutral, PublicKeyToken=null
+  - _obj: {fileID: 11400000, guid: b854f7225edf3824d96735fe0283ff23, type: 2}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-3-b854f7225edf3824d96735fe0283ff23-11400000-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: EnemyConfig, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - _obj: {fileID: 11400000, guid: 34a3dca7a28f9994c9ff2b870b3f81a7, type: 2}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-3-34a3dca7a28f9994c9ff2b870b3f81a7-11400000-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: SecurityCameraConfig, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - _obj: {fileID: 11400000, guid: 24f1995214fa3b940bf46fa8046e9c33, type: 2}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-3-24f1995214fa3b940bf46fa8046e9c33-11400000-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: SecurityAlarmConfig, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - _obj: {fileID: 11400000, guid: 038466aa5ff19034b8442d5765b84c6c, type: 2}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-3-038466aa5ff19034b8442d5765b84c6c-11400000-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: DoorInteractionConfig, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - _obj: {fileID: 11400000, guid: d4520402759172e4692e9f85b73d9839, type: 2}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-3-d4520402759172e4692e9f85b73d9839-11400000-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: SuspicionConfig, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - _obj: {fileID: 11400000, guid: 115b124c02a033b43ba5ecc7a6ea6911, type: 2}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-3-115b124c02a033b43ba5ecc7a6ea6911-11400000-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: NoiseConfig, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - _obj: {fileID: 11400000, guid: cd473707c8b5fcb4d88777f29cc90a2e, type: 2}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-3-cd473707c8b5fcb4d88777f29cc90a2e-11400000-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: LockTimingPuzzleConfig, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - _obj: {fileID: 11400000, guid: 2e77080a9aeb3324c837eaa3a9f48524, type: 2}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-3-2e77080a9aeb3324c837eaa3a9f48524-11400000-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: GlitchEffectSettings, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - _obj: {fileID: 9100000, guid: 3dcbb7ff605184746be82d748741383f, type: 2}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-3-3dcbb7ff605184746be82d748741383f-9100000-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: UnityEditor.Animations.AnimatorController, UnityEditor.CoreModule,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - _obj: {fileID: 1543695114780030, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-1-ceddc97abfdd06647918f15b13cfac6c-1543695114780030-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - _obj: {fileID: 11400000, guid: f288ae1f4751b564a96ac7587541f7a2, type: 2}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-3-f288ae1f4751b564a96ac7587541f7a2-11400000-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: UnityEngine.Rendering.Universal.UniversalRendererData, Unity.RenderPipelines.Universal.Runtime,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null

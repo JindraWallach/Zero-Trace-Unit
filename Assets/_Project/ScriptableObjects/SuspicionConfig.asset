@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dd78d9ba8445f5448f63d98af7578f5, type: 3}
+  m_Name: SuspicionConfig
+  m_EditorClassIdentifier: Assembly-CSharp::SuspicionConfig
+  baseBuildRate: 15
+  decayRate: 10
+  decayGracePeriod: 1
+  useExponentialMultiplier: 1
+  manualMultipliers:
+  - 1
+  - 1.5
+  - 2.5
+  - 4
+  alertThreshold: 30
+  chaseThreshold: 100
+  updateInterval: 0.1
+  visionCheckInterval: 0.2
+  suspiciousInvestigationDuration: 10
+  suspiciousFaceDuration: 1
+  noiseInitialSuspicion: 30
+  noiseAdditionalSuspicion: 20
+  showDebugBar: 1
+  showSuspicionValue: 1
