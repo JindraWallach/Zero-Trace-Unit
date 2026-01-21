@@ -1,4 +1,4 @@
-// Copyright (c) 2024 Synty Studios Limited. All rights reserved.
+﻿// Copyright (c) 2024 Synty Studios Limited. All rights reserved.
 //
 // Simplified Menu Animation Controller - Only handles basic animations without movement systems
 // For use in menu scenes where player control is not needed
@@ -219,51 +219,61 @@ namespace Synty.AnimationBaseLocomotion.Samples
 
         private void UpdateCameraFacing()
         {
-            // Calculate rotation rate for lean and look effects
-            _currentRotation = transform.forward;
-            _rotationRate = _currentRotation != _previousRotation
-                ? Vector3.SignedAngle(_currentRotation, _previousRotation, Vector3.up) / Time.deltaTime * -1f
-                : 0f;
+            Vector3 directionToCamera =
+                _mainCamera.transform.position - transform.position;
+            directionToCamera.y = 0f;
 
-            // Get camera forward direction (zeroed Y for horizontal plane)
-            _cameraForward = _mainCamera.transform.forward;
-            _cameraForward.y = 0f;
-            _cameraForward.Normalize();
+            if (directionToCamera.sqrMagnitude < 0.001f)
+                return;
 
-            if (_cameraForward == Vector3.zero)
-            {
-                _cameraForward = Vector3.forward;
-            }
+            directionToCamera.Normalize();
 
-            // Rotate character body to face camera direction
-            Quaternion targetRotation = Quaternion.LookRotation(_cameraForward);
+            // Otočení těla ke kameře
+            Quaternion targetRotation = Quaternion.LookRotation(directionToCamera);
             transform.rotation = Quaternion.Slerp(
                 transform.rotation,
                 targetRotation,
                 _rotationSmoothing * Time.deltaTime
             );
 
-            // Update head look if enabled
+            // HEAD LOOK
             if (_enableHeadLook)
             {
-                UpdateHeadLook();
+                Vector3 localDir =
+                    transform.InverseTransformDirection(directionToCamera);
+
+                _headLookX = Mathf.Lerp(
+                    _headLookX,
+                    Mathf.Clamp(localDir.x, -1f, 1f),
+                    _headLookSmoothing * Time.deltaTime
+                );
+
+                float cameraTilt = _mainCamera.transform.rotation.eulerAngles.x;
+                cameraTilt = (cameraTilt > 180 ? cameraTilt - 360 : cameraTilt) / -180f;
+
+                _headLookY = Mathf.Lerp(
+                    _headLookY,
+                    Mathf.Clamp(cameraTilt, -0.3f, 0.8f),
+                    _headLookSmoothing * Time.deltaTime
+                );
             }
 
-            // Update body look if enabled
+            // BODY LOOK (slabší než hlava)
             if (_enableBodyLook)
             {
-                UpdateBodyLook();
-            }
+                Vector3 localDir =
+                    transform.InverseTransformDirection(directionToCamera);
 
-            // Update lean if enabled
-            if (_enableLean)
-            {
-                UpdateLean();
-            }
+                _bodyLookX = Mathf.Lerp(
+                    _bodyLookX,
+                    localDir.x * 0.5f,
+                    _bodyLookSmoothing * Time.deltaTime
+                );
 
-            // Store previous rotation for next frame
-            _previousRotation = _currentRotation;
+                _bodyLookY = _headLookY * 0.5f;
+            }
         }
+
 
         private void UpdateHeadLook()
         {
