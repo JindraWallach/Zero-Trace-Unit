@@ -17031,8 +17031,8 @@ MonoBehaviour:
   _animator: {fileID: 590660820}
   _controller: {fileID: 590660819}
   _playIdle: 1
-  _simulateFallSequence: 0
-  _fallSequenceDelay: 2
+  _simulateFallSequence: 1
+  _fallSequenceDelay: 0.5
   _groundLayerMask:
     serializedVersion: 2
     m_Bits: 128
