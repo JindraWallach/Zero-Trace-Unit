@@ -24,4 +24,4 @@ MonoBehaviour:
   doorCloseRadius: 9
   flashlightToggleRadius: 8
   debugNoise: 1
-  debugNoiseDuration: 1.5
+  debugNoiseDuration: 1
