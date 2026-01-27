@@ -10,12 +10,14 @@ public class UIPanelManager : MonoBehaviour
     public CanvasGroup panelMenu;
     public CanvasGroup panelSettings;
     public CanvasGroup panelControls;
+    public CanvasGroup panelClass;
 
     private void Start()
     {
         panelMenu.alpha = 1;
         panelSettings.alpha = 0;
         panelControls.alpha = 0;
+        panelClass.alpha = 0;
     }
 
     public void SwitchToPanel(int target)
