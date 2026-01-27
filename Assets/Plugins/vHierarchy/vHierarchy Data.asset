@@ -301,6 +301,10 @@ MonoBehaviour:
         - globalObjectIdString: GlobalObjectId_V1-2-f29ddd06f84fc8f429ee69fe1b33f9d8-191053203231797785-1843422293
         - globalObjectIdString: GlobalObjectId_V1-2-f29ddd06f84fc8f429ee69fe1b33f9d8-2463272308743208296-84820416
         - globalObjectIdString: GlobalObjectId_V1-2-f29ddd06f84fc8f429ee69fe1b33f9d8-1375635934-0
+        - globalObjectIdString: GlobalObjectId_V1-2-f29ddd06f84fc8f429ee69fe1b33f9d8-1674526260-0
+        - globalObjectIdString: GlobalObjectId_V1-2-f29ddd06f84fc8f429ee69fe1b33f9d8-1758029846-0
+        - globalObjectIdString: GlobalObjectId_V1-2-f29ddd06f84fc8f429ee69fe1b33f9d8-132241873-0
+        - globalObjectIdString: GlobalObjectId_V1-2-f29ddd06f84fc8f429ee69fe1b33f9d8-1678258814-0
         values:
         - colorIndex: 7
           iconNameOrGuid: Rigidbody Icon
@@ -328,6 +332,22 @@ MonoBehaviour:
           isColorRecursive: 0
         - colorIndex: 1
           iconNameOrGuid: PreMatCube
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 7
+          iconNameOrGuid: 
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 7
+          iconNameOrGuid: 
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 5
+          iconNameOrGuid: 
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 5
+          iconNameOrGuid: 
           isIconRecursive: 0
           isColorRecursive: 0
   bookmarks: []
