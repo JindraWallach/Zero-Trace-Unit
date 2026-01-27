@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 740f823ef47ed8e4ea57126dbb28782c, type: 3}
+  m_Name: Phantom
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerClassConfig
+  className: Phantom
+  classPrefix: Tier II Operative
+  description: BULKY
+  playerPrefab: {fileID: 0}
+  classIcon: {fileID: 21300000, guid: 01355905a4556544cab941de4a8c6286, type: 3}
+  primaryColor: {r: 0.2783019, g: 1, b: 0.38551793, a: 1}
+  movementSpeedMultiplier: 0.772
+  sprintDurationMultiplier: 0.854
+  noiseRadiusMultiplier: 1
+  detectionRangeMultiplier: 1
+  suspicionBuildMultiplier: 0.7
+  hackTimeMultiplier: 1

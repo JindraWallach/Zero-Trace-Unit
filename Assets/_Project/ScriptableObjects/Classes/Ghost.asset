@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 740f823ef47ed8e4ea57126dbb28782c, type: 3}
+  m_Name: Ghost
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerClassConfig
+  className: Ghost
+  classPrefix: Tier I Operative
+  description: Master of silent infiltration. Reduced noise generation at the cost
+    of movement speed.
+  playerPrefab: {fileID: 4638563124423285341, guid: bfbdc10f0790d1d4f9eaf26c1303bdf5, type: 3}
+  classIcon: {fileID: 21300000, guid: 664d2d1b25407f548b2ea5a22b12adcb, type: 3}
+  primaryColor: {r: 1, g: 1, b: 1, a: 1}
+  movementSpeedMultiplier: 0.9
+  sprintDurationMultiplier: 0.9
+  noiseRadiusMultiplier: 0.7
+  detectionRangeMultiplier: 0.8
+  suspicionBuildMultiplier: 1
+  hackTimeMultiplier: 1
