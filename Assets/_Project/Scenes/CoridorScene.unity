@@ -708,6 +708,11 @@ MonoBehaviour:
     done: 0
   - name: add resume button on esc
     done: 0
+  - name: 
+    done: 0
+  - name: 'Problem 2: PlayerClassConfig - Sprite Preview, player in scene, Problem
+      3: Dynamic Spawn Point Search'
+    done: 0
 --- !u!4 &36559939
 Transform:
   m_ObjectHideFlags: 0
