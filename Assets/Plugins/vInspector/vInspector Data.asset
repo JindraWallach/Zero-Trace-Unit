@@ -153,3 +153,17 @@ MonoBehaviour:
     isAsset: 1
     _typeString: UnityEngine.Rendering.Universal.UniversalRendererData, Unity.RenderPipelines.Universal.Runtime,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - _obj: {fileID: 11400000, guid: 608d4b2d007491c45b683fd8ea50aa61, type: 2}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-3-608d4b2d007491c45b683fd8ea50aa61-11400000-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: PlayerClassConfig, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - _obj: {fileID: 11400000, guid: 578dda5f79abdb44abeb844ebd34b7c8, type: 2}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-3-578dda5f79abdb44abeb844ebd34b7c8-11400000-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: PlayerClassConfig, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null

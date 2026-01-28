@@ -15,8 +15,10 @@ MonoBehaviour:
   className: Phantom
   classPrefix: Tier II Operative
   description: BULKY
-  playerPrefab: {fileID: 4638563124423285341, guid: 2df5ef7632fb63d4d88aa2223aedf45f, type: 3}
+  characterMesh: {fileID: 4300030, guid: c8c20564eb982f84a96a0d4d8e357cc5, type: 3}
+  characterMaterial: {fileID: 2100000, guid: 4cee7a5983b187943adc589b9cb1f084, type: 2}
   classIcon: {fileID: 21300000, guid: 01355905a4556544cab941de4a8c6286, type: 3}
+  classPreviewSprite: {fileID: 21300000, guid: 01355905a4556544cab941de4a8c6286, type: 3}
   primaryColor: {r: 0.2783019, g: 1, b: 0.38551793, a: 1}
   movementSpeedMultiplier: 0.772
   sprintDurationMultiplier: 0.854

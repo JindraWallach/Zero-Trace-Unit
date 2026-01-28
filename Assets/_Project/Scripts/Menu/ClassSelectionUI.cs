@@ -9,10 +9,6 @@ public class ClassSelectionUI : MonoBehaviour
     [SerializeField] private PlayerClassSelector classSelector;
     [SerializeField] private GameObject menuPlayer; // Player in menu scene
 
-    [Header("Canvas Group (Optional)")]
-    [SerializeField] private CanvasGroup canvasGroup;
-    [SerializeField] private bool startHidden = true;
-
     [Header("Text Elements")]
     [SerializeField] private TextMeshProUGUI classNameText;
     [SerializeField] private TextMeshProUGUI classPrefixText;
@@ -56,42 +52,13 @@ public class ClassSelectionUI : MonoBehaviour
                 Debug.LogWarning("[ClassSelectionUI] Menu player missing PlayerClassApplier!");
         }
 
-        if (canvasGroup != null && startHidden)
-        {
-            canvasGroup.alpha = 0f;
-            canvasGroup.interactable = false;
-            canvasGroup.blocksRaycasts = false;
-        }
-
         BindButtons();
         GenerateStatBars();
-
-        if (!startHidden)
-            UpdateUI();
     }
 
     private void OnDestroy()
     {
         UnbindButtons();
-    }
-
-    public void ShowPanel()
-    {
-        if (canvasGroup != null)
-        {
-            canvasGroup.interactable = true;
-            canvasGroup.blocksRaycasts = true;
-        }
-        UpdateUI();
-    }
-
-    public void HidePanel()
-    {
-        if (canvasGroup != null)
-        {
-            canvasGroup.interactable = false;
-            canvasGroup.blocksRaycasts = false;
-        }
     }
 
     private void BindButtons()
@@ -152,7 +119,6 @@ public class ClassSelectionUI : MonoBehaviour
     {
         classSelector.ConfirmSelection();
         ApplyClassToMenuPlayer();
-        HidePanel();
     }
 
     private void ApplyClassToMenuPlayer()
