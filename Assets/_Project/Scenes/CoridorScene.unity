@@ -40150,10 +40150,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMultiPointVision
   playerBodyPoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 2095369381791153925}
+  - {fileID: 8652820161553808479}
+  - {fileID: 1973982266494646150}
+  - {fileID: 5420174507588890032}
 --- !u!137 &6166143513043849242
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 0
