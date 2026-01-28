@@ -56,6 +56,11 @@ public class ClassSelectionUI : MonoBehaviour
         GenerateStatBars();
     }
 
+    private void OnEnable()
+    {
+        UpdateUI();
+    }
+
     private void OnDestroy()
     {
         UnbindButtons();
