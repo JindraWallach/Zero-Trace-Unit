@@ -35,6 +35,12 @@ public class ClassSelectionUI : MonoBehaviour
     private ClassStatBar[] generatedStatBars;
     private PlayerClassApplier playerApplier;
 
+    private void Awake()
+    {
+        // Ensure stat bars are generated before OnEnable/UpdateUI runs
+        GenerateStatBars();
+    }
+
     private void Start()
     {
         if (classSelector == null)
@@ -53,7 +59,7 @@ public class ClassSelectionUI : MonoBehaviour
         }
 
         BindButtons();
-        GenerateStatBars();
+        // GenerateStatBars moved to Awake to run before OnEnable
     }
 
     private void OnEnable()
@@ -191,7 +197,6 @@ public class ClassSelectionUI : MonoBehaviour
         if (backgroundTint != null)
         {
             Color tintColor = classConfig.primaryColor;
-            tintColor.a = 0.3f;
             backgroundTint.color = tintColor;
         }
     }
@@ -204,11 +209,13 @@ public class ClassSelectionUI : MonoBehaviour
         {
             classPreviewImage.sprite = classConfig.classPreviewSprite;
             classPreviewImage.color = Color.white;
+            classPreviewImage.preserveAspect = true;
         }
         else if (classConfig.classIcon != null)
         {
             classPreviewImage.sprite = classConfig.classIcon;
             classPreviewImage.color = classConfig.primaryColor;
+            classPreviewImage.preserveAspect = true;
         }
         else
         {

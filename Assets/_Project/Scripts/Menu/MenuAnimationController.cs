@@ -34,11 +34,6 @@ namespace Synty.AnimationBaseLocomotion.Samples
         [SerializeField]
         private CharacterController _controller;
 
-        [Header("Animation State")]
-        [Tooltip("Should character play idle animation")]
-        [SerializeField]
-        private bool _playIdle = true;
-
         [Tooltip("Should character simulate falling/landing sequence")]
         [SerializeField]
         private bool _simulateFallSequence = false;
@@ -94,11 +89,6 @@ namespace Synty.AnimationBaseLocomotion.Samples
         [Tooltip("Curve for X-axis body turning")]
         [SerializeField]
         private AnimationCurve _bodyLookXCurve = AnimationCurve.Linear(-1f, -0.5f, 1f, 0.5f);
-
-        [Header("Lean Settings")]
-        [Tooltip("Enable leaning when rotating")]
-        [SerializeField]
-        private bool _enableLean = false;
 
         [Tooltip("Curve for leaning")]
         [SerializeField]
