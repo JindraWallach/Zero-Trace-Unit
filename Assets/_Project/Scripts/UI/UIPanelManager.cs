@@ -1,12 +1,13 @@
 using System.Collections;
-using Unity.AppUI.UI;
 using UnityEngine;
 
 public class UIPanelManager : MonoBehaviour
 {
-
     public float switchDelay = 0.3f;
     public Animator animator;
+
+    public CameraPanelAnimation cameraMove; // reference na script kamery
+
     public CanvasGroup panelMenu;
     public CanvasGroup panelSettings;
     public CanvasGroup panelControls;
@@ -27,9 +28,18 @@ public class UIPanelManager : MonoBehaviour
 
     private IEnumerator SwitchPanelCoroutine(int target)
     {
-        animator.SetInteger("CurrentPanel", -1); 
-        yield return new WaitForSeconds(switchDelay);  
-        animator.SetInteger("CurrentPanel", target); 
-    }
+        animator.SetInteger("CurrentPanel", -1);
+        yield return new WaitForSeconds(switchDelay);
 
+        animator.SetInteger("CurrentPanel", target);
+
+        if (target == 3)
+        {
+            cameraMove.MoveForward();
+        }
+        else
+        {
+            cameraMove.MoveBack();
+        }
+    }
 }

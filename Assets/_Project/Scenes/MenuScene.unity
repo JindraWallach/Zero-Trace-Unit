@@ -28108,12 +28108,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 925947737}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -30.7, y: 4.488, z: -3.57}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1389861494}
   m_LocalEulerAnglesHint: {x: 4.089, y: 23.537, z: 1.779}
 --- !u!1 &927028464
 GameObject:
@@ -36402,6 +36402,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UIPanelManager
   switchDelay: 0.9
   animator: {fileID: 527115622}
+  cameraMove: {fileID: 1389861495}
   panelMenu: {fileID: 254382010029518761}
   panelSettings: {fileID: 1396896392}
   panelControls: {fileID: 284117448}
@@ -36711,6 +36712,77 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4970181988206704, guid: e4ce1648ab31b6f419486a7f8e990c76, type: 3}
   m_PrefabInstance: {fileID: 1388466516}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1389861493
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1389861494}
+  - component: {fileID: 1389861495}
+  m_Layer: 0
+  m_Name: CameraRig
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1389861494
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1389861493}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -30.7, y: 4.488, z: -3.57}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 925947742}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1389861495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1389861493}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ede1fc5a7f1af2b40a069da9a64d3143, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraPanelAnimation
+  forwardOffset: {x: 0.6, y: 0, z: 0}
+  duration: 0.6
+  moveCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1396896390
 GameObject:
   m_ObjectHideFlags: 0
@@ -55909,7 +55981,7 @@ SceneRoots:
   - {fileID: 1273158580}
   - {fileID: 165709210}
   - {fileID: 253954864}
-  - {fileID: 925947742}
+  - {fileID: 1389861494}
   - {fileID: 1375635935}
   - {fileID: 1843422293}
   - {fileID: 1859690607}
