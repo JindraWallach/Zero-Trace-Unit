@@ -116,12 +116,14 @@ public class ClassSelectionUI : MonoBehaviour
 
     private void OnPreviousClicked()
     {
+        Debug.Log("[ClassSelectionUI] Previous button clicked");
         classSelector.SelectPreviousClass();
         UpdateUI();
     }
 
     private void OnNextClicked()
     {
+        Debug.Log("[ClassSelectionUI] Next button clicked");
         classSelector.SelectNextClass();
         UpdateUI();
     }
