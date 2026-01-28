@@ -37268,6 +37268,7 @@ GameObject:
   - component: {fileID: 148798653840260963}
   - component: {fileID: 771632440130162968}
   - component: {fileID: 8290277118261291091}
+  - component: {fileID: 8290277118261291092}
   m_Layer: 8
   m_Name: PolygonCharacter
   m_TagString: Untagged
@@ -44339,6 +44340,23 @@ MonoBehaviour:
   baseRunSpeed: 2.5
   baseSprintSpeed: 7
   currentMultiplier: 1
+  debugLog: 1
+--- !u!114 &8290277118261291092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4389865434754953424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 450f94ca2f50904459c26bc24047885c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerClassStatsApplier
+  noiseConfig: {fileID: 11400000, guid: 115b124c02a033b43ba5ecc7a6ea6911, type: 2}
+  enemyConfig: {fileID: 11400000, guid: b854f7225edf3824d96735fe0283ff23, type: 2}
+  suspicionConfig: {fileID: 11400000, guid: d4520402759172e4692e9f85b73d9839, type: 2}
+  playerMovement: {fileID: 771632440130162968}
   debugLog: 1
 --- !u!23 &8342619450023209112
 MeshRenderer:
