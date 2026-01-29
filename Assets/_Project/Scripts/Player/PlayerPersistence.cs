@@ -1,28 +1,20 @@
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
-/// Keeps player GameObject alive between scenes using DontDestroyOnLoad.
-/// Automatically applies selected class when entering gameplay scene.
-/// Handles duplicate player instances correctly.
-/// 
-/// SETUP:
-/// 1. Attach to player prefab in first gameplay scene
-/// 2. Player will persist through menu and back
-/// 3. No need for separate menu player - this IS the player
+/// Keeps player alive between scenes and applies selected PlayerClassConfig
+/// when entering gameplay scenes.
+/// Safe for DontDestroyOnLoad usage (no scene references).
 /// </summary>
 public class PlayerPersistence : MonoBehaviour
 {
     public static PlayerPersistence Instance { get; private set; }
 
     [Header("Settings")]
-    [Tooltip("Is this a gameplay scene where class should be applied?")]
-    [SerializeField] private bool isGameplayScene = true;
+    [SerializeField] private bool persistBetweenScenes = true;
 
-    [Tooltip("Scene names where player should exist (leave empty = all scenes)")]
+    [Tooltip("Names of scenes where class should be applied (empty = all scenes)")]
     [SerializeField] private string[] validSceneNames;
-
-    [Header("References")]
-    [SerializeField] private PlayerClassApplier classApplier;
 
     [Header("Debug")]
     [SerializeField] private bool debugLog = true;
@@ -31,148 +23,121 @@ public class PlayerPersistence : MonoBehaviour
 
     private void Awake()
     {
-        // Singleton pattern with duplicate destruction
-        if (Instance != null && Instance != this)
+        if (persistBetweenScenes)
         {
-            if (debugLog)
-                Debug.Log($"[PlayerPersistence] Destroying duplicate player instance: {gameObject.name}");
+            if (Instance != null && Instance != this)
+            {
+                if (debugLog)
+                    Debug.Log("[PlayerPersistence] Duplicate instance destroyed.");
 
-            Destroy(gameObject);
-            return;
+                Destroy(gameObject);
+                return;
+            }
+
+            Instance = this;
+            DontDestroyOnLoad(transform.root.gameObject);
+
+            if (debugLog)
+                Debug.Log("[PlayerPersistence] Player marked as DontDestroyOnLoad.");
+        }
+        else
+        {
+            Instance = this;
         }
 
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
-
-        if (debugLog)
-            Debug.Log($"[PlayerPersistence] Player marked as persistent: {gameObject.name}");
-
-        // Auto-find class applier if not assigned
-        if (classApplier == null)
-            classApplier = GetComponent<PlayerClassApplier>();
-
-        // Subscribe to scene changes
+        // ✅ explicit Unity SceneManager
         UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void OnDestroy()
     {
+        // ✅ explicit Unity SceneManager
         UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnSceneLoaded;
 
         if (Instance == this)
             Instance = null;
     }
 
-    private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         if (debugLog)
             Debug.Log($"[PlayerPersistence] Scene loaded: {scene.name}");
 
-        // Check if this scene is valid for player
         if (!IsValidScene(scene.name))
         {
             if (debugLog)
-                Debug.Log($"[PlayerPersistence] Scene '{scene.name}' not in valid scenes list, skipping class application");
+                Debug.Log("[PlayerPersistence] Scene not valid for class application.");
             return;
         }
 
-        // Apply class if we're in a gameplay scene and haven't applied yet
-        if (ShouldApplyClassInScene(scene.name))
-        {
-            ApplySelectedClass();
-        }
+        ApplySelectedClass();
     }
 
     private bool IsValidScene(string sceneName)
     {
-        // If no restrictions, all scenes are valid
         if (validSceneNames == null || validSceneNames.Length == 0)
             return true;
 
-        // Check if current scene is in the valid list
-        foreach (string validName in validSceneNames)
+        foreach (string name in validSceneNames)
         {
-            if (sceneName.Equals(validName, System.StringComparison.OrdinalIgnoreCase))
+            if (sceneName.Equals(name, System.StringComparison.OrdinalIgnoreCase))
                 return true;
         }
 
         return false;
     }
 
-    private bool ShouldApplyClassInScene(string sceneName)
-    {
-        // Only apply in gameplay scenes
-        // You can customize this logic - for now, apply in any scene marked as gameplay
-        return isGameplayScene;
-    }
-
-    /// <summary>
-    /// Apply the selected class from PlayerPrefs.
-    /// Called automatically when entering gameplay scene.
-    /// </summary>
     private void ApplySelectedClass()
     {
-        if (classApplier == null)
-        {
-            Debug.LogWarning("[PlayerPersistence] No PlayerClassApplier found!");
-            return;
-        }
-
-        // Load selected class from PlayerPrefs
         PlayerClassConfig selectedClass = LoadSelectedClass();
 
         if (selectedClass == null)
         {
             if (debugLog)
-                Debug.Log("[PlayerPersistence] No class selected, using default appearance");
+                Debug.Log("[PlayerPersistence] No selected class found.");
             return;
         }
 
-        // Apply the class
-        classApplier.ApplyClass(selectedClass);
+        PlayerClassApplier applier = Object.FindFirstObjectByType<PlayerClassApplier>();
+
+        if (applier == null)
+        {
+            Debug.LogWarning("[PlayerPersistence] PlayerClassApplier not found in scene!");
+            return;
+        }
+
+        applier.ApplyClass(selectedClass);
         classAppliedThisSession = true;
 
         if (debugLog)
-            Debug.Log($"[PlayerPersistence] Applied class '{selectedClass.className}' to persistent player");
+            Debug.Log($"[PlayerPersistence] Applied class '{selectedClass.className}' to '{applier.gameObject.name}'.");
     }
 
-    /// <summary>
-    /// Load the selected class from PlayerClassSelector's saved data.
-    /// </summary>
     private PlayerClassConfig LoadSelectedClass()
     {
-        // Check if class was selected
         if (!PlayerPrefs.HasKey("SelectedClassName"))
         {
             if (debugLog)
-                Debug.Log("[PlayerPersistence] No class selected in PlayerPrefs");
+                Debug.Log("[PlayerPersistence] No SelectedClassName in PlayerPrefs.");
             return null;
         }
 
         string className = PlayerPrefs.GetString("SelectedClassName");
 
-        // Load the class config from Resources
-        // This assumes your class configs are in Resources/PlayerClasses/
         PlayerClassConfig loadedClass = Resources.Load<PlayerClassConfig>($"PlayerClasses/{className}");
 
         if (loadedClass == null)
         {
-            Debug.LogWarning($"[PlayerPersistence] Could not load class '{className}' from Resources!");
+            Debug.LogWarning($"[PlayerPersistence] Could not load class '{className}' from Resources.");
         }
 
         return loadedClass;
     }
 
-    /// <summary>
-    /// Manually trigger class application (useful for testing).
-    /// </summary>
     public void ForceApplyClass()
     {
         ApplySelectedClass();
     }
 
-    /// <summary>
-    /// Check if player has applied class this session.
-    /// </summary>
     public bool HasAppliedClass() => classAppliedThisSession;
 }

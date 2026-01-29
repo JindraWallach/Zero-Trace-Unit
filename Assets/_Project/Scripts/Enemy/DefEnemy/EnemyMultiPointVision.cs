@@ -164,12 +164,12 @@ public class EnemyMultiPointVision : MonoBehaviour
         if (nowVisible && !wasVisible)
         {
             OnPlayerSpotted?.Invoke(playerTransform.position);
-            Debug.Log($"[EnemyMultiPointVision] {gameObject.name} SPOTTED player! Visible parts: {visiblePointsCount}/4", this);
+            //Debug.Log($"[EnemyMultiPointVision] {gameObject.name} SPOTTED player! Visible parts: {visiblePointsCount}/4", this);
         }
         else if (!nowVisible && wasVisible)
         {
             OnPlayerLostSight?.Invoke(playerTransform.position);
-            Debug.Log($"[EnemyMultiPointVision] {gameObject.name} LOST sight of player", this);
+            //Debug.Log($"[EnemyMultiPointVision] {gameObject.name} LOST sight of player", this);
         }
 
         canSeePlayer = nowVisible;
@@ -179,11 +179,11 @@ public class EnemyMultiPointVision : MonoBehaviour
         if (suspicionSystem != null)
         {
             suspicionSystem.SetPlayerVisible(canSeePlayer, visiblePointsCount);
-            Debug.Log($"[EnemyMultiPointVision] {gameObject.name} -> SuspicionSystem.SetPlayerVisible called. Visible={canSeePlayer}, Parts={visiblePointsCount}", this);
+            //Debug.Log($"[EnemyMultiPointVision] {gameObject.name} -> SuspicionSystem.SetPlayerVisible called. Visible={canSeePlayer}, Parts={visiblePointsCount}", this);
         }
         else
         {
-            Debug.LogWarning($"[EnemyMultiPointVision] {gameObject.name} suspicionSystem is NULL when trying to update suspicion", this);
+            //Debug.LogWarning($"[EnemyMultiPointVision] {gameObject.name} suspicionSystem is NULL when trying to update suspicion", this);
         }
 
         // Fire visibility changed event

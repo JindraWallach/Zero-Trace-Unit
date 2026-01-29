@@ -29,5 +29,5 @@ MonoBehaviour:
   suspiciousFaceDuration: 1
   noiseInitialSuspicion: 30
   noiseAdditionalSuspicion: 20
-  showDebugBar: 1
-  showSuspicionValue: 1
+  showDebugBar: 0
+  showSuspicionValue: 0
