@@ -16,14 +16,23 @@ MonoBehaviour:
   classPrefix: Tier I Operative
   description: Master of silent infiltration. Reduced noise generation at the cost
     of movement speed.
-  characterMesh: {fileID: 4300030, guid: c8c20564eb982f84a96a0d4d8e357cc5, type: 3}
-  characterMaterial: {fileID: 2100000, guid: 4cee7a5983b187943adc589b9cb1f084, type: 2}
   classIcon: {fileID: 21300000, guid: 664d2d1b25407f548b2ea5a22b12adcb, type: 3}
   classPreviewSprite: {fileID: 21300000, guid: d2a49dc530ac0d14db40d08b4eca6781, type: 3}
   primaryColor: {r: 0, g: 0, b: 0, a: 0.27450982}
+  characterParts:
+  - partType: 0
+    mesh: {fileID: 4300030, guid: c8c20564eb982f84a96a0d4d8e357cc5, type: 3}
+    material: {fileID: 2100000, guid: 4cee7a5983b187943adc589b9cb1f084, type: 2}
+    enabled: 1
+  - partType: 1
+    mesh: {fileID: 4300008, guid: c8c20564eb982f84a96a0d4d8e357cc5, type: 3}
+    material: {fileID: 2100000, guid: 4cee7a5983b187943adc589b9cb1f084, type: 2}
+    enabled: 1
+  speedStat: 9
+  stealthStat: 7
+  hackingStat: 8
+  detectionStat: 10
   movementSpeedMultiplier: 0.9
-  sprintDurationMultiplier: 0.9
   noiseRadiusMultiplier: 0.7
   detectionRangeMultiplier: 0.8
   suspicionBuildMultiplier: 1
-  hackTimeMultiplier: 1

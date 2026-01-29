@@ -15,14 +15,23 @@ MonoBehaviour:
   className: Phantom
   classPrefix: Tier II Operative
   description: BULKY
-  characterMesh: {fileID: 4300030, guid: c8c20564eb982f84a96a0d4d8e357cc5, type: 3}
-  characterMaterial: {fileID: 2100000, guid: 4cee7a5983b187943adc589b9cb1f084, type: 2}
   classIcon: {fileID: 21300000, guid: 01355905a4556544cab941de4a8c6286, type: 3}
   classPreviewSprite: {fileID: 21300000, guid: 38c9f5daf65a07b4587347af1a1453b0, type: 3}
   primaryColor: {r: 0, g: 0, b: 0, a: 0.27450982}
-  movementSpeedMultiplier: 0.772
-  sprintDurationMultiplier: 0.854
+  characterParts:
+  - partType: 0
+    mesh: {fileID: 4300032, guid: c8c20564eb982f84a96a0d4d8e357cc5, type: 3}
+    material: {fileID: 2100000, guid: 4cee7a5983b187943adc589b9cb1f084, type: 2}
+    enabled: 1
+  - partType: 1
+    mesh: {fileID: 4300014, guid: c8c20564eb982f84a96a0d4d8e357cc5, type: 3}
+    material: {fileID: 2100000, guid: 4cee7a5983b187943adc589b9cb1f084, type: 2}
+    enabled: 1
+  speedStat: 8
+  stealthStat: 10
+  hackingStat: 10
+  detectionStat: 7
+  movementSpeedMultiplier: 0.8
   noiseRadiusMultiplier: 1
   detectionRangeMultiplier: 1
   suspicionBuildMultiplier: 0.7
-  hackTimeMultiplier: 1
