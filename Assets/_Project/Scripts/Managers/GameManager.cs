@@ -201,6 +201,14 @@ public class GameManager : MonoBehaviour, IInitializable
         Debug.Log("[GameManager] Game resumed");
     }
 
+    public void OnResumeButtonPressed()
+    {
+        if (currentState != GameState.Paused)
+            return;
+
+        ResumeGame();
+    }
+
     // === SETTINGS INTEGRATION ===
 
     public SettingsManager GetSettings()
