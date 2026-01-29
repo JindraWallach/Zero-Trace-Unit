@@ -17859,7 +17859,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b7c7d0713d25ba42b147d427ea012a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerClassApplier
-  bodyRenderer: {fileID: 958837572}
+  characterParts: []
   movementModifier: {fileID: 590660826}
   debugLog: 1
   appliedClass: {fileID: 11400000, guid: 578dda5f79abdb44abeb844ebd34b7c8, type: 2}
@@ -17870,7 +17870,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 590660816}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aac325d10cec16144bc1ea55956a5772, type: 3}
   m_Name: 
