@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerClassConfig
   className: Phantom
   classPrefix: Tier II Operative
-  description: BULKY
+  description: Master hacker and covert operative. Exceptional hacking and stealth
+    tools, but slower walking speed and higher chance of being detected.
   classIcon: {fileID: 21300000, guid: 01355905a4556544cab941de4a8c6286, type: 3}
   classPreviewSprite: {fileID: 21300000, guid: 0043d240d4229bc4491e564b063e773f, type: 3}
   primaryColor: {r: 0, g: 0, b: 0, a: 0.27450982}
