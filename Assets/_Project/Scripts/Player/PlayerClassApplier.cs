@@ -29,6 +29,30 @@ public class PlayerClassApplier : MonoBehaviour
         ValidateCharacterParts();
     }
 
+    private void Start()
+    {
+        // Runtime loading: prefer PlayerPrefs-selected class (Resources/PlayerClasses/Name).
+        PlayerClassConfig loaded = LoadSelectedClass();
+        if (loaded != null)
+        {
+            ApplyClass(loaded);
+            return;
+        }
+
+        // Fallback to inspector-assigned class (useful for editor/testing)
+        if (appliedClass != null)
+        {
+            if (debugLog)
+                Debug.Log($"[PlayerClassApplier] No selection in PlayerPrefs - applying inspector class: {appliedClass.className}");
+            ApplyClass(appliedClass);
+        }
+        else
+        {
+            if (debugLog)
+                Debug.Log("[PlayerClassApplier] No class selected and no inspector class assigned.");
+        }
+    }
+
     /// <summary>
     /// Apply complete character class (visuals + stats).
     /// </summary>
@@ -157,6 +181,31 @@ public class PlayerClassApplier : MonoBehaviour
     {
         var slot = Array.Find(characterParts, s => s.partType == partType);
         return slot?.renderer;
+    }
+
+    private PlayerClassConfig LoadSelectedClass()
+    {
+        if (!PlayerPrefs.HasKey("SelectedClassName"))
+        {
+            if (debugLog)
+                Debug.Log("[PlayerClassApplier] No class selected in PlayerPrefs (SelectedClassName missing)");
+            return null;
+        }
+
+        string classAssetName = PlayerPrefs.GetString("SelectedClassName");
+        if (string.IsNullOrEmpty(classAssetName))
+        {
+            if (debugLog)
+                Debug.LogWarning("[PlayerClassApplier] SelectedClassName is empty in PlayerPrefs");
+            return null;
+        }
+
+        // Expect PlayerClassConfig assets to be located in Resources/PlayerClasses/
+        PlayerClassConfig loaded = Resources.Load<PlayerClassConfig>($"PlayerClasses/{classAssetName}");
+        if (loaded == null)
+            Debug.LogWarning($"[PlayerClassApplier] Could not load class '{classAssetName}' from Resources/PlayerClasses/");
+
+        return loaded;
     }
 }
 

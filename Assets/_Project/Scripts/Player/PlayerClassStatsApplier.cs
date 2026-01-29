@@ -37,24 +37,33 @@ public class PlayerClassStatsApplier : MonoBehaviour
 
     private PlayerClassConfig LoadSelectedClass()
     {
-        // Load from PlayerPrefs (saved by PlayerClassSelector)
-        if (!PlayerPrefs.HasKey("SelectedClassIndex"))
+        // Follow same approach as PlayerPersistence: load class asset from Resources by saved name.
+        if (!PlayerPrefs.HasKey("SelectedClassName"))
+        {
+            if (debugLog)
+                Debug.Log("[PlayerClassStatsApplier] No class selected in PlayerPrefs (SelectedClassName missing)");
             return null;
+        }
 
-        int classIndex = PlayerPrefs.GetInt("SelectedClassIndex");
+        string classAssetName = PlayerPrefs.GetString("SelectedClassName");
+        if (string.IsNullOrEmpty(classAssetName))
+        {
+            if (debugLog)
+                Debug.LogWarning("[PlayerClassStatsApplier] SelectedClassName is empty in PlayerPrefs");
+            return null;
+        }
 
-        // You need to load the class config - implement based on your setup
-        // Option A: Store class name and load via Resources
-        // Option B: Have a reference to PlayerClassSelector's class list
-        // For now, return null - implement based on your needs
+        // Expect PlayerClassConfig assets to be located in Resources/PlayerClasses/
+        PlayerClassConfig loaded = Resources.Load<PlayerClassConfig>($"PlayerClasses/{classAssetName}");
+        if (loaded == null)
+            Debug.LogWarning($"[PlayerClassStatsApplier] Could not load class '{classAssetName}' from Resources/PlayerClasses/");
 
-        Debug.LogWarning("[PlayerClassStatsApplier] Class loading not implemented - add your class loading logic here!");
-        return null;
+        return loaded;
     }
 
     private void ApplyNoiseStats()
     {
-        if (noiseConfig == null) return;
+        if (noiseConfig == null || appliedClass == null) return;
         float multiplier = appliedClass.noiseRadiusMultiplier;
         noiseConfig.walkNoiseRadius *= multiplier;
         noiseConfig.runNoiseRadius *= multiplier;
@@ -64,7 +73,7 @@ public class PlayerClassStatsApplier : MonoBehaviour
 
     private void ApplyEnemyStats()
     {
-        if (enemyConfig == null) return;
+        if (enemyConfig == null || appliedClass == null) return;
         float multiplier = appliedClass.detectionRangeMultiplier;
         enemyConfig.visionRange *= multiplier;
         if (debugLog)
@@ -73,7 +82,7 @@ public class PlayerClassStatsApplier : MonoBehaviour
 
     private void ApplySuspicionStats()
     {
-        if (suspicionConfig == null) return;
+        if (suspicionConfig == null || appliedClass == null) return;
         float multiplier = appliedClass.suspicionBuildMultiplier;
         suspicionConfig.baseBuildRate *= multiplier;
         if (debugLog)
