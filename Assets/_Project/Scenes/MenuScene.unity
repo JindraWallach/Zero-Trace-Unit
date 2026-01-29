@@ -17668,7 +17668,7 @@ MonoBehaviour:
   - partType: 0
     renderer: {fileID: 958837572}
   - partType: 1
-    renderer: {fileID: 958837572}
+    renderer: {fileID: 1006813558}
   movementModifier: {fileID: 0}
   debugLog: 1
   appliedClass: {fileID: 0}
@@ -55713,6 +55713,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1317957627873024585}
   - component: {fileID: 7124241871453706389}
+  - component: {fileID: 7124241871453706390}
   m_Layer: 0
   m_Name: PlayerClassSelector
   m_TagString: Untagged
@@ -55736,6 +55737,22 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 578dda5f79abdb44abeb844ebd34b7c8, type: 2}
   - {fileID: 11400000, guid: 608d4b2d007491c45b683fd8ea50aa61, type: 2}
   defaultClassIndex: 0
+  debugLog: 1
+--- !u!114 &7124241871453706390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7124241871453706388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd596323d0841a549a33cff184b3f9df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerPersistence
+  isGameplayScene: 1
+  validSceneNames: []
+  classApplier: {fileID: 590660823}
   debugLog: 1
 --- !u!222 &8172845429158576866
 CanvasRenderer:
