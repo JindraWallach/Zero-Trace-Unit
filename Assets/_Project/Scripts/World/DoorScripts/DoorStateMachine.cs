@@ -59,6 +59,7 @@ public class DoorStateMachine : MonoBehaviour
 
     public void OnInteract()
     {
+        Debug.Log($"[DoorStateMachine] Interact called in state: {currentStateName}");
         currentState?.Interact();
     }
 
