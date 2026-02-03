@@ -148559,6 +148559,7 @@ MonoBehaviour:
   _moveComposite: {x: 0, y: 0}
   _movementInputDuration: 0
   _movementInputDetected: 0
+  actionNames: []
 --- !u!143 &7899819685120886279
 CharacterController:
   m_ObjectHideFlags: 0
