@@ -43971,7 +43971,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &394474218
 Transform:
   m_ObjectHideFlags: 0
@@ -249634,6 +249634,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _syntyCharacter: {fileID: 7851300971499092592}
+  _collisionLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  _cameraRadius: 0.5
+  _smoothTime: 0.05
   _mainCamera: {fileID: 3777643569748310893}
   _playerTarget: {fileID: 0}
   _lockOnTarget: {fileID: 0}
@@ -255556,6 +255561,7 @@ MonoBehaviour:
   _moveComposite: {x: 0, y: 0}
   _movementInputDuration: 0
   _movementInputDetected: 0
+  actionNames: []
 --- !u!143 &7899819685120886279
 CharacterController:
   m_ObjectHideFlags: 0
