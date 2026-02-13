@@ -2441,6 +2441,8 @@ MonoBehaviour:
     done: 0
   - name: dvere nejdou otevirat
     done: 0
+  - name: chyba v applied class stat multiplier wut
+    done: 0
 --- !u!4 &36559939
 Transform:
   m_ObjectHideFlags: 0
@@ -52983,6 +52985,7 @@ MonoBehaviour:
   enemyConfig: {fileID: 11400000, guid: b854f7225edf3824d96735fe0283ff23, type: 2}
   suspicionConfig: {fileID: 11400000, guid: d4520402759172e4692e9f85b73d9839, type: 2}
   debugLog: 1
+  disableScript: 1
 --- !u!1001 &1003925793
 PrefabInstance:
   m_ObjectHideFlags: 0

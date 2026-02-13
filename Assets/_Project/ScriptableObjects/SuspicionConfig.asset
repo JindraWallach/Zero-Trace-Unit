@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dd78d9ba8445f5448f63d98af7578f5, type: 3}
   m_Name: SuspicionConfig
   m_EditorClassIdentifier: Assembly-CSharp::SuspicionConfig
-  baseBuildRate: 15
+  baseBuildRate: 25
   decayRate: 10
   decayGracePeriod: 1
   useExponentialMultiplier: 1
@@ -21,7 +21,7 @@ MonoBehaviour:
   - 1.5
   - 2.5
   - 4
-  alertThreshold: 30
+  alertThreshold: 25
   chaseThreshold: 100
   updateInterval: 0.1
   visionCheckInterval: 0.2
@@ -29,5 +29,5 @@ MonoBehaviour:
   suspiciousFaceDuration: 1
   noiseInitialSuspicion: 30
   noiseAdditionalSuspicion: 20
-  showDebugBar: 0
-  showSuspicionValue: 0
+  showDebugBar: 1
+  showSuspicionValue: 1

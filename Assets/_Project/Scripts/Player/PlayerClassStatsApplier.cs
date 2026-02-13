@@ -9,12 +9,14 @@ public class PlayerClassStatsApplier : MonoBehaviour
 
     [Header("Debug")]
     [SerializeField] private bool debugLog = true;
+    [SerializeField] private bool disableScript = false;
 
     private PlayerClassConfig appliedClass;
 
     private void Start()
     {
-        ApplyClassStats();
+        if (!disableScript) ApplyClassStats();
+  
     }
 
     public void ApplyClassStats()

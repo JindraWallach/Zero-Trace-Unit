@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dadd20a73e436fb438bddc8a9f74bd07, type: 3}
   m_Name: NoiseConfig
   m_EditorClassIdentifier: Assembly-CSharp::NoiseConfig
-  walkNoiseRadius: 6
-  runNoiseRadius: 14
+  walkNoiseRadius: 7
+  runNoiseRadius: 12
   walkFootstepInterval: 0.7
   runFootstepInterval: 0.5
   minFallVelocityForNoise: 3

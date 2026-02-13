@@ -25,7 +25,7 @@ MonoBehaviour:
   waypointWaitTime: 5
   alertDuration: 6
   alertToSearchDelay: 2
-  catchRange: 2
+  catchRange: 1.2
   searchDuration: 10
   searchRadius: 8
   searchSpeed: 3
@@ -33,6 +33,6 @@ MonoBehaviour:
   catchForceMagnitude: 20
   catchForceVertical: 0.2
   taserHitDelay: 0.5
-  debugVision: 0
-  debugStates: 0
-  debugMovement: 0
+  debugVision: 1
+  debugStates: 1
+  debugMovement: 1

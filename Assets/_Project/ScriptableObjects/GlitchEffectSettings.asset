@@ -21,5 +21,5 @@ MonoBehaviour:
   verticalShift: 0.01
   noiseFrequency: 1
   enabled: 0
-  updateFrequency: 4
+  updateFrequency: 2
   currentPreset: 5
