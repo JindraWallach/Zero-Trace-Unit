@@ -146,3 +146,9 @@ MonoBehaviour:
     isAsset: 1
     _typeString: PlayerClassConfig, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+  - _obj: {fileID: 11400000, guid: 51c1e62fc4ace6a4d995c5d021064c1f, type: 2}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-3-51c1e62fc4ace6a4d995c5d021064c1f-11400000-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: BaseStats, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
