@@ -28,11 +28,11 @@ MonoBehaviour:
     mesh: {fileID: 4300014, guid: c8c20564eb982f84a96a0d4d8e357cc5, type: 3}
     material: {fileID: 2100000, guid: 4cee7a5983b187943adc589b9cb1f084, type: 2}
     enabled: 1
-  speedStat: 8
-  stealthStat: 10
-  hackingStat: 10
-  detectionStat: 7
+  speedStat: 80
+  stealthStat: 100
+  hackingStat: 100
+  detectionStat: 70
   movementSpeedMultiplier: 0.8
   noiseRadiusMultiplier: 1
-  detectionRangeMultiplier: 1
+  detectionRangeMultiplier: 0.7
   suspicionBuildMultiplier: 0.7
