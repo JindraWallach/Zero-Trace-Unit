@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 /// <summary>
 /// Keeps player alive between scenes and applies selected PlayerClassConfig
 /// when entering gameplay scenes.
+/// UPDATED: Now integrates with StatsApplicationManager to prevent multiplier stacking.
 /// Safe for DontDestroyOnLoad usage (no scene references).
 /// </summary>
 public class PlayerPersistence : MonoBehaviour
@@ -45,13 +46,11 @@ public class PlayerPersistence : MonoBehaviour
             Instance = this;
         }
 
-        // ✅ explicit Unity SceneManager
         UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void OnDestroy()
     {
-        // ✅ explicit Unity SceneManager
         UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnSceneLoaded;
 
         if (Instance == this)
@@ -98,6 +97,18 @@ public class PlayerPersistence : MonoBehaviour
             return;
         }
 
+        // === CRITICAL FIX ===
+        // Apply stats via StatsApplicationManager FIRST (only once per session)
+        if (StatsApplicationManager.Instance != null)
+        {
+            StatsApplicationManager.Instance.ApplyClassStats(selectedClass);
+        }
+        else
+        {
+            Debug.LogWarning("[PlayerPersistence] StatsApplicationManager not found! Stats may apply multiple times. Create StatsApplicationManager in menu scene.");
+        }
+
+        // Then apply visuals to player (can happen every scene load)
         PlayerClassApplier applier = Object.FindFirstObjectByType<PlayerClassApplier>();
 
         if (applier == null)

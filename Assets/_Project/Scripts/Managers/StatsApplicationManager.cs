@@ -128,4 +128,14 @@ public class StatsApplicationManager : MonoBehaviour
 
     // Static accessor
     public static StatsApplicationManager Instance => instance;
+
+    /// <summary>
+    /// Force reset for testing purposes (e.g., returning to main menu).
+    /// Call this when starting a completely new game session.
+    /// </summary>
+    public void ForceResetForNewSession()
+    {
+        ResetToBaseStats();
+        Debug.Log("[StatsApplicationManager] Forced reset for new session.");
+    }
 }

@@ -106,15 +106,23 @@ public class PlayerClassSelector : MonoBehaviour
             return;
         }
 
-        hasConfirmed = true;
-
-        // Save index
-        PlayerPrefs.SetInt("SelectedClassIndex", currentIndex);
-
-        // Save class name (used by PlayerPersistence to load the actual config)
-        PlayerPrefs.SetString("SelectedClassName", CurrentClass.name);
-
+        // Save class name
+        PlayerPrefs.SetString("SelectedClassName", CurrentClass.className);
         PlayerPrefs.Save();
+
+        // === PŘIDEJ TOTO ===
+        // Reset stats manager když hráč vybere NOVOU třídu v menu
+        if (StatsApplicationManager.Instance != null)
+        {
+            string lastClass = StatsApplicationManager.Instance.GetLastAppliedClass();
+            if (lastClass != "None" && lastClass != CurrentClass.className)
+            {
+                // Hráč změnil třídu → reset pro novou aplikaci
+                StatsApplicationManager.Instance.ForceResetForNewSession();
+                Debug.Log($"[PlayerClassSelector] Class changed from {lastClass} to {CurrentClass.className} - stats reset.");
+            }
+        }
+        // === KONEC ===
 
         if (debugLog)
             Debug.Log($"[PlayerClassSelector] ✓ Confirmed and saved: {CurrentClass.className}");
