@@ -27,12 +27,12 @@ MonoBehaviour:
   alertToSearchDelay: 2
   catchRange: 1.2
   searchDuration: 10
-  searchRadius: 8
+  searchRadius: 6.42
   searchSpeed: 3
   memoryDuration: 10
   catchForceMagnitude: 20
   catchForceVertical: 0.2
-  taserHitDelay: 0.5
+  taserHitDelay: 0.2
   debugVision: 1
   debugStates: 1
   debugMovement: 1
