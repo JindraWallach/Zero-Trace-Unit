@@ -59,6 +59,7 @@ public class StatsApplicationManager : MonoBehaviour
             Debug.LogError("[StatsApplicationManager] Missing references! Assign BaseStats and EnemyConfig in inspector.");
             return;
         }
+        Debug.LogWarning($"[StatsApplicationManager] Applying stats for class: {classConfig.className} (Detection: {classConfig.detectionStat}%, Speed: {classConfig.speedStat}%, Stealth: {classConfig.stealthStat}%)");
 
         // Convert percentage stats to multipliers (100% = 1.0x)
         float enemyVisionMult = classConfig.detectionStat / 100f;

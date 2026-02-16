@@ -105,7 +105,7 @@ public class PlayerPersistence : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("[PlayerPersistence] StatsApplicationManager not found! Stats may apply multiple times. Create StatsApplicationManager in menu scene.");
+            Debug.LogError("[PlayerPersistence] StatsApplicationManager not found! Stats may apply multiple times. Create StatsApplicationManager in menu scene.");
         }
 
         // Then apply visuals to player (can happen every scene load)
@@ -129,7 +129,7 @@ public class PlayerPersistence : MonoBehaviour
         if (!PlayerPrefs.HasKey("SelectedClassName"))
         {
             if (debugLog)
-                Debug.Log("[PlayerPersistence] No SelectedClassName in PlayerPrefs.");
+                Debug.LogWarning("[PlayerPersistence] No SelectedClassName in PlayerPrefs.");
             return null;
         }
 
