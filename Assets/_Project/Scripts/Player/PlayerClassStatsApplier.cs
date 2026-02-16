@@ -15,8 +15,12 @@ public class PlayerClassStatsApplier : MonoBehaviour
 
     private void Start()
     {
-        if (!disableScript) ApplyClassStats();
-  
+        // If a centralized StatsApplicationManager exists and has applied stats this session,
+        // skip local automatic application to avoid duplicate multipliers.
+        if (!disableScript && (StatsApplicationManager.Instance == null || !StatsApplicationManager.Instance.HasAppliedStats()))
+        {
+            ApplyClassStats();
+        }
     }
 
     public void ApplyClassStats()

@@ -52,7 +52,7 @@ public class PlayerClassSelector : MonoBehaviour
 
     private void LoadLastSelection()
     {
-        // Try to load previously selected class
+        // Try to load previously selected class index (fallback to name if not present)
         if (PlayerPrefs.HasKey("SelectedClassIndex"))
         {
             int savedIndex = PlayerPrefs.GetInt("SelectedClassIndex");
@@ -60,13 +60,27 @@ public class PlayerClassSelector : MonoBehaviour
 
             if (debugLog)
                 Debug.Log($"[PlayerClassSelector] Loaded saved selection: {CurrentClass?.className}");
+            return;
         }
-        else
+
+        // If index missing, try to load by name (keeps backward compatibility)
+        if (PlayerPrefs.HasKey("SelectedClassName"))
         {
-            currentIndex = Mathf.Clamp(defaultClassIndex, 0, availableClasses.Length - 1);
-            if (debugLog)
-                Debug.Log($"[PlayerClassSelector] Using default class: {CurrentClass?.className}");
+            string savedName = PlayerPrefs.GetString("SelectedClassName");
+            int found = System.Array.FindIndex(availableClasses, c => c != null && c.className == savedName);
+            if (found >= 0)
+            {
+                currentIndex = found;
+                if (debugLog)
+                    Debug.Log($"[PlayerClassSelector] Loaded saved selection by name: {CurrentClass?.className}");
+                return;
+            }
         }
+
+        // Fallback to default
+        currentIndex = Mathf.Clamp(defaultClassIndex, 0, availableClasses.Length - 1);
+        if (debugLog)
+            Debug.Log($"[PlayerClassSelector] Using default class: {CurrentClass?.className}");
     }
 
     public void SelectNextClass()
@@ -106,23 +120,31 @@ public class PlayerClassSelector : MonoBehaviour
             return;
         }
 
-        // Save class name
+        // Save both index and name so loading works reliably
+        PlayerPrefs.SetInt("SelectedClassIndex", currentIndex);
         PlayerPrefs.SetString("SelectedClassName", CurrentClass.className);
         PlayerPrefs.Save();
 
-        // === PŘIDEJ TOTO ===
-        // Reset stats manager když hráč vybere NOVOU třídu v menu
+        // Ensure StatsApplicationManager reflects the new choice (reset + apply if different)
         if (StatsApplicationManager.Instance != null)
         {
             string lastClass = StatsApplicationManager.Instance.GetLastAppliedClass();
-            if (lastClass != "None" && lastClass != CurrentClass.className)
+
+            if (lastClass != CurrentClass.className)
             {
-                // Hráč změnil třídu → reset pro novou aplikaci
-                StatsApplicationManager.Instance.ForceResetForNewSession();
-                Debug.Log($"[PlayerClassSelector] Class changed from {lastClass} to {CurrentClass.className} - stats reset.");
+                // If a different class was applied earlier this session, reset and apply new
+                if (lastClass != "None")
+                {
+                    StatsApplicationManager.Instance.ForceResetForNewSession();
+                    Debug.Log($"[PlayerClassSelector] Class changed from {lastClass} to {CurrentClass.className} - forced reset.");
+                }
+
+                StatsApplicationManager.Instance.ApplyClassStats(CurrentClass);
+                Debug.Log($"[PlayerClassSelector] StatsApplicationManager now set to: {CurrentClass.className}");
             }
         }
-        // === KONEC ===
+
+        hasConfirmed = true;
 
         if (debugLog)
             Debug.Log($"[PlayerClassSelector] ✓ Confirmed and saved: {CurrentClass.className}");
