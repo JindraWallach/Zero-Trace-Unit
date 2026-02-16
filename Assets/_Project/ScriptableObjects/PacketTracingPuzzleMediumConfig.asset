@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 97f887af8e6a6304797eff0971ffb1b7, type: 3}
-  m_Name: PacketTracingPuzzleConfig
+  m_Name: PacketTracingPuzzleMediumConfig
   m_EditorClassIdentifier: Assembly-CSharp::PacketTracingPuzzleConfig
-  gridColumns: 4
+  gridColumns: 5
   gridRows: 3
   nodeSpacing: 90
-  startNodeIndex: 11
-  goalNodeIndex: 4
-  disabledNodes: 05000000030000000a00000001000000
-  correctPath: 0b0000000700000006000000090000000800000004000000
+  startNodeIndex: 0
+  goalNodeIndex: 14
+  disabledNodes: 010000000200000006000000080000000a0000000c0000000d000000
+  correctPath: 00000000050000000b000000070000000300000004000000090000000e000000
   neutralColor: {r: 1, g: 1, b: 1, a: 1}
   connectedColor: {r: 0.2, g: 0.8, b: 1, a: 1}
   startColor: {r: 0, g: 1, b: 0, a: 1}

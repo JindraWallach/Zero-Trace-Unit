@@ -198,7 +198,7 @@ GameObject:
   - component: {fileID: 5180841066948393736}
   - component: {fileID: 3212416125346102619}
   m_Layer: 5
-  m_Name: PacketTracingPuzzleHandler
+  m_Name: PacketTracingPuzzleHandlerMedium
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -236,7 +236,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d3905cc149d94343b6411878d3b7350, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PacketTracingPuzzle
-  config: {fileID: 11400000, guid: 1a9075465be05d7459f784800c6809e4, type: 2}
+  config: {fileID: 11400000, guid: c0bd5233104d2ce4583916ac69ad8880, type: 2}
   gridParent: {fileID: 5475042891306505908}
   nodePrefab: {fileID: 8717215684103590769, guid: b25cd3c70f6f19e4c8245d9b79e72066, type: 3}
   linePrefab: {fileID: 2240685962243047412, guid: cb8e5e31b14ed99479a05d59383b2f3d, type: 3}
