@@ -8,6 +8,7 @@ public class ClassSelectionUI : MonoBehaviour
     [Header("Required References")]
     [SerializeField] private PlayerClassSelector classSelector;
     [SerializeField] private GameObject menuPlayer; // Player in menu scene
+    [SerializeField] private UIPanelManager UIPanelManager;    
 
     [Header("Text Elements")]
     [SerializeField] private TextMeshProUGUI classNameText;
@@ -132,6 +133,7 @@ public class ClassSelectionUI : MonoBehaviour
     {
         classSelector.ConfirmSelection();
         ApplyClassToMenuPlayer();
+        UIPanelManager.SwitchToPanel(0); // Switch back to main menu panel
     }
 
     private void ApplyClassToMenuPlayer()

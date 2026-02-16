@@ -72,6 +72,7 @@ public class SettingsUI : MonoBehaviour
             {
                 "30 FPS",
                 "60 FPS",
+                "90 FPS",
                 "120 FPS",
                 "144 FPS",
                 "240 FPS",
@@ -190,8 +191,8 @@ public class SettingsUI : MonoBehaviour
     {
         if (!isInitialized) return;
 
-        // Map dropdown index to FPS values
-        int[] fpsValues = { 30, 60, 120, 144, 240, -1 }; // -1 = unlimited
+        // Map dropdown index to FPS values (must match InitializeUI order)
+        int[] fpsValues = { 30, 60, 90, 120, 144, 240, -1 }; // -1 = unlimited
         if (index >= 0 && index < fpsValues.Length)
         {
             settings.SetTargetFramerate(fpsValues[index]);
@@ -207,7 +208,17 @@ public class SettingsUI : MonoBehaviour
     private void OnResolutionDropdownChanged(int value)
     {
         if (!isInitialized) return;
+
+        // Set requested resolution in settings
         settings.SetResolution(value);
+
+        // Immediately reflect selection in UI to avoid race with SettingsManager event ordering.
+        // This ensures the dropdown visually updates on first click even if the SettingsManager
+        // raises its changed event before its internal index is readable by GetCurrentResolutionIndex().
+        if (resolutionDropdown != null && resolutionDropdown.value != value)
+        {
+            resolutionDropdown.SetValueWithoutNotify(value);
+        }
     }
 
     private void OnFullscreenToggleChanged(bool value)
@@ -232,11 +243,16 @@ public class SettingsUI : MonoBehaviour
 
     private void OnSettingsTargetFramerateChanged(int fps)
     {
-        // Map FPS value to dropdown index
-        int[] fpsValues = { 30, 60, 120, 144, 240, -1 };
+        // Map FPS value to dropdown index (must match InitializeUI order)
+        int[] fpsValues = { 30, 60, 90, 120, 144, 240, -1 };
         int index = System.Array.IndexOf(fpsValues, fps);
 
-        if (index == -1) index = 1; // Default to 60 FPS if not found
+        if (index == -1) 
+        { 
+            index = 1; 
+            Debug.LogWarning($"[SettingsUI] Unrecognized FPS value {fps} from settings, defaulting dropdown to 60 FPS");
+        }
+        ; // Default to 60 FPS if not found
 
         if (fpsLimitDropdown != null && fpsLimitDropdown.value != index)
         {
