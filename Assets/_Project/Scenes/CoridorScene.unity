@@ -20,7 +20,7 @@ RenderSettings:
   m_FogDensity: 0.03
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 1, g: 1, b: 1, a: 1}
+  m_AmbientSkyColor: {r: 0.08235294, g: 0.2784314, b: 0.5019608, a: 1}
   m_AmbientEquatorColor: {r: 0.15712889, g: 0.20531386, b: 0.31132078, a: 1}
   m_AmbientGroundColor: {r: 0.08495015, g: 0.13446176, b: 0.21698111, a: 1}
   m_AmbientIntensity: 1
@@ -2823,6 +2823,10 @@ PrefabInstance:
       propertyPath: puzzleDefinition
       value: 
       objectReference: {fileID: 11400000, guid: 0e6b2f0281a34474d8f39c15daf6b067, type: 2}
+    - target: {fileID: 6400673175810272358, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+      propertyPath: alarmSystem
+      value: 
+      objectReference: {fileID: 1931417453}
     - target: {fileID: 7371815972592028288, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
       propertyPath: startLocked
       value: 1
@@ -4652,6 +4656,10 @@ PrefabInstance:
       propertyPath: puzzleDefinition
       value: 
       objectReference: {fileID: 11400000, guid: b1c1cf317b6e95a498ee87219e840084, type: 2}
+    - target: {fileID: 6400673175810272358, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+      propertyPath: alarmSystem
+      value: 
+      objectReference: {fileID: 1931417453}
     - target: {fileID: 7371815972592028288, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
       propertyPath: startLocked
       value: 1
@@ -7382,6 +7390,10 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: -0
       objectReference: {fileID: 0}
+    - target: {fileID: 6400673175810272358, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+      propertyPath: alarmSystem
+      value: 
+      objectReference: {fileID: 1931417453}
     - target: {fileID: 7371815972592028288, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
       propertyPath: startLocked
       value: 0
@@ -11461,13 +11473,17 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: -0
       objectReference: {fileID: 0}
+    - target: {fileID: 6400673175810272358, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+      propertyPath: alarmSystem
+      value: 
+      objectReference: {fileID: 1931417453}
     - target: {fileID: 7371815972592028288, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
       propertyPath: startLocked
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7371815972592028288, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
       propertyPath: enableAutoLock
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -12429,6 +12445,10 @@ PrefabInstance:
       propertyPath: puzzleDefinition
       value: 
       objectReference: {fileID: 11400000, guid: bf28f6f2d953a6a4ab521fe7648ce8f1, type: 2}
+    - target: {fileID: 6400673175810272358, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+      propertyPath: alarmSystem
+      value: 
+      objectReference: {fileID: 1931417453}
     - target: {fileID: 7371815972592028288, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
       propertyPath: startLocked
       value: 1
@@ -13672,15 +13692,16 @@ MonoBehaviour:
   playerPosition: {fileID: 8290277118261291090}
   playerInteractor: {fileID: 1598809358177039851}
   objectsToInitialize:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   - {fileID: 7337032058987619807}
   - {fileID: 4389865434754953424}
   - {fileID: 8999615667373627023}
   - {fileID: 7594934753950584949}
   - {fileID: 2742592322409305854}
+  - {fileID: 2275317156822406145}
+  - {fileID: 1272571110}
+  - {fileID: 1548812246}
+  - {fileID: 1543697021983179}
+  - {fileID: 705126247}
   - {fileID: 2275317156822406145}
 --- !u!1001 &315082981
 PrefabInstance:
@@ -27939,6 +27960,10 @@ PrefabInstance:
       propertyPath: puzzleDefinition
       value: 
       objectReference: {fileID: 11400000, guid: 0e6b2f0281a34474d8f39c15daf6b067, type: 2}
+    - target: {fileID: 6400673175810272358, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+      propertyPath: alarmSystem
+      value: 
+      objectReference: {fileID: 1931417453}
     - target: {fileID: 7371815972592028288, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
       propertyPath: startLocked
       value: 1
@@ -31097,6 +31122,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4333038575803528, guid: 9185866dc0127144abec19b225bf37c0, type: 3}
   m_PrefabInstance: {fileID: 703983254}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &705126247 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1543695114780030, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+  m_PrefabInstance: {fileID: 156273366}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &705637531
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -33599,6 +33629,10 @@ PrefabInstance:
       propertyPath: puzzleDefinition
       value: 
       objectReference: {fileID: 11400000, guid: b1c1cf317b6e95a498ee87219e840084, type: 2}
+    - target: {fileID: 6400673175810272358, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+      propertyPath: alarmSystem
+      value: 
+      objectReference: {fileID: 1931417453}
     - target: {fileID: 7371815972592028288, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
       propertyPath: startLocked
       value: 1
@@ -48609,6 +48643,10 @@ PrefabInstance:
       propertyPath: puzzleDefinition
       value: 
       objectReference: {fileID: 11400000, guid: 0e6b2f0281a34474d8f39c15daf6b067, type: 2}
+    - target: {fileID: 6400673175810272358, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+      propertyPath: alarmSystem
+      value: 
+      objectReference: {fileID: 1931417453}
     - target: {fileID: 7371815972592028288, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
       propertyPath: startLocked
       value: 0
@@ -51491,6 +51529,10 @@ PrefabInstance:
       propertyPath: puzzleDefinition
       value: 
       objectReference: {fileID: 11400000, guid: d21deb378a78b3646a654d51b348ddf4, type: 2}
+    - target: {fileID: 6400673175810272358, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+      propertyPath: alarmSystem
+      value: 
+      objectReference: {fileID: 1931417453}
     - target: {fileID: 7371815972592028288, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
       propertyPath: startLocked
       value: 1
@@ -52377,6 +52419,10 @@ PrefabInstance:
       propertyPath: puzzleDefinition
       value: 
       objectReference: {fileID: 11400000, guid: d87de8e4dd672714ba0ccb2fa444358a, type: 2}
+    - target: {fileID: 6400673175810272358, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+      propertyPath: alarmSystem
+      value: 
+      objectReference: {fileID: 1931417453}
     - target: {fileID: 7371815972592028288, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
       propertyPath: startLocked
       value: 1
@@ -56425,6 +56471,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 4360224306843022, guid: 99077309963a2c34a8f2d7e1dfb4f4ce, type: 3}
   m_PrefabInstance: {fileID: 1270739928}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1272571110 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1543695114780030, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+  m_PrefabInstance: {fileID: 91302825}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1273671014
 PrefabInstance:
@@ -68374,6 +68425,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 4360224306843022, guid: 99077309963a2c34a8f2d7e1dfb4f4ce, type: 3}
   m_PrefabInstance: {fileID: 1548521545}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1548812246 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1543695114780030, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+  m_PrefabInstance: {fileID: 751514484}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1551074691
 GameObject:
@@ -87248,6 +87304,10 @@ PrefabInstance:
       propertyPath: puzzleDefinition
       value: 
       objectReference: {fileID: 11400000, guid: d21deb378a78b3646a654d51b348ddf4, type: 2}
+    - target: {fileID: 6400673175810272358, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+      propertyPath: alarmSystem
+      value: 
+      objectReference: {fileID: 1931417453}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

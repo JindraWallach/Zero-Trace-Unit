@@ -31399,7 +31399,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ClassSelectionUI
   classSelector: {fileID: 7124241871453706389}
   menuPlayer: {fileID: 590660816}
-  UIPanelManager: {fileID: 0}
+  UIPanelManager: {fileID: 1375635937}
   classNameText: {fileID: 65380869}
   classPrefixText: {fileID: 1869268418}
   descriptionText: {fileID: 497573959}
