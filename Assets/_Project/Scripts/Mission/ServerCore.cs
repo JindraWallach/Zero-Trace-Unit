@@ -75,7 +75,19 @@ public class ServerCore : InteractableBase, IHackTarget, IInitializable
     /// <summary>
     /// Fyzická interakce – server nejde otevřít ručně, nic nedělej.
     /// </summary>
-    public override void Interact() { }
+    public override void Interact()
+    {
+        // PlayerInteractor volá Interact() při stisku E
+        // Server nemá fyzickou interakci – hack se spouští vždy přes RequestHack
+        if (PlayerModeController.Instance.CurrentMode != PlayerMode.Hack) return;
+        if (!_playerInRange) return;
+
+        RequestHack(
+            onSuccess: null,
+            onFail: () => Debug.Log("[ServerCore] Hack failed."),
+            onCancel: () => Debug.Log("[ServerCore] Hack cancelled.")
+        );
+    }
 
     public override void ShowPromptForPlayer(Transform player)
     {

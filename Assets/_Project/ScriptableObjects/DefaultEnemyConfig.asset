@@ -33,6 +33,6 @@ MonoBehaviour:
   catchForceMagnitude: 20
   catchForceVertical: 0.2
   taserHitDelay: 0.2
-  debugVision: 1
-  debugStates: 1
-  debugMovement: 1
+  debugVision: 0
+  debugStates: 0
+  debugMovement: 0
