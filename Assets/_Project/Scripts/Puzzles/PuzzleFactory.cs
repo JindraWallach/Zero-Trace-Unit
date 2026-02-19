@@ -27,6 +27,9 @@ public class PuzzleFactory : MonoBehaviour
             }
         }
 
+        if (target is ServerCore server && server.GetPuzzleDefinition() != null)
+            return server.GetPuzzleDefinition().puzzlePrefab;
+
         // Fallback to default
         if (defaultPuzzlePrefab != null)
         {

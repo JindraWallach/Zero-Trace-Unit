@@ -3,7 +3,6 @@ using UnityEngine;
 
 /// <summary>
 /// ScriptableObject pro konfiguraci mission systému.
-/// Nastavitelné hodnoty – žádný hardcode v scriptech.
 /// Create via: Assets > Create > Zero Trace > Mission System Config
 /// </summary>
 [CreateAssetMenu(fileName = "MissionSystemConfig", menuName = "Zero Trace/Mission System Config")]
@@ -16,7 +15,15 @@ public class MissionSystemConfig : ScriptableObject
     [Tooltip("Barva textu MISSION COMPLETE")]
     public Color missionCompleteColor = Color.white;
 
-    [Header("Server Hack")]
+    [Header("Server Hack – Prompt")]
+    [Tooltip("Hack range terminálu (stejné jako hackRange u dveří)")]
+    [Range(5f, 30f)]
+    public float serverHackRange = 15f;
+
+    [Tooltip("Klávesa zobrazená v promptu – např. E")]
+    public string interactKey = "E";
+
+    [Header("Identifikace")]
     [Tooltip("Tag hráče pro EscapeZone trigger")]
     public string playerTag = "Player";
 
