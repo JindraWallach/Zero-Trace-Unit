@@ -46862,7 +46862,7 @@ Transform:
   m_GameObject: {fileID: 1036602105}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0.006, y: 1.146, z: 0.267}
+  m_LocalPosition: {x: 0.003, y: 1.146, z: 0.128}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -86235,7 +86235,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 7927
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -86253,7 +86253,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e42177bb223292240b591d6fe1ff5c78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EscapeZoneTrigger
-  config: {fileID: 0}
+  config: {fileID: 11400000, guid: 1f72b5b3dec1f994ca46fc38a3fa662c, type: 2}
 --- !u!1001 &1837727623
 PrefabInstance:
   m_ObjectHideFlags: 0
