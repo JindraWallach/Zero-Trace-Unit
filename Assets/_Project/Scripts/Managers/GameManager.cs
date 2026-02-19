@@ -147,8 +147,8 @@ public class GameManager : MonoBehaviour, IInitializable
 
     private void OnEscapePressed()
     {
-        if (currentState == GameState.Dead)
-            return; // No pause during death
+        if (currentState == GameState.Dead || currentState == GameState.MissionComplete)
+            return; // No pause during death or completed mission
 
         if (currentState == GameState.InPuzzle)
         {
@@ -224,6 +224,28 @@ public class GameManager : MonoBehaviour, IInitializable
             Debug.Log("[GameManager] Applied settings");
         }
     }
+
+    /// <summary>
+    /// Called by MissionUIHandler when the mission is completed.
+    /// Owns Time.timeScale = 0 – nobody else smí psát timeScale přímo.
+    /// Disables player input, freezes time.
+    /// </summary>
+    public void OnMissionComplete()
+    {
+        if (currentState == GameState.MissionComplete) return;
+
+        ChangeState(GameState.MissionComplete);
+
+        if (inputReader != null)
+            inputReader.DisableInputs();
+
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
+        Time.timeScale = 0f;
+
+        Debug.Log("[GameManager] MissionComplete – time frozen.");
+    }
 }
 
 public enum GameState
@@ -231,5 +253,6 @@ public enum GameState
     Playing,
     Paused,
     InPuzzle,
-    Dead // NEW: Death state
+    Dead,
+    MissionComplete
 }

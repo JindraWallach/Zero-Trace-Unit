@@ -203,6 +203,7 @@ MonoBehaviour:
         - globalObjectIdString: GlobalObjectId_V1-2-9253f80fc2f07b2419779996f230ba6b-4638563123966577445-0
         - globalObjectIdString: GlobalObjectId_V1-2-9253f80fc2f07b2419779996f230ba6b-1003706655-0
         - globalObjectIdString: GlobalObjectId_V1-2-9253f80fc2f07b2419779996f230ba6b-6988103900816139113-1388776969
+        - globalObjectIdString: GlobalObjectId_V1-2-9253f80fc2f07b2419779996f230ba6b-398547444-0
         values:
         - colorIndex: 7
           iconNameOrGuid: StandaloneInputModule Icon
@@ -298,6 +299,10 @@ MonoBehaviour:
           isColorRecursive: 0
         - colorIndex: 4
           iconNameOrGuid: WheelCollider Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 1
+          iconNameOrGuid: Settings Icon
           isIconRecursive: 0
           isColorRecursive: 0
         - colorIndex: 1
