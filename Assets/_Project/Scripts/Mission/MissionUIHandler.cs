@@ -1,4 +1,5 @@
 ﻿// Scripts/Mission/MissionUIHandler.cs
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,7 +20,7 @@ public class MissionUIHandler : MonoBehaviour
     [SerializeField] private GameObject missionCompleteOverlay;
 
     [Tooltip("Volitelný Text element – nech prázdné pokud nepotřebuješ")]
-    [SerializeField] private Text missionCompleteText;
+    [SerializeField] private TextMeshProUGUI missionCompleteText;
 
     [Header("Settings")]
     [SerializeField] private string completeMessage = "MISSION COMPLETE";
