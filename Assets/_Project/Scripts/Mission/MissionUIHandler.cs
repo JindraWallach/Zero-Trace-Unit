@@ -4,28 +4,20 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// SRP: Listens to MissionManager.OnMissionCompleted and handles ONLY UI overlay.
-///
-/// Time.timeScale je VLASTNĚN GameManagerem.
-/// Voláme GameManager.OnMissionComplete() (viz GameManager_PATCH.cs).
-/// Nikdy nepíšeme Time.timeScale přímo.
-///
+/// SRP: Reaguje na MissionManager.OnMissionCompleted – zobrazí overlay.
+/// Text a barvu čte z MissionSystemConfig SO.
+/// Time.timeScale vlastní GameManager – voláme GameManager.OnMissionComplete().
 /// Event-driven: no Update(), no polling.
 /// </summary>
 [DisallowMultipleComponent]
 public class MissionUIHandler : MonoBehaviour
 {
-    [Header("Mission Complete UI")]
-    [Tooltip("Canvas nebo panel zobrazený po dokončení mise")]
+    [Header("Config")]
+    [SerializeField] private MissionSystemConfig config;
+
+    [Header("UI References")]
     [SerializeField] private GameObject missionCompleteOverlay;
-
-    [Tooltip("Volitelný Text element – nech prázdné pokud nepotřebuješ")]
     [SerializeField] private TextMeshProUGUI missionCompleteText;
-
-    [Header("Settings")]
-    [SerializeField] private string completeMessage = "MISSION COMPLETE";
-
-    // ───────────────────────────────────────────────────────────────────────
 
     private void Awake()
     {
@@ -47,32 +39,25 @@ public class MissionUIHandler : MonoBehaviour
             MissionManager.Instance.OnMissionCompleted -= HandleMissionCompleted;
     }
 
-    // ── Event handler ──────────────────────────────────────────────────────
-
     private void HandleMissionCompleted()
     {
-        Debug.Log("[MissionUIHandler] Showing MISSION COMPLETE.");
-
         if (missionCompleteOverlay != null)
             missionCompleteOverlay.SetActive(true);
 
-        if (missionCompleteText != null)
-            missionCompleteText.text = completeMessage;
-
-        // Time.timeScale vlastní GameManager – voláme jeho API, nikdy nepíšeme přímo.
-        // GameManager.OnMissionComplete() přidáš dle GameManager_PATCH.cs
-        if (GameManager.Instance != null)
+        if (missionCompleteText != null && config != null)
         {
-            GameManager.Instance.OnMissionComplete();
+            missionCompleteText.text = config.missionCompleteText;
+            missionCompleteText.color = config.missionCompleteColor;
         }
+
+        if (GameManager.Instance != null)
+            GameManager.Instance.OnMissionComplete();
         else
         {
-            Debug.LogWarning("[MissionUIHandler] GameManager not found – falling back to direct timeScale.");
+            Debug.LogWarning("[MissionUIHandler] GameManager not found – fallback timeScale.");
             Time.timeScale = 0f;
         }
     }
-
-    // ── Helpers ────────────────────────────────────────────────────────────
 
     private System.Collections.IEnumerator SubscribeWhenReady()
     {

@@ -2,26 +2,17 @@
 using UnityEngine;
 
 /// <summary>
-/// SRP: Detects player entry and calls MissionManager.CompleteMission().
-/// Registers/unregisters itself via MissionManager events – no polling, no Update().
-///
-/// Setup:
-///   1. Create GameObject "EscapeZone" with a Trigger Collider.
-///   2. Attach this script.
-///   3. Disable the GameObject in the scene – MissionManager.OnEscapeActivated enables it.
-///   4. Assign the reference in MissionAlarmHandler (or MissionManager) Inspector.
+/// SRP: Detekuje vstup hráče a volá MissionManager.CompleteMission().
+/// Player tag čte z MissionSystemConfig SO.
 /// </summary>
 [RequireComponent(typeof(Collider))]
 [DisallowMultipleComponent]
 public class EscapeZoneTrigger : MonoBehaviour
 {
-    [SerializeField] private string playerTag = "Player";
-
-    // ───────────────────────────────────────────────────────────────────────
+    [SerializeField] private MissionSystemConfig config;
 
     private void Awake()
     {
-        // Enforce trigger
         var col = GetComponent<Collider>();
         if (!col.isTrigger)
         {
@@ -30,14 +21,10 @@ public class EscapeZoneTrigger : MonoBehaviour
         }
     }
 
-    private void OnEnable()
-    {
-        Debug.Log("[EscapeZoneTrigger] Escape zone active.");
-    }
-
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag(playerTag)) return;
+        string tag = config != null ? config.playerTag : "Player";
+        if (!other.CompareTag(tag)) return;
         if (MissionManager.Instance == null) return;
         if (MissionManager.Instance.CurrentState != MissionManager.MissionState.Escape) return;
 

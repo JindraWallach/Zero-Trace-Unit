@@ -152,3 +152,10 @@ MonoBehaviour:
     isSceneGameObject: 0
     isAsset: 1
     _typeString: BaseStats, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - _obj: {fileID: 11400000, guid: 1f72b5b3dec1f994ca46fc38a3fa662c, type: 2}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-3-1f72b5b3dec1f994ca46fc38a3fa662c-11400000-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: MissionSystemConfig, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null

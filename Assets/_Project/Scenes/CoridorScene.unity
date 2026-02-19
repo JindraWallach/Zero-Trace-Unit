@@ -17551,6 +17551,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66fe3851b354623448341713bcb080f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ServerObjective
+  config: {fileID: 11400000, guid: 1f72b5b3dec1f994ca46fc38a3fa662c, type: 2}
+  puzzleDefinition: {fileID: 11400000, guid: 4d189acc318cbb44f8f551920274ae0e, type: 2}
 --- !u!1 &379739581
 GameObject:
   m_ObjectHideFlags: 0
@@ -38424,9 +38426,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9cd451ad4cbd5d43b6243c1181d25f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MissionUIHandler
+  config: {fileID: 11400000, guid: 1f72b5b3dec1f994ca46fc38a3fa662c, type: 2}
   missionCompleteOverlay: {fileID: 1904950322}
   missionCompleteText: {fileID: 1783599382}
-  completeMessage: MISSION COMPLETE
 --- !u!1001 &836639709
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -44165,7 +44167,7 @@ PrefabInstance:
     - target: {fileID: 4930989083550011045, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
       propertyPath: puzzleDefinition
       value: 
-      objectReference: {fileID: 11400000, guid: 4d189acc318cbb44f8f551920274ae0e, type: 2}
+      objectReference: {fileID: 11400000, guid: b1c1cf317b6e95a498ee87219e840084, type: 2}
     - target: {fileID: 6400673175810272358, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
       propertyPath: alarmSystem
       value: 
@@ -85654,7 +85656,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e42177bb223292240b591d6fe1ff5c78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EscapeZoneTrigger
-  playerTag: Player
+  config: {fileID: 0}
 --- !u!1001 &1837727623
 PrefabInstance:
   m_ObjectHideFlags: 0

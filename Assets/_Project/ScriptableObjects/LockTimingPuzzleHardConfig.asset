@@ -15,7 +15,7 @@ MonoBehaviour:
   sequenceLength: 4
   visibleSymbolsInColumn: 6
   symbolPool: 2
-  rotationSpeed: 9
+  rotationSpeed: 6
   symbolSpacing: 50
   alignmentTolerance: 20
   targetColor: {r: 0, g: 1, b: 0, a: 1}
