@@ -19,14 +19,14 @@ using UnityEngine;
 ///      Hackování deleguje na ServerCore.RequestHack().
 /// </summary>
 [DisallowMultipleComponent]
-public class ServerCoreInteractionMode : MonoBehaviour
+public class ServerCoreInteractionMode : MonoBehaviour, IInitializable
 {
     [Header("References")]
     [Tooltip("UIPromptController přiřazený na terminálu")]
     [SerializeField] private UIPromptController prompt;
 
-    [Tooltip("Alarm systém – triggeruje se při neúspěšném hacku (optional, auto-find)")]
-    [SerializeField] private SecurityAlarmSystem alarmSystem;
+    // Injected via DependencyInjector.Initialize() – nepřiřazuj v Inspectoru
+    private SecurityAlarmSystem alarmSystem;
 
     [Header("Config")]
     [SerializeField] private MissionSystemConfig config;
@@ -69,6 +69,16 @@ public class ServerCoreInteractionMode : MonoBehaviour
             PlayerModeController.Instance.OnModeChanged -= OnModeChanged;
 
         StopUpdating();
+    }
+
+    // ── IInitializable ─────────────────────────────────────────────────────
+
+    public void Initialize(DependencyInjector di)
+    {
+        alarmSystem = di.AlarmSystem;
+
+        if (alarmSystem == null)
+            Debug.LogWarning("[ServerCoreIM] DependencyInjector.AlarmSystem not assigned!", this);
     }
 
     // ── Public API (volá ServerCore) ───────────────────────────────────────
@@ -116,7 +126,7 @@ public class ServerCoreInteractionMode : MonoBehaviour
         // Delegate hack to ServerCore (which owns RequestHack)
         var serverCore = GetComponent<ServerCore>();
         serverCore?.RequestHack(
-            onSuccess: null,        // HandleHackSuccess voláno uvnitř ServerCore
+            onSuccess: OnHackSuccess_Alarm,  // spustí permanentní alarm
             onFail: OnHackFail,
             onCancel: () => { if (config != null && config.debugLog) Debug.Log("[ServerCoreIM] Hack cancelled – no alarm."); }
         );
@@ -124,23 +134,24 @@ public class ServerCoreInteractionMode : MonoBehaviour
 
     // ── Alarm ──────────────────────────────────────────────────────────────
 
+    private void OnHackSuccess_Alarm()
+    {
+        // Permanentní alarm do konce levelu – nelze zastavit
+        if (alarmSystem != null)
+            alarmSystem.TriggerPermanentAlarm(transform.position);
+        else
+            Debug.LogError("[ServerCoreIM] AlarmSystem not injected – assign in DependencyInjector!", this);
+    }
+
     private void OnHackFail()
     {
         if (config != null && config.debugLog)
             Debug.Log("[ServerCoreIM] Hack failed – triggering alarm.");
 
         if (alarmSystem != null)
-        {
-            alarmSystem.TriggerAlarm(transform.position);
-            return;
-        }
-
-        // Auto-find fallback (stejný pattern jako DoorInteractionMode)
-        alarmSystem = FindFirstObjectByType<SecurityAlarmSystem>();
-        if (alarmSystem != null)
             alarmSystem.TriggerAlarm(transform.position);
         else
-            Debug.LogError("[ServerCoreIM] No SecurityAlarmSystem found in scene!", this);
+            Debug.LogError("[ServerCoreIM] AlarmSystem not injected – assign in DependencyInjector!", this);
     }
 
     // ── Event callbacks ────────────────────────────────────────────────────
