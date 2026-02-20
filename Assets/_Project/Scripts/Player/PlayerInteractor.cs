@@ -31,8 +31,12 @@ public class PlayerInteractor : MonoBehaviour, IInitializable
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log($"Entered interaction range: {other.gameObject.name} at {other.transform.position}");
         if (!IsInLayerMask(other.gameObject.layer, interactableLayers)) return;
         if (!other.TryGetComponent(out IInteractable interactable)) return;
+
+        // Debug log: print when an interactable enters the player's interaction range.
+        
 
         interactable.OnEnterRange();
 

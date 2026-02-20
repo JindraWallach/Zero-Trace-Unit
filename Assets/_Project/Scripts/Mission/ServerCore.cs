@@ -89,6 +89,19 @@ public class ServerCore : InteractableBase, IHackTarget, IInitializable
         );
     }
 
+    public override void OnEnterRange()
+    {
+        base.OnEnterRange();
+        if (PlayerModeController.Instance.CurrentMode == PlayerMode.Hack)
+            ShowPromptForPlayer(_player);
+    }
+
+    public override void OnExitRange()
+    {
+        base.OnExitRange();
+        HidePromptForPlayer();
+    }
+
     public override void ShowPromptForPlayer(Transform player)
     {
         _player = player;
