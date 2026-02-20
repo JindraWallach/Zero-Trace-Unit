@@ -41,6 +41,13 @@ MonoBehaviour:
     isAsset: 1
     _typeString: UnityEditor.SceneAsset, UnityEditor.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  - _obj: {fileID: 11400000, guid: 1f72b5b3dec1f994ca46fc38a3fa662c, type: 2}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-3-1f72b5b3dec1f994ca46fc38a3fa662c-11400000-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: MissionSystemConfig, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
   - _obj: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     globalId:
       globalObjectIdString: GlobalObjectId_V1-1-052faaac586de48259a63d0c4782560b-17502115434096073164-0
@@ -145,6 +152,13 @@ MonoBehaviour:
     isSceneGameObject: 0
     isAsset: 1
     _typeString: PlayerClassConfig, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - _obj: {fileID: 11400000, guid: 1f72b5b3dec1f994ca46fc38a3fa662c, type: 2}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-3-1f72b5b3dec1f994ca46fc38a3fa662c-11400000-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: MissionSystemConfig, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
   - _obj: {fileID: 11400000, guid: 51c1e62fc4ace6a4d995c5d021064c1f, type: 2}
     globalId:
