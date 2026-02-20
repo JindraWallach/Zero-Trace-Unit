@@ -5,17 +5,17 @@ using UnityEngine;
 /// <summary>
 /// ServerCore – hackovatelný terminál mise.
 ///
-/// Stejný pattern jako HackableDoor:
-///   InteractableBase  → IInteractable (PlayerInteractor ho najde v range)
-///   IHackTarget       → HackManager ho registruje, spouští puzzle
-///   IInitializable    → DI zavolá Initialize(di)
+//// Stejný pattern jako HackableDoor:
+////   InteractableBase  → IInteractable (PlayerInteractor ho najde v range)
+////   IHackTarget       → HackManager ho registruje, spouští puzzle
+////   IInitializable    → DI zavolá Initialize(di)
 ///
-/// Prompt logika:
-///   Pouze 1 UIPromptController (terminál má jen 1 stranu).
-///   Reaguje na OnModeChanged event – coroutine polling distance 5x/s.
-///   Stavy: OUT OF RANGE (červená) | [E] HACK (žlutá) | ALREADY HACKED (šedá)
+//// Prompt logika:
+////   Pouze 1 UIPromptController (terminál má jen 1 stranu).
+////   Reaguje na OnModeChanged event – coroutine polling distance 5x/s.
+////   Stavy: OUT OF RANGE (červená) | [E] HACK (žlutá) | ALREADY HACKED (šedá)
 ///
-/// Po úspěšném hacknutí volá MissionManager.OnServerHacked().
+//// Po úspěšném hacknutí volá MissionManager.OnServerHacked().
 /// </summary>
 [DisallowMultipleComponent]
 public class ServerCore : InteractableBase, IHackTarget, IInitializable
@@ -92,8 +92,8 @@ public class ServerCore : InteractableBase, IHackTarget, IInitializable
     public override void OnEnterRange()
     {
         base.OnEnterRange();
-        if (PlayerModeController.Instance.CurrentMode == PlayerMode.Hack)
-            ShowPromptForPlayer(_player);
+        // Do not attempt to show prompt here using internal _player (not yet set).
+        // PlayerInteractor will call ShowPromptForPlayer(playerTransform) with the correct transform.
     }
 
     public override void OnExitRange()
@@ -107,6 +107,9 @@ public class ServerCore : InteractableBase, IHackTarget, IInitializable
         _player = player;
         _playerInRange = true;
         StartUpdating();
+
+        if (config != null && config.debugLog)
+            Debug.Log($"[ServerCore] ShowPromptForPlayer called. player={(player == null ? "null" : player.name)}");
     }
 
     public override void HidePromptForPlayer()
@@ -212,6 +215,9 @@ public class ServerCore : InteractableBase, IHackTarget, IInitializable
             string key = config != null ? config.interactKey : "E";
             prompt.Show($"[{key}] HACK", ColorHack);
         }
+
+        if (config != null && config.debugLog)
+            Debug.Log($"[ServerCore] RefreshPrompt called. dist={Vector3.Distance(transform.position, _player.position):F2}");
     }
 
     // ── Interní ────────────────────────────────────────────────────────────
