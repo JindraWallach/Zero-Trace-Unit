@@ -1,54 +1,24 @@
+// Scripts/Managers/UIManager.cs
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// SRP: UI utility manager - prompts and hack mode UI only.
+/// Pause menu ownership moved to GameManager.
+/// </summary>
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance { get; private set; }
 
     [Header("UI References")]
-    [SerializeField] private GameObject[] disableDuringHack; 
-    
-    [Header("Pause Menu")]
-    [SerializeField] private GameObject pauseMenuPanel;
+    [SerializeField] private GameObject[] disableDuringHack;
 
     private readonly List<UIPromptController> activePrompts = new();
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
+        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
-        //DontDestroyOnLoad(gameObject);
-    }
-
-    private void Start()
-    {
-        HidePauseMenu();
-    }
-
-    public void ShowPauseMenu()
-    {
-        if (pauseMenuPanel != null)
-        {
-            pauseMenuPanel.SetActive(true);
-            Debug.Log("[UIManager] Pause menu shown");
-        }
-        else
-        {
-            Debug.LogWarning("[UIManager] Pause menu panel not assigned!");
-        }
-    }
-
-    public void HidePauseMenu()
-    {
-        if (pauseMenuPanel != null)
-        {
-            pauseMenuPanel.SetActive(false);
-            Debug.Log("[UIManager] Pause menu hidden");
-        }
     }
 
     public void RegisterPrompt(UIPromptController prompt)

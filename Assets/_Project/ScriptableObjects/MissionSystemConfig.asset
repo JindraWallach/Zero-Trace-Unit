@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 822cd2a840038d948a979fa2d60612e3, type: 3}
   m_Name: MissionSystemConfig
   m_EditorClassIdentifier: Assembly-CSharp::MissionSystemConfig
-  missionCompleteText: MISSION COMPLETE
+  missionCompleteText: MISSION COMPLETED
   missionCompleteColor: {r: 1, g: 1, b: 1, a: 1}
   interactionRange: 6
   serverHackRange: 15

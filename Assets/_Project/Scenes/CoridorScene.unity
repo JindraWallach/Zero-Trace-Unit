@@ -2100,6 +2100,10 @@ MonoBehaviour:
     done: 0
   - name: 'sky color: 21 71 128'
     done: 0
+  - name: add cameras
+    done: 0
+  - name: 'and camera hud UI '
+    done: 0
 --- !u!4 &36559939
 Transform:
   m_ObjectHideFlags: 0
@@ -14657,6 +14661,7 @@ MonoBehaviour:
   - {fileID: 1113791866}
   - {fileID: 2053884504}
   - {fileID: 204410438}
+  - {fileID: 1328918901}
   - {fileID: 1161337253}
   - {fileID: 809363209}
   - {fileID: 741603335}
@@ -58251,8 +58256,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b2b15841835838428f5ed0ae26cd6be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIManager
-  disableDuringHack: []
-  pauseMenuPanel: {fileID: 475067415}
+  disableDuringHack:
+  - {fileID: 1787687958}
 --- !u!1001 &1248101202
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -62489,6 +62494,11 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.000000059604645, y: 0.84480757, z: -0.06503843}
     m_Extent: {x: 1.0228081, y: 0.94324356, z: 0.27683073}
   m_DirtyAABB: 0
+--- !u!1 &1328918901 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1543695114780030, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+  m_PrefabInstance: {fileID: 975410425}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1330523714
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -104234,9 +104244,21 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 475067415}
     - target: {fileID: 9126424233814254475, guid: 3dcceb07bf30f3d4b81feeb75476a1a0, type: 3}
+      propertyPath: pauseMenuPanel
+      value: 
+      objectReference: {fileID: 475067415}
+    - target: {fileID: 9126424233814254475, guid: 3dcceb07bf30f3d4b81feeb75476a1a0, type: 3}
       propertyPath: deathSceneReloadDelay
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 9126424233814254475, guid: 3dcceb07bf30f3d4b81feeb75476a1a0, type: 3}
+      propertyPath: hideOnPauseObjects.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9126424233814254475, guid: 3dcceb07bf30f3d4b81feeb75476a1a0, type: 3}
+      propertyPath: 'hideOnPauseObjects.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1787687958}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

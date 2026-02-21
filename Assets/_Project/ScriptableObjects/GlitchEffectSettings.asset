@@ -20,6 +20,6 @@ MonoBehaviour:
   inversionIntensity: 0
   verticalShift: 0
   noiseFrequency: 0.5
-  enabled: 0
+  enabled: 1
   updateFrequency: 2
   currentPreset: 2

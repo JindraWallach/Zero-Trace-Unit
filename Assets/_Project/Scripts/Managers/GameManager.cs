@@ -1,4 +1,5 @@
-﻿using Synty.AnimationBaseLocomotion.Samples.InputSystem;
+﻿// Scripts/Managers/GameManager.cs
+using Synty.AnimationBaseLocomotion.Samples.InputSystem;
 using System;
 using UnityEngine;
 
@@ -17,14 +18,15 @@ public class GameManager : MonoBehaviour, IInitializable
     [Header("Death Handling")]
     [SerializeField] private float deathSceneReloadDelay = 2f;
 
-    [Header("UI References")]
-    [SerializeField] private GameObject pauseMenuUI;
+    [Header("UI")]
+    [Tooltip("Pause menu root panel")]
+    [SerializeField] private GameObject pauseMenuPanel;
 
+    [Tooltip("Objects hidden when pause menu opens or mission completes (e.g. objective popup)")]
+    [SerializeField] private GameObject[] hideOnPauseObjects;
 
-
-    // Events for game state changes
     public event Action<GameState> OnGameStateChanged;
-    public event Action OnPlayerDied; // NEW: Notify listeners about player death
+    public event Action OnPlayerDied;
 
     public GameState CurrentState => currentState;
     public bool IsPaused => currentState == GameState.Paused;
@@ -37,12 +39,7 @@ public class GameManager : MonoBehaviour, IInitializable
 
     private void Awake()
     {
-        // NO DontDestroyOnLoad - we want fresh state per scene
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
+        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
 
         playerDeath = FindFirstObjectByType<PlayerDeath>();
@@ -58,7 +55,6 @@ public class GameManager : MonoBehaviour, IInitializable
         else
             Debug.LogError("[GameManager] InputReader is null during initialization!");
 
-        // Find PlayerDeath component in scene
         playerDeath = FindFirstObjectByType<PlayerDeath>();
         if (playerDeath == null)
             Debug.LogWarning("[GameManager] PlayerDeath component not found in scene!");
@@ -73,12 +69,8 @@ public class GameManager : MonoBehaviour, IInitializable
             Instance = null;
     }
 
-    // === PLAYER DEATH HANDLING ===
+    // === PLAYER DEATH ===
 
-    /// <summary>
-    /// Called by EnemyCatchState when player is caught.
-    /// Delegates to PlayerDeath for execution.
-    /// </summary>
     public void OnPlayerCaught(Transform enemyTransform, Vector3 forceDirection, float forceMagnitude)
     {
         if (currentState == GameState.Dead) return;
@@ -88,31 +80,20 @@ public class GameManager : MonoBehaviour, IInitializable
         if (inputReader != null)
             inputReader.DisableInputs();
 
-        // 1. Spawn vizuální efekty HNED (taser trail/electric FX)
         if (taserEffects != null && playerDeath != null && enemyTransform != null)
-        {
-            Vector3 taserPoint = enemyTransform.position;
-            Vector3 playerChest = playerDeath.transform.position;
+            taserEffects.SpawnTaserEffect(enemyTransform.position, playerDeath.transform.position);
 
-            // TaserEffectSpawner automaticky použije playerTransform z DI
-            taserEffects.SpawnTaserEffect(taserPoint, playerChest);
-        }
-
-        // 2. Execute death s force
         if (playerDeath != null)
-        {
             playerDeath.ExecuteDeathWithForce(forceDirection, forceMagnitude, deathSceneReloadDelay);
-        }
 
         OnPlayerDied?.Invoke();
     }
 
-    // === GAME STATE MANAGEMENT ===
+    // === GAME STATE ===
 
     private void ChangeState(GameState newState)
     {
-        if (currentState == newState)
-            return;
+        if (currentState == newState) return;
 
         GameState oldState = currentState;
         currentState = newState;
@@ -129,8 +110,6 @@ public class GameManager : MonoBehaviour, IInitializable
 
         if (inputReader != null)
             inputReader.DisableInputs(new[] { "Exit" });
-
-        Debug.Log("[GameManager] Entered Puzzle Mode");
     }
 
     public void ExitPuzzleMode()
@@ -141,14 +120,12 @@ public class GameManager : MonoBehaviour, IInitializable
 
         if (inputReader != null)
             inputReader.EnableAllInputs();
-
-        Debug.Log("[GameManager] Exited Puzzle Mode");
     }
 
     private void OnEscapePressed()
     {
         if (currentState == GameState.Dead || currentState == GameState.MissionComplete)
-            return; // No pause during death or completed mission
+            return;
 
         if (currentState == GameState.InPuzzle)
         {
@@ -164,15 +141,14 @@ public class GameManager : MonoBehaviour, IInitializable
 
     public void PauseGame()
     {
-        if (currentState == GameState.Paused || currentState == GameState.Dead)
-            return;
+        if (currentState == GameState.Paused || currentState == GameState.Dead) return;
 
         ChangeState(GameState.Paused);
 
-        UIManager.Instance?.ShowPauseMenu();
+        SetPauseMenu(true);
+        SetHideOnPauseObjects(false);
 
         Time.timeScale = 0f;
-
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
 
@@ -188,10 +164,10 @@ public class GameManager : MonoBehaviour, IInitializable
 
         ChangeState(GameState.Playing);
 
-        UIManager.Instance?.HidePauseMenu();
+        SetPauseMenu(false);
+        SetHideOnPauseObjects(true);
 
         Time.timeScale = 1f;
-
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
@@ -203,32 +179,15 @@ public class GameManager : MonoBehaviour, IInitializable
 
     public void OnResumeButtonPressed()
     {
-        if (currentState != GameState.Paused)
-            return;
-
+        if (currentState != GameState.Paused) return;
         ResumeGame();
     }
 
-    // === SETTINGS INTEGRATION ===
-
-    public SettingsManager GetSettings()
-    {
-        return SettingsManager.Instance;
-    }
-
-    public void ApplySettings()
-    {
-        if (SettingsManager.Instance != null)
-        {
-            SettingsManager.Instance.ApplySettings();
-            Debug.Log("[GameManager] Applied settings");
-        }
-    }
+    // === MISSION ===
 
     /// <summary>
-    /// Called by MissionUIHandler when the mission is completed.
-    /// Owns Time.timeScale = 0 – nobody else smí psát timeScale přímo.
-    /// Disables player input, freezes time.
+    /// Called by MissionUIHandler when mission is completed.
+    /// Owns Time.timeScale = 0 – nobody else writes timeScale directly.
     /// </summary>
     public void OnMissionComplete()
     {
@@ -239,12 +198,39 @@ public class GameManager : MonoBehaviour, IInitializable
         if (inputReader != null)
             inputReader.DisableInputs();
 
+        SetHideOnPauseObjects(false);
+
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
-
         Time.timeScale = 0f;
 
         Debug.Log("[GameManager] MissionComplete – time frozen.");
+    }
+
+    // === SETTINGS ===
+
+    public SettingsManager GetSettings() => SettingsManager.Instance;
+
+    public void ApplySettings()
+    {
+        if (SettingsManager.Instance != null)
+            SettingsManager.Instance.ApplySettings();
+    }
+
+    // === HELPERS ===
+
+    private void SetPauseMenu(bool visible)
+    {
+        if (pauseMenuPanel != null)
+            pauseMenuPanel.SetActive(visible);
+    }
+
+    private void SetHideOnPauseObjects(bool visible)
+    {
+        foreach (var obj in hideOnPauseObjects)
+        {
+            if (obj != null) obj.SetActive(visible);
+        }
     }
 }
 

@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd0c26245601dad4b83acacb3a30900d, type: 3}
   m_Name: Objective_FindData
   m_EditorClassIdentifier: Assembly-CSharp::MissionObjectiveSO
-  objectiveText: FIND AND DOWNLOAD DATA
+  objectiveText: FIND AND DOWNLOAD ENCRYPTED DATA
   description: 
-  popupDuration: 3
+  popupDuration: 5
