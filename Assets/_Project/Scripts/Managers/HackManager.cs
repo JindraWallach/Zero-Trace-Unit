@@ -30,7 +30,6 @@ public class HackManager : MonoBehaviour
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
     }
 
     // === Registration ===
