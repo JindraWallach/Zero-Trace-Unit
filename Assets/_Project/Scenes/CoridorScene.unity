@@ -31683,9 +31683,9 @@ MonoBehaviour:
     m_ColorSpace: 0
     m_NumColorKeys: 3
     m_NumAlphaKeys: 2
-  fadeInDuration: 0.3
-  fadeOutDuration: 0.5
-  pulseSpeed: 2
+  fadeInDuration: 1
+  fadeOutDuration: 1
+  pulseSpeed: 1
   warningMessage: DETECTED BY CAMERA
   warningColor: {r: 1, g: 0, b: 0, a: 0.68235296}
   textPulseMin: 0.5

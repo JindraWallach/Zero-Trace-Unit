@@ -4,10 +4,8 @@ using UnityEngine.UI;
 
 /// <summary>
 /// Drives a full-screen sliced border Image red based on highest camera suspicion.
-/// borderImage MUST be on a separate Canvas (or outside any CanvasGroup)
-/// so SecurityCameraHUD's CanvasGroup.alpha cannot override it.
-///
-/// Single Responsibility: border visual only. No warning text, no CanvasGroup.
+/// borderImage MUST be outside any CanvasGroup in the hierarchy.
+/// Single Responsibility: border visual only.
 /// </summary>
 public class ScreenEdgeDangerHUD : MonoBehaviour
 {
@@ -19,8 +17,9 @@ public class ScreenEdgeDangerHUD : MonoBehaviour
     [Header("References")]
     [SerializeField] private Image borderImage;
 
-    private float currentSuspicion;
-    private Coroutine updateCoroutine;
+    // Highest suspicion reported this tick — resets every coroutine frame
+    private float reportedSuspicion;
+    private bool hasStarted;
 
     // ── Lifecycle ─────────────────────────────────────────────────────────────
 
@@ -42,7 +41,14 @@ public class ScreenEdgeDangerHUD : MonoBehaviour
             return;
         }
 
-        ApplyImmediate(0f);
+        SetAlpha(0f);
+    }
+
+    private void Start()
+    {
+        // Always-running coroutine — decays naturally when no suspicion reported
+        StartCoroutine(BorderCoroutine());
+        hasStarted = true;
     }
 
     private void OnDestroy()
@@ -66,67 +72,45 @@ public class ScreenEdgeDangerHUD : MonoBehaviour
 
     public void ResetHUD()
     {
-        currentSuspicion = 0f;
-        StopUpdateCoroutine();
-        ApplyImmediate(0f);
+        reportedSuspicion = 0f;
+        SetAlpha(0f);
     }
 
     // ── Internal ──────────────────────────────────────────────────────────────
 
     private void OnSuspicionChanged(float suspicion)
     {
-        // Keep highest suspicion if multiple cameras
-        if (suspicion > currentSuspicion || suspicion == 0f)
-            currentSuspicion = suspicion;
-
-        // Start coroutine if not running
-        if (updateCoroutine == null)
-            updateCoroutine = StartCoroutine(BorderUpdateCoroutine());
+        // Keep highest value reported this frame
+        if (suspicion > reportedSuspicion)
+            reportedSuspicion = suspicion;
     }
 
-    private IEnumerator BorderUpdateCoroutine()
+    private IEnumerator BorderCoroutine()
     {
-        float currentAlpha = borderImage.color.a;
+        float currentAlpha = 0f;
 
         while (true)
         {
-            float targetAlpha = config.GetTargetAlpha(currentSuspicion);
-            float targetPixels = config.GetBorderPixels(currentSuspicion);
+            float targetAlpha = config.GetTargetAlpha(reportedSuspicion);
+            float targetPixels = config.GetBorderPixels(reportedSuspicion);
 
             currentAlpha = Mathf.Lerp(currentAlpha, targetAlpha, config.lerpSpeed * Time.deltaTime);
 
-            Color c = config.borderColor;
-            c.a = currentAlpha;
-            borderImage.color = c;
+            SetAlpha(currentAlpha);
             borderImage.pixelsPerUnitMultiplier = Mathf.Max(0.01f, targetPixels);
 
-            // Stop when fully faded out and suspicion is 0
-            if (currentSuspicion <= 0f && currentAlpha < 0.001f)
-            {
-                ApplyImmediate(0f);
-                updateCoroutine = null;
-                yield break;
-            }
+            // Reset reported suspicion each frame — cameras must re-report next frame
+            // If no camera reports, suspicion = 0 and alpha lerps back to 0
+            reportedSuspicion = 0f;
 
             yield return null;
         }
     }
 
-    private void ApplyImmediate(float alpha)
+    private void SetAlpha(float alpha)
     {
-        Color c = config != null ? config.borderColor : Color.red;
+        Color c = config.borderColor;
         c.a = alpha;
         borderImage.color = c;
-        if (config != null)
-            borderImage.pixelsPerUnitMultiplier = config.minPixelsPerUnit;
-    }
-
-    private void StopUpdateCoroutine()
-    {
-        if (updateCoroutine != null)
-        {
-            StopCoroutine(updateCoroutine);
-            updateCoroutine = null;
-        }
     }
 }
