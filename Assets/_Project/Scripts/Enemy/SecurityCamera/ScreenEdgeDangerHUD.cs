@@ -1,18 +1,13 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// Drives a full-screen sliced border Image that turns red based on the highest
-/// active camera suspicion level.
-/// 
-/// Setup:
-///   • Add this component to a Canvas child GameObject.
-///   • Assign a 9-sliced border sprite to borderImage (stretch mode = Sliced).
-///   • Assign ScreenEdgeDangerConfig SO.
-///   • ScreenEdgeDangerHUD.Instance is populated automatically (per-scene singleton).
-/// 
-/// Single Responsibility: update one UI Image alpha + border size from suspicion data.
-/// Performance: no Update() allocation; runs only when suspicion changes via event.
+/// Drives a full-screen sliced border Image red based on highest camera suspicion.
+/// borderImage MUST be on a separate Canvas (or outside any CanvasGroup)
+/// so SecurityCameraHUD's CanvasGroup.alpha cannot override it.
+///
+/// Single Responsibility: border visual only. No warning text, no CanvasGroup.
 /// </summary>
 public class ScreenEdgeDangerHUD : MonoBehaviour
 {
@@ -24,33 +19,22 @@ public class ScreenEdgeDangerHUD : MonoBehaviour
     [Header("References")]
     [SerializeField] private Image borderImage;
 
-    // Current smoothed alpha
-    private float currentAlpha;
-
-    // Highest suspicion seen this frame across all registered cameras
-    private float highestSuspicion;
-
-    // Whether we need to re-render this frame
-    private bool dirty;
+    private float currentSuspicion;
+    private Coroutine updateCoroutine;
 
     // ── Lifecycle ─────────────────────────────────────────────────────────────
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
+        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
 
         if (borderImage == null)
         {
-            Debug.LogError("[ScreenEdgeDangerHUD] Missing borderImage reference!", this);
+            Debug.LogError("[ScreenEdgeDangerHUD] Missing borderImage!", this);
             enabled = false;
             return;
         }
-
         if (config == null)
         {
             Debug.LogError("[ScreenEdgeDangerHUD] Missing ScreenEdgeDangerConfig!", this);
@@ -58,98 +42,91 @@ public class ScreenEdgeDangerHUD : MonoBehaviour
             return;
         }
 
-        // Initialise hidden
-        SetBorderImmediate(0f);
+        ApplyImmediate(0f);
     }
 
     private void OnDestroy()
     {
-        if (Instance == this)
-            Instance = null;
-    }
-
-    private void LateUpdate()
-    {
-        if (!dirty) return;
-        dirty = false;
-
-        ApplyBorder(highestSuspicion);
-
-        // Reset for next frame
-        highestSuspicion = 0f;
+        if (Instance == this) Instance = null;
     }
 
     // ── Public API ────────────────────────────────────────────────────────────
 
-    /// <summary>
-    /// Called by SecurityCamera (or SecurityCameraHUD) every time suspicion changes.
-    /// Keeps the highest value across all cameras per frame.
-    /// </summary>
-    public void ReportSuspicion(float suspicion)
-    {
-        if (suspicion > highestSuspicion)
-        {
-            highestSuspicion = suspicion;
-            dirty = true;
-        }
-    }
-
-    /// <summary>
-    /// Register a SecurityCamera so its suspicion is forwarded here automatically.
-    /// </summary>
     public void RegisterCamera(SecurityCamera camera)
     {
         if (camera == null) return;
-        camera.OnSuspicionChanged += ReportSuspicion;
+        camera.OnSuspicionChanged += OnSuspicionChanged;
     }
 
-    /// <summary>
-    /// Unregister a SecurityCamera.
-    /// </summary>
     public void UnregisterCamera(SecurityCamera camera)
     {
         if (camera == null) return;
-        camera.OnSuspicionChanged -= ReportSuspicion;
+        camera.OnSuspicionChanged -= OnSuspicionChanged;
     }
 
-    /// <summary>
-    /// Instantly hide the border (e.g., on scene/game reset).
-    /// </summary>
     public void ResetHUD()
     {
-        highestSuspicion = 0f;
-        dirty = false;
-        SetBorderImmediate(0f);
+        currentSuspicion = 0f;
+        StopUpdateCoroutine();
+        ApplyImmediate(0f);
     }
 
     // ── Internal ──────────────────────────────────────────────────────────────
 
-    private void ApplyBorder(float suspicion)
+    private void OnSuspicionChanged(float suspicion)
     {
-        float targetAlpha = config.GetTargetAlpha(suspicion);
-        float targetPixels = config.GetBorderPixels(suspicion);
+        // Keep highest suspicion if multiple cameras
+        if (suspicion > currentSuspicion || suspicion == 0f)
+            currentSuspicion = suspicion;
 
-        // Smooth alpha toward target
-        currentAlpha = Mathf.Lerp(currentAlpha, targetAlpha, Time.deltaTime / Mathf.Max(config.lerpSpeed, 0.001f));
-
-        // Apply color + alpha
-        Color c = config.borderColor;
-        c.a = currentAlpha;
-        borderImage.color = c;
-
-        // Apply border size (9-sliced pixel inset)
-        borderImage.pixelsPerUnitMultiplier = Mathf.Max(0.01f, targetPixels);
+        // Start coroutine if not running
+        if (updateCoroutine == null)
+            updateCoroutine = StartCoroutine(BorderUpdateCoroutine());
     }
 
-    private void SetBorderImmediate(float suspicion)
+    private IEnumerator BorderUpdateCoroutine()
     {
-        currentAlpha = 0f;
+        float currentAlpha = borderImage.color.a;
 
+        while (true)
+        {
+            float targetAlpha = config.GetTargetAlpha(currentSuspicion);
+            float targetPixels = config.GetBorderPixels(currentSuspicion);
+
+            currentAlpha = Mathf.Lerp(currentAlpha, targetAlpha, config.lerpSpeed * Time.deltaTime);
+
+            Color c = config.borderColor;
+            c.a = currentAlpha;
+            borderImage.color = c;
+            borderImage.pixelsPerUnitMultiplier = Mathf.Max(0.01f, targetPixels);
+
+            // Stop when fully faded out and suspicion is 0
+            if (currentSuspicion <= 0f && currentAlpha < 0.001f)
+            {
+                ApplyImmediate(0f);
+                updateCoroutine = null;
+                yield break;
+            }
+
+            yield return null;
+        }
+    }
+
+    private void ApplyImmediate(float alpha)
+    {
         Color c = config != null ? config.borderColor : Color.red;
-        c.a = 0f;
+        c.a = alpha;
         borderImage.color = c;
-
         if (config != null)
-            borderImage.pixelsPerUnitMultiplier = config.minBorderPixels;
+            borderImage.pixelsPerUnitMultiplier = config.minPixelsPerUnit;
+    }
+
+    private void StopUpdateCoroutine()
+    {
+        if (updateCoroutine != null)
+        {
+            StopCoroutine(updateCoroutine);
+            updateCoroutine = null;
+        }
     }
 }

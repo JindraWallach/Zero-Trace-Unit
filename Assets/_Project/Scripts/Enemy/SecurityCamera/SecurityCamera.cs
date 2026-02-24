@@ -30,7 +30,6 @@ public class SecurityCamera : MonoBehaviour
 
     // Components
     private SecurityCameraVision vision;
-    private SecurityCameraIndicator indicator;
 
     // State
     private CameraState currentState;
@@ -50,7 +49,6 @@ public class SecurityCamera : MonoBehaviour
     {
         // Cache components
         vision = GetComponent<SecurityCameraVision>();
-        indicator = GetComponent<SecurityCameraIndicator>();
 
         // Validate config
         if (config == null)
@@ -226,15 +224,12 @@ public class SecurityCamera : MonoBehaviour
         {
             case CameraState.Idle:
                 suspicionMeter = 0f;
-                indicator.SetState(CameraState.Idle);
                 break;
 
             case CameraState.Suspicious:
-                indicator.SetState(CameraState.Suspicious);
                 break;
 
             case CameraState.Alert:
-                indicator.SetState(CameraState.Alert);
                 TriggerAlert();
                 break;
         }

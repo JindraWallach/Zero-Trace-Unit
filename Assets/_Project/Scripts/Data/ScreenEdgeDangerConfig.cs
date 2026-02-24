@@ -1,14 +1,14 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 /// <summary>
 /// ScriptableObject configuration for screen edge danger vignette.
-/// Controls how red border intensity maps to camera suspicion (0–100%).
+/// Controls how red border intensity maps to camera suspicion (0â€“100%).
 /// Create via: Assets > Create > Zero Trace > Screen Edge Danger Config
 /// </summary>
 [CreateAssetMenu(fileName = "ScreenEdgeDangerConfig", menuName = "Zero Trace/Screen Edge Danger Config")]
 public class ScreenEdgeDangerConfig : ScriptableObject
 {
-    [Header("Suspicion Thresholds (0–100)")]
+    [Header("Suspicion Thresholds (0â€“100)")]
     [Tooltip("Suspicion % at which border first becomes visible (maps to pixel multiplier ~1.2)")]
     [Range(0f, 100f)]
     public float visibleThreshold = 20f;
@@ -29,18 +29,18 @@ public class ScreenEdgeDangerConfig : ScriptableObject
     [Range(0f, 1f)]
     public float maxAlpha = 0.85f;
 
-    [Tooltip("Duration (seconds) for alpha to interpolate to target value")]
-    [Range(0f, 1f)]
-    public float lerpSpeed = 0.15f;
+    [Tooltip("Lerp speed toward target alpha (higher = faster, e.g. 5 = smooth, 20 = snappy)")]
+    [Range(0.5f, 30f)]
+    public float lerpSpeed = 8f;
 
-    [Header("Image (Sliced Sprite) Settings")]
-    [Tooltip("Border width in pixels at minimum intensity (suspicion ~1.2 camera multiplier)")]
-    [Range(0f, 120f)]
-    public float minBorderPixels = 20f;
+    [Header("Image pixelsPerUnitMultiplier Range")]
+    [Tooltip("pixelsPerUnitMultiplier at minimum intensity (border just visible)")]
+    [Range(0f, 10f)]
+    public float minPixelsPerUnit = 0.5f;
 
-    [Tooltip("Border width in pixels at maximum intensity (suspicion ~1.88 camera multiplier)")]
-    [Range(0f, 300f)]
-    public float maxBorderPixels = 80f;
+    [Tooltip("pixelsPerUnitMultiplier at maximum intensity (full red border)")]
+    [Range(0f, 10f)]
+    public float maxPixelsPerUnit = 1.5f;
 
     private void OnValidate()
     {
@@ -49,12 +49,12 @@ public class ScreenEdgeDangerConfig : ScriptableObject
 
         minAlpha = Mathf.Clamp01(minAlpha);
         maxAlpha = Mathf.Clamp(maxAlpha, minAlpha, 1f);
-        minBorderPixels = Mathf.Max(0f, minBorderPixels);
-        maxBorderPixels = Mathf.Max(minBorderPixels, maxBorderPixels);
+        minPixelsPerUnit = Mathf.Max(0f, minPixelsPerUnit);
+        maxPixelsPerUnit = Mathf.Max(minPixelsPerUnit, maxPixelsPerUnit);
     }
 
     /// <summary>
-    /// Returns normalized danger intensity (0–1) based on raw suspicion value (0–100).
+    /// Returns normalized danger intensity (0â€“1) based on raw suspicion value (0â€“100).
     /// Returns 0 below visibleThreshold, 1 at or above maxIntensityThreshold.
     /// </summary>
     public float GetNormalizedIntensity(float suspicion)
@@ -66,11 +66,13 @@ public class ScreenEdgeDangerConfig : ScriptableObject
 
     /// <summary>
     /// Returns target alpha for the border image based on suspicion.
+    /// 0 below visibleThreshold, lerps minAlphaâ†’maxAlpha up to maxIntensityThreshold.
     /// </summary>
     public float GetTargetAlpha(float suspicion)
     {
         float t = GetNormalizedIntensity(suspicion);
-        return Mathf.Lerp(0f, Mathf.Lerp(minAlpha, maxAlpha, t), Mathf.Ceil(t));
+        if (t <= 0f) return 0f;
+        return Mathf.Lerp(minAlpha, maxAlpha, t);
     }
 
     /// <summary>
@@ -79,6 +81,6 @@ public class ScreenEdgeDangerConfig : ScriptableObject
     public float GetBorderPixels(float suspicion)
     {
         float t = GetNormalizedIntensity(suspicion);
-        return Mathf.Lerp(minBorderPixels, maxBorderPixels, t);
+        return Mathf.Lerp(minPixelsPerUnit, maxPixelsPerUnit, t);
     }
 }

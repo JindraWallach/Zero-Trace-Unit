@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b1296942efdfd94ca057fd7e8d136c1, type: 3}
   m_Name: ScreenEdgeDangerConfig
   m_EditorClassIdentifier: Assembly-CSharp::ScreenEdgeDangerConfig
-  visibleThreshold: 20
+  visibleThreshold: 10
   maxIntensityThreshold: 100
-  borderColor: {r: 1, g: 0, b: 0, a: 1}
-  minAlpha: 0.05
-  maxAlpha: 0.3
-  lerpSpeed: 0.15
-  minBorderPixels: 20
-  maxBorderPixels: 80
+  borderColor: {r: 1, g: 0, b: 0, a: 0.18431373}
+  minAlpha: 0.1
+  maxAlpha: 1
+  lerpSpeed: 0.5
+  minPixelsPerUnit: 1.8
+  maxPixelsPerUnit: 4

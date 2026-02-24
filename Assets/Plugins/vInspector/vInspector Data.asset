@@ -173,3 +173,10 @@ MonoBehaviour:
     isAsset: 1
     _typeString: MissionSystemConfig, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+  - _obj: {fileID: 11400000, guid: a2cb4bb3ca2f21144956436ccd75dffb, type: 2}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-3-a2cb4bb3ca2f21144956436ccd75dffb-11400000-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: ScreenEdgeDangerConfig, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
