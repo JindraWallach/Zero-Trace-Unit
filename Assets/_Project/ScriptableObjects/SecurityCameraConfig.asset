@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: SecurityCameraConfig
   m_EditorClassIdentifier: Assembly-CSharp::SecurityCameraConfig
   visionRange: 10
-  visionAngle: 70
+  visionAngle: 120
   visionCheckInterval: 0.2
   visionObstacleMask:
     serializedVersion: 2
     m_Bits: 192
   suspicionBuildTime: 1.5
-  suspicionDecayTime: 3
+  suspicionDecayTime: 5
   alertDelay: 0.5
   alertCooldown: 10
-  debugVision: 0
-  debugStates: 0
+  debugVision: 1
+  debugStates: 1
