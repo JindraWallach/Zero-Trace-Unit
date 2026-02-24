@@ -31606,6 +31606,7 @@ GameObject:
   m_Component:
   - component: {fileID: 682711796}
   - component: {fileID: 682711797}
+  - component: {fileID: 682711798}
   m_Layer: 5
   m_Name: SecurityCameraHUD
   m_TagString: Untagged
@@ -31648,7 +31649,7 @@ MonoBehaviour:
   warningCanvasGroup: {fileID: 1528088499}
   warningText: {fileID: 1432879589}
   warningBackground: {fileID: 480758426}
-  showSuspicionBar: 1
+  showSuspicionBar: 0
   suspicionSlider: {fileID: 0}
   suspicionFillImage: {fileID: 0}
   suspicionGradient:
@@ -31686,6 +31687,20 @@ MonoBehaviour:
   pulseSpeed: 2
   warningMessage: DETECTED BY CAMERA
   warningColor: {r: 1, g: 0, b: 0, a: 0.09803922}
+--- !u!114 &682711798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 682711795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8465599c9ca81b143a5772e26f1d9782, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScreenEdgeDangerHUD
+  config: {fileID: 11400000, guid: a2cb4bb3ca2f21144956436ccd75dffb, type: 2}
+  borderImage: {fileID: 480758426}
 --- !u!1001 &684308816
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -71672,7 +71687,7 @@ CanvasGroup:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1528088497}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
