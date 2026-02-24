@@ -22,4 +22,4 @@ MonoBehaviour:
   alarmSound: {fileID: 0}
   alarmVolume: 0.7
   debugDrawRadius: 1
-  debugLog: 1
+  debugLog: 0

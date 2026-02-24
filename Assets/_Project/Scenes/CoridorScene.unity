@@ -2100,9 +2100,7 @@ MonoBehaviour:
     done: 0
   - name: 'sky color: 21 71 128'
     done: 0
-  - name: add cameras
-    done: 0
-  - name: 'and camera hud UI '
+  - name: add cameras and better suspicious HUD
     done: 0
 --- !u!4 &36559939
 Transform:
@@ -48722,11 +48720,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2b58d0b3fe7ca6a42bc23d936b7f83bc, type: 3}
---- !u!4 &1052635238 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4538084039755730, guid: 2b58d0b3fe7ca6a42bc23d936b7f83bc, type: 3}
-  m_PrefabInstance: {fileID: 1052635237}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1053852979
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -73416,7 +73409,7 @@ Transform:
   - {fileID: 1548521546}
   - {fileID: 1280547222}
   - {fileID: 799031497}
-  - {fileID: 1052635238}
+  - {fileID: 8487910492182508921}
   - {fileID: 506582986}
   - {fileID: 1547171062}
   - {fileID: 538325826}
@@ -120793,6 +120786,11 @@ Transform:
   - {fileID: 7405440667865433961}
   m_Father: {fileID: 5220343083881510861}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &8487910492182508921 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4538084039755730, guid: 2b58d0b3fe7ca6a42bc23d936b7f83bc, type: 3}
+  m_PrefabInstance: {fileID: 1052635237}
+  m_PrefabAsset: {fileID: 0}
 --- !u!33 &8519818983876970397
 MeshFilter:
   m_ObjectHideFlags: 0
