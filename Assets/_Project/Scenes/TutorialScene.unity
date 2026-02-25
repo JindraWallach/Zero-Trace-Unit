@@ -1480,25 +1480,12 @@ MonoBehaviour:
   - {fileID: 7594934753950584949}
   - {fileID: 2742592322409305854}
   - {fileID: 2275317156822406145}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   - {fileID: 836465480}
-  - {fileID: 0}
   - {fileID: 7337032058987619807}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 8764951848288096590}
+  - {fileID: 5734694478520522301}
+  - {fileID: 5637892788245177419}
+  - {fileID: 2396165414253322241}
 --- !u!1 &324648923
 GameObject:
   m_ObjectHideFlags: 0
