@@ -16,4 +16,4 @@ MonoBehaviour:
   description: 'Get to the extraction zone
 
     Mission will complete once you arrive'
-  popupDuration: 6
+  popupDuration: 10

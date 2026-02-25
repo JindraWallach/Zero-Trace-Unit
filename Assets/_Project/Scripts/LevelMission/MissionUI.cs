@@ -15,12 +15,18 @@ public class MissionUI : MonoBehaviour
     [Tooltip("TMP text inside the Pause Menu showing current objective")]
     [SerializeField] private TextMeshProUGUI pauseMenuObjectiveText;
 
+    [Tooltip("TMP text inside the Pause Menu showing objective description")]
+    [SerializeField] private TextMeshProUGUI pauseMenuDescriptionText;
+
     [Header("HUD Popup")]
     [Tooltip("Root panel of the popup (CanvasGroup required or will be added)")]
     [SerializeField] private GameObject popupPanel;
 
     [Tooltip("TMP text inside the popup")]
     [SerializeField] private TextMeshProUGUI popupObjectiveText;
+
+    [Tooltip("Optional description text inside the popup")]
+    [SerializeField] private TextMeshProUGUI popupDescriptionText;
 
     [Tooltip("Optional label text above the objective (e.g. 'NEW OBJECTIVE')")]
     [SerializeField] private TextMeshProUGUI popupLabelText;
@@ -48,6 +54,9 @@ public class MissionUI : MonoBehaviour
 
         if (pauseMenuObjectiveText != null)
             pauseMenuObjectiveText.text = string.Empty;
+
+        if (pauseMenuDescriptionText != null)
+            pauseMenuDescriptionText.text = string.Empty;
     }
 
     private void OnEnable()
@@ -64,16 +73,19 @@ public class MissionUI : MonoBehaviour
 
     private void HandleObjectiveChanged(MissionObjectiveSO objective)
     {
-        SetPauseMenuText(objective.objectiveText);
+        SetPauseMenuText(objective.objectiveText, objective.description);
         ShowPopup(objective);
     }
 
     // ── Pause menu ─────────────────────────────────────────────────────────
 
-    private void SetPauseMenuText(string text)
+    private void SetPauseMenuText(string objective, string description)
     {
         if (pauseMenuObjectiveText != null)
-            pauseMenuObjectiveText.text = text;
+            pauseMenuObjectiveText.text = objective;
+
+        if (pauseMenuDescriptionText != null)
+            pauseMenuDescriptionText.text = description;
     }
 
     // ── Popup ──────────────────────────────────────────────────────────────
@@ -90,8 +102,19 @@ public class MissionUI : MonoBehaviour
 
     private IEnumerator PopupRoutine(MissionObjectiveSO objective)
     {
+        // If popup is currently visible, fade it out first before showing next
+        if (popupPanel.activeSelf && _popupCanvasGroup.alpha > 0f)
+        {
+            yield return StartCoroutine(Fade(_popupCanvasGroup.alpha, 0f));
+            popupPanel.SetActive(false);
+        }
+
+        // Now safe to update text and show new objective
         if (popupObjectiveText != null)
             popupObjectiveText.text = objective.objectiveText;
+
+        if (popupDescriptionText != null)
+            popupDescriptionText.text = objective.description;
 
         if (popupLabelText != null)
             popupLabelText.text = "NEW OBJECTIVE";

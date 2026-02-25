@@ -15,4 +15,4 @@ MonoBehaviour:
   objectiveText: LEARN TO MOVE
   description: "WASD \u2013 Move  |  Shift \u2013 Sprint  |  Space \u2013 Jump \nReach
     the highlighted zone"
-  popupDuration: 6
+  popupDuration: 10

@@ -19,6 +19,6 @@ public class MissionObjectiveSO : ScriptableObject
 
     [Header("Display")]
     [Tooltip("How long the HUD popup stays on screen (seconds)")]
-    [Range(1f, 6f)]
+    [Range(1f, 30f)]
     public float popupDuration = 3f;
 }

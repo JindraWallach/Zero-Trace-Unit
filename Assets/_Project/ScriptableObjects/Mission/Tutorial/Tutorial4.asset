@@ -15,4 +15,4 @@ MonoBehaviour:
   objectiveText: AVOID DETECTION
   description: "Move past the guard without being spotted\nStay silent \u2013 noise
     will give away your position"
-  popupDuration: 6
+  popupDuration: 10
