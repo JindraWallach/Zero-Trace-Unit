@@ -875,7 +875,7 @@ Transform:
   m_GameObject: {fileID: 174432911}
   serializedVersion: 2
   m_LocalRotation: {x: 0.19066228, y: -0.15900792, z: 0.031228516, w: -0.96818864}
-  m_LocalPosition: {x: -56.33, y: -12.65, z: -21.17}
+  m_LocalPosition: {x: -56.08, y: -12.68, z: -21.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2499,7 +2499,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -40}
+  m_AnchoredPosition: {x: 0, y: -16.7}
   m_SizeDelta: {x: 400, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &431475098
@@ -2864,7 +2864,7 @@ Transform:
   m_GameObject: {fileID: 491277950}
   serializedVersion: 2
   m_LocalRotation: {x: 0.1569005, y: 0.572177, z: -0.11273664, w: -0.7970484}
-  m_LocalPosition: {x: -46.86, y: -13.85, z: -24.13}
+  m_LocalPosition: {x: -46.61, y: -13.88, z: -24.21}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4131,7 +4131,7 @@ Transform:
   m_GameObject: {fileID: 708564176}
   serializedVersion: 2
   m_LocalRotation: {x: 0.1569005, y: 0.572177, z: -0.11273664, w: -0.7970484}
-  m_LocalPosition: {x: -50, y: -11.45, z: -18.27}
+  m_LocalPosition: {x: -49.75, y: -11.48, z: -18.35}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4446,7 +4446,7 @@ Transform:
   m_GameObject: {fileID: 727436732}
   serializedVersion: 2
   m_LocalRotation: {x: 0.19066228, y: -0.15900792, z: 0.031228516, w: -0.96818864}
-  m_LocalPosition: {x: -57.93, y: -14.44, z: -25.55}
+  m_LocalPosition: {x: -57.68, y: -14.47, z: -25.63}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5353,7 +5353,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.33333334}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.29803923}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -6192,7 +6192,7 @@ Transform:
   m_GameObject: {fileID: 1034937059}
   serializedVersion: 2
   m_LocalRotation: {x: 0.1569005, y: 0.572177, z: -0.11273664, w: -0.7970484}
-  m_LocalPosition: {x: -45.26, y: -12.06, z: -19.75}
+  m_LocalPosition: {x: -45.01, y: -12.09, z: -19.83}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10237,7 +10237,7 @@ Transform:
   m_GameObject: {fileID: 1605504974}
   serializedVersion: 2
   m_LocalRotation: {x: 0.1569005, y: 0.572177, z: -0.11273664, w: -0.7970484}
-  m_LocalPosition: {x: -51.6, y: -13.24, z: -22.65}
+  m_LocalPosition: {x: -51.35, y: -13.27, z: -22.73}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -11681,6 +11681,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1787687959}
   - component: {fileID: 1787687960}
+  - component: {fileID: 1787687961}
   m_Layer: 5
   m_Name: MissionUI
   m_TagString: Untagged
@@ -11727,6 +11728,18 @@ MonoBehaviour:
   popupDescriptionText: {fileID: 2108783508}
   popupLabelText: {fileID: 2001717663}
   fadeDuration: 0.3
+--- !u!225 &1787687961
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1787687958}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &1792352871
 GameObject:
   m_ObjectHideFlags: 0
@@ -13669,8 +13682,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -165.8}
-  m_SizeDelta: {x: 500, y: 154.4}
+  m_AnchoredPosition: {x: 0, y: -142.50003}
+  m_SizeDelta: {x: 550, y: 154.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2108783508
 MonoBehaviour:
@@ -13719,8 +13732,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 22
+  m_fontSizeBase: 22
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -67099,7 +67112,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  deathPreset: 5
+  deathPreset: 4
   pulseDuration: 0.5
   pulseIntensityMultiplier: 2
   transitionSpeed: 2
