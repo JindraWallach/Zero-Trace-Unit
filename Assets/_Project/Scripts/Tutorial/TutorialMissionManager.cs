@@ -47,23 +47,27 @@ public class TutorialMissionManager : MonoBehaviour
 
     private void OnEnable()
     {
-        // Hack Mode phase: listen to PlayerModeController
-        PlayerModeController.Instance.OnModeChanged += OnModeChanged;
-
-        // Puzzle phase: listen to HackManager result
+        // Puzzle phase: static event, safe to subscribe immediately
         TutorialHackListener.OnPuzzleSucceeded += OnPuzzleSucceeded;
     }
 
     private void OnDisable()
     {
+        TutorialHackListener.OnPuzzleSucceeded -= OnPuzzleSucceeded;
+
         if (PlayerModeController.Instance != null)
             PlayerModeController.Instance.OnModeChanged -= OnModeChanged;
-
-        TutorialHackListener.OnPuzzleSucceeded -= OnPuzzleSucceeded;
     }
 
     private void Start()
     {
+        // PlayerModeController.Instance is guaranteed to exist by Start()
+        // (all Awake() calls have already run at this point)
+        if (PlayerModeController.Instance != null)
+            PlayerModeController.Instance.OnModeChanged += OnModeChanged;
+        else
+            Debug.LogError("[TutorialMissionManager] PlayerModeController.Instance is null in Start() – Hack Mode phase will not advance.");
+
         // MissionManager auto-activates objective[0] on its own Start().
         // We just sync our internal phase counter.
         CurrentPhase = PHASE_MOVEMENT;

@@ -193,8 +193,9 @@ public class GlitchEffectSettings : ScriptableObject
         isApplyingPreset = false;
 
 #if UNITY_EDITOR
-        // Mark asset as dirty to save changes
-        UnityEditor.EditorUtility.SetDirty(this);
+        // Mark asset as dirty to save changes only when NOT in Play mode
+        if (!Application.isPlaying)
+            UnityEditor.EditorUtility.SetDirty(this);
 #endif
     }
 
@@ -250,7 +251,9 @@ public class GlitchEffectSettings : ScriptableObject
                 currentPreset = GlitchPreset.Custom;
                 lastAppliedPreset = GlitchPreset.Custom;
 #if UNITY_EDITOR
-                UnityEditor.EditorUtility.SetDirty(this);
+                // Mark asset dirty only when not playing
+                if (!Application.isPlaying)
+                    UnityEditor.EditorUtility.SetDirty(this);
 #endif
             }
         }
