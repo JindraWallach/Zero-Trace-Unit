@@ -22505,7 +22505,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 0, b: 0, a: 0}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 0
   m_OnCullStateChanged:
@@ -85785,8 +85785,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MissionUI
   pauseMenuObjectiveText: {fileID: 1752478375}
+  pauseMenuDescriptionText: {fileID: 0}
   popupPanel: {fileID: 1849296952}
   popupObjectiveText: {fileID: 431475098}
+  popupDescriptionText: {fileID: 0}
   popupLabelText: {fileID: 2001717663}
   fadeDuration: 0.3
 --- !u!1001 &1791274957
