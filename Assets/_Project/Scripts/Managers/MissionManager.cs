@@ -106,6 +106,16 @@ public class MissionManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Advances to the next objective in sequence.
+    /// Called by TutorialMissionManager to drive the tutorial level flow.
+    /// Safe to call even if missionData is null (logs warning, no crash).
+    /// </summary>
+    public void AdvanceObjective()
+    {
+        ActivateObjectiveAt(_currentObjectiveIndex + 1);
+    }
+
+    /// <summary>
     /// Called by EscapeZoneTrigger when player reaches extraction.
     /// </summary>
     public void CompleteMission()
