@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
+using ZeroTrace.Audio;
 
 /// <summary>
 /// Handles door animations, sounds, and prompt display.
 /// Pure presentation logic - no game logic.
 /// Now supports colored prompts via InteractionResult.
+/// Audio přes AudioManager — žádný vlastní AudioSource/AudioClip.
 /// </summary>
 [RequireComponent(typeof(Animator))]
 public class DoorController : MonoBehaviour
@@ -17,10 +19,11 @@ public class DoorController : MonoBehaviour
     [SerializeField] private UIPromptController promptBack;
     [SerializeField] private bool invertSideLogic = false;
 
-    [Header("Audio")]
-    [SerializeField] private AudioSource audioSource;
-    [SerializeField] private AudioClip openSound;
-    [SerializeField] private AudioClip closeSound;
+    [Header("Audio IDs")]
+    [Tooltip("AudioData id pro zvuk otevření (musí existovat v AudioManager)")]
+    [SerializeField] private string openSoundId = "door_open";
+    [Tooltip("AudioData id pro zvuk zavření (musí existovat v AudioManager)")]
+    [SerializeField] private string closeSoundId = "door_close";
 
     [Header("Settings")]
     [SerializeField] private float animationDuration = 1.25f;
@@ -30,24 +33,26 @@ public class DoorController : MonoBehaviour
     private Transform player;
     private bool playerInRange;
 
+    // ── Lifecycle ────────────────────────────────────────────────────────────
+
     private void Reset()
     {
         animator = GetComponent<Animator>();
     }
 
+    // ── Public API ───────────────────────────────────────────────────────────
+
     public void Open()
     {
         animator.SetBool(openBoolName, true);
-
-        PlaySound(openSound);
+        AudioManager.Instance?.Play(openSoundId, transform.position);
         NoiseSystem.Instance?.EmitNoise(transform.position, 8f, NoiseType.DoorOpen);
     }
 
     public void Close()
     {
         animator.SetBool(openBoolName, false);
-
-        PlaySound(closeSound);
+        AudioManager.Instance?.Play(closeSoundId, transform.position);
         NoiseSystem.Instance?.EmitNoise(transform.position, 6f, NoiseType.DoorClose);
     }
 
@@ -89,6 +94,14 @@ public class DoorController : MonoBehaviour
         ShowPromptForSide(promptText, Color.white);
     }
 
+    public void HidePrompts()
+    {
+        promptFront?.Hide();
+        promptBack?.Hide();
+    }
+
+    // ── Private ──────────────────────────────────────────────────────────────
+
     private void ShowPromptForSide(string text, Color color)
     {
         if (player == null)
@@ -113,17 +126,5 @@ public class DoorController : MonoBehaviour
             promptFront?.Show(text, color);
             promptBack?.Hide();
         }
-    }
-
-    public void HidePrompts()
-    {
-        promptFront?.Hide();
-        promptBack?.Hide();
-    }
-
-    private void PlaySound(AudioClip clip)
-    {
-        if (audioSource != null && clip != null)
-            audioSource.PlayOneShot(clip);
     }
 }

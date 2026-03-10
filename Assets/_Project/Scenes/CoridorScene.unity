@@ -2166,6 +2166,8 @@ MonoBehaviour:
     done: 0
   - name: add cameras and better suspicious HUD
     done: 0
+  - name: alarm_loop, door_open, door_close, noise emitter on player a lot
+    done: 0
 --- !u!4 &36559939
 Transform:
   m_ObjectHideFlags: 0
@@ -98655,10 +98657,10 @@ MonoBehaviour:
   - {fileID: 713962241}
   - {fileID: 1711369752}
   - {fileID: 2044542943}
-  isAlarmActive: 0
-  timeRemaining: 0
   stackDuration: 30
   stackCap: 60
+  isAlarmActive: 0
+  timeRemaining: 0
 --- !u!1 &1931427393
 GameObject:
   m_ObjectHideFlags: 0
@@ -115605,9 +115607,8 @@ MonoBehaviour:
   promptFront: {fileID: 7340959423362379315}
   promptBack: {fileID: 8766160073247652137}
   invertSideLogic: 0
-  audioSource: {fileID: 0}
-  openSound: {fileID: 0}
-  closeSound: {fileID: 0}
+  openSoundId: door_open
+  closeSoundId: door_close
   animationDuration: 1.25
 --- !u!1 &3011958281848118958
 GameObject:
@@ -118781,6 +118782,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NoiseEmitter
   config: {fileID: 11400000, guid: 115b124c02a033b43ba5ecc7a6ea6911, type: 2}
+  walkStepSoundId: footstep_walk
+  runStepSoundId: footstep_run
+  landSoftSoundId: land_soft
+  landHardSoundId: land_hard
+  flashlightSoundId: flashlight_toggle
   timeSinceLastFootstep: 0
   isMoving: 0
   isRunning: 0
