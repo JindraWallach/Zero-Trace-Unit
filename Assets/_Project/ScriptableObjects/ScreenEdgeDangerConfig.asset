@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ScreenEdgeDangerConfig
   visibleThreshold: 10
   maxIntensityThreshold: 100
-  borderColor: {r: 1, g: 0, b: 0, a: 0.18431373}
+  borderColor: {r: 1, g: 0, b: 0, a: 0.078431375}
   minAlpha: 0.1
-  maxAlpha: 1
+  maxAlpha: 0.4
   lerpSpeed: 0.5
   minPixelsPerUnit: 1.8
   maxPixelsPerUnit: 4
