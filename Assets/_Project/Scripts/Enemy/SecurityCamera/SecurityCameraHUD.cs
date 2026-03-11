@@ -41,6 +41,7 @@ public class SecurityCameraHUD : MonoBehaviour
     private Coroutine fadeCoroutine;
     private Coroutine pulseCoroutine;
     private bool isWarningVisible;
+    private float _lastSliderValue = -1f;
 
     private void Awake()
     {
@@ -100,10 +101,16 @@ public class SecurityCameraHUD : MonoBehaviour
         if (!showSuspicionBar || suspicionSlider == null) return;
 
         suspicionPercent = Mathf.Clamp(suspicionPercent, 0f, 100f);
-        suspicionSlider.value = suspicionPercent / 100f;
+        float normalized = suspicionPercent / 100f;
+
+        // Neaktualizuj UI pokud se hodnota nezměnila (dirty check)
+        if (Mathf.Approximately(_lastSliderValue, normalized)) return;
+        _lastSliderValue = normalized;
+
+        suspicionSlider.value = normalized;
 
         if (suspicionFillImage != null && suspicionGradient != null)
-            suspicionFillImage.color = suspicionGradient.Evaluate(suspicionPercent / 100f);
+            suspicionFillImage.color = suspicionGradient.Evaluate(normalized);
 
         if (suspicionPercent <= 0f && isWarningVisible)
             HideWarning();

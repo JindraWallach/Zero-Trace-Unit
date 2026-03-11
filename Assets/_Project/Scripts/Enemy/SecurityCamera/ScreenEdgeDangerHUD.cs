@@ -88,27 +88,34 @@ public class ScreenEdgeDangerHUD : MonoBehaviour
     private IEnumerator BorderCoroutine()
     {
         float currentAlpha = 0f;
+        var waitForEndOfFrame = new WaitForEndOfFrame(); // alokuj jednou
 
         while (true)
         {
             float targetAlpha = config.GetTargetAlpha(reportedSuspicion);
-            float targetPixels = config.GetBorderPixels(reportedSuspicion);
 
+            // Pokud jsme na 0 a cíl je 0 — přeskoč výpočet úplně
+            if (currentAlpha < 0.001f && targetAlpha < 0.001f)
+            {
+                reportedSuspicion = 0f;
+                yield return null;
+                continue;
+            }
+
+            float targetPixels = config.GetBorderPixels(reportedSuspicion);
             currentAlpha = Mathf.Lerp(currentAlpha, targetAlpha, config.lerpSpeed * Time.deltaTime);
 
             SetAlpha(currentAlpha);
             borderImage.pixelsPerUnitMultiplier = Mathf.Max(0.01f, targetPixels);
 
-            // Reset reported suspicion each frame — cameras must re-report next frame
-            // If no camera reports, suspicion = 0 and alpha lerps back to 0
             reportedSuspicion = 0f;
-
             yield return null;
         }
     }
 
     private void SetAlpha(float alpha)
     {
+        Debug.Log("alpha: " + alpha);
         Color c = config.borderColor;
         c.a = alpha;
         borderImage.color = c;

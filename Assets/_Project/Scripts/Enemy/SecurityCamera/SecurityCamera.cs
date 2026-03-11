@@ -35,6 +35,8 @@ public class SecurityCamera : MonoBehaviour
     private CameraState currentState;
     private float suspicionMeter; // 0-100
     private float stateTimer;
+    private float _lastInvokedSuspicion = -1f;
+    private const float SUSPICION_CHANGE_THRESHOLD = 0.5f; // invokvat jen při změně o 0.5%
 
     // Cached calculations
     private float suspicionBuildRate;
@@ -75,48 +77,44 @@ public class SecurityCamera : MonoBehaviour
 
     private void Start()
     {
-        // Initialize vision
         vision.Initialize(config, player);
 
         if (alarmSystem == null)
             alarmSystem = FindFirstObjectByType<SecurityAlarmSystem>();
 
-        // Calculate rates once
         suspicionBuildRate = 100f / config.suspicionBuildTime;
         suspicionDecayRate = 100f / config.suspicionDecayTime;
 
-        // Start in Idle state
         TransitionToState(CameraState.Idle);
 
-        // Register with HUD
         if (SecurityCameraHUD.Instance != null)
-        {
             SecurityCameraHUD.Instance.RegisterCamera(this);
-        }
+
+        // ← PŘIDEJ TOTO
+        if (ScreenEdgeDangerHUD.Instance != null)
+            ScreenEdgeDangerHUD.Instance.RegisterCamera(this);
     }
 
     private void OnDestroy()
     {
-        // Unregister from HUD
         if (SecurityCameraHUD.Instance != null)
-        {
             SecurityCameraHUD.Instance.UnregisterCamera(this);
-        }
+
+        // ← PŘIDEJ TOTO
+        if (ScreenEdgeDangerHUD.Instance != null)
+            ScreenEdgeDangerHUD.Instance.UnregisterCamera(this);
     }
 
     private void Update()
     {
-        // State machine update
         switch (currentState)
         {
             case CameraState.Idle:
-                UpdateIdleState();
+                UpdateIdleState(); // ← MUSÍ SE VOLAT, jinak kamera nikdy nedetekuje
                 break;
-
             case CameraState.Suspicious:
                 UpdateSuspiciousState();
                 break;
-
             case CameraState.Alert:
                 UpdateAlertState();
                 break;
@@ -148,8 +146,7 @@ public class SecurityCamera : MonoBehaviour
             suspicionMeter += suspicionBuildRate * Time.deltaTime;
             suspicionMeter = Mathf.Min(suspicionMeter, 100f);
 
-            // Fire suspicion changed event
-            OnSuspicionChanged?.Invoke(suspicionMeter);
+            NotifySuspicionIfChanged();
 
             // Check if reached 100%
             if (suspicionMeter >= 100f)
@@ -163,14 +160,22 @@ public class SecurityCamera : MonoBehaviour
             suspicionMeter -= suspicionDecayRate * Time.deltaTime;
             suspicionMeter = Mathf.Max(suspicionMeter, 0f);
 
-            // Fire suspicion changed event
-            OnSuspicionChanged?.Invoke(suspicionMeter);
+            NotifySuspicionIfChanged();
 
             // Check if fully decayed
             if (suspicionMeter <= 0f)
             {
                 TransitionToState(CameraState.Idle);
             }
+        }
+    }
+
+    private void NotifySuspicionIfChanged()
+    {
+        if (Mathf.Abs(suspicionMeter - _lastInvokedSuspicion) >= SUSPICION_CHANGE_THRESHOLD)
+        {
+            _lastInvokedSuspicion = suspicionMeter;
+            OnSuspicionChanged?.Invoke(suspicionMeter);
         }
     }
 
@@ -224,6 +229,8 @@ public class SecurityCamera : MonoBehaviour
         {
             case CameraState.Idle:
                 suspicionMeter = 0f;
+                _lastInvokedSuspicion = -1f;
+                OnSuspicionChanged?.Invoke(0f); // jednou při přechodu, ne každý frame
                 break;
 
             case CameraState.Suspicious:
