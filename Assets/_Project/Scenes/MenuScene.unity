@@ -30243,7 +30243,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: CoridorScene
+          m_StringArgument: Level1Scene
           m_BoolArgument: 0
         m_CallState: 1
 --- !u!114 &1012591930
@@ -43872,7 +43872,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerPersistence
   persistBetweenScenes: 1
   validSceneNames:
-  - CoridorScene
+  - Level1Scene
+  - Level2Scene
   debugLog: 1
 --- !u!4 &1816581302
 Transform:
