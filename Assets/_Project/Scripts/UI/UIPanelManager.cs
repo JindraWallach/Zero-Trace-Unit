@@ -12,6 +12,7 @@ public class UIPanelManager : MonoBehaviour
     public CanvasGroup panelSettings;
     public CanvasGroup panelControls;
     public CanvasGroup panelClass;
+    public CanvasGroup panelLevelSelection;
 
     private void Start()
     {
@@ -19,6 +20,7 @@ public class UIPanelManager : MonoBehaviour
         panelSettings.alpha = 0;
         panelControls.alpha = 0;
         panelClass.alpha = 0;
+        panelLevelSelection.alpha = 0;
     }
 
     public void SwitchToPanel(int target)
@@ -33,7 +35,7 @@ public class UIPanelManager : MonoBehaviour
 
         animator.SetInteger("CurrentPanel", target);
 
-        if (target == 3)
+        if (target == 3 || target == 4)
         {
             cameraMove.MoveForward();
         }
