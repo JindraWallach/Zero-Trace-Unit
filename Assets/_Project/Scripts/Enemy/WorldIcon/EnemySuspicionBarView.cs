@@ -39,11 +39,13 @@ namespace ZeroTrace.UI.Suspicion
 
         private void OnSuspicionChanged(float suspicion)
         {
-            if (suspicion <= 0f || !_suspicionSystem.IsPlayerVisible)
+            // Zobraz kdykoli enemy vidí hráče — i při suspicion = 0 na začátku
+            if (!_suspicionSystem.IsPlayerVisible)
             {
                 Hide();
                 return;
             }
+
             Show();
             SetFill(suspicion * 0.01f);
         }

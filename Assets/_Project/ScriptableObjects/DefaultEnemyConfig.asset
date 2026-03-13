@@ -15,7 +15,7 @@ MonoBehaviour:
   enableSuspicionSystem: 1
   suspicionConfig: {fileID: 11400000, guid: d4520402759172e4692e9f85b73d9839, type: 2}
   visionAngle: 120
-  visionRange: 30
+  visionRange: 20
   visionObstacleMask:
     serializedVersion: 2
     m_Bits: 192
@@ -33,6 +33,6 @@ MonoBehaviour:
   catchForceMagnitude: 20
   catchForceVertical: 0.2
   taserHitDelay: 0.2
-  debugVision: 0
+  debugVision: 1
   debugStates: 0
   debugMovement: 0

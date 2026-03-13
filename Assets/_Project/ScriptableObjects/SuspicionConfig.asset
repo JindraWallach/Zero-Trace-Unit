@@ -12,15 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dd78d9ba8445f5448f63d98af7578f5, type: 3}
   m_Name: SuspicionConfig
   m_EditorClassIdentifier: Assembly-CSharp::SuspicionConfig
-  baseBuildRate: 35
+  baseBuildRate: 5
+  suspiciousBuildRateMultiplier: 0.2
   decayRate: 10
-  decayGracePeriod: 2
-  useExponentialMultiplier: 1
+  decayGracePeriod: 3
+  useExponentialMultiplier: 0
   manualMultipliers:
   - 1
+  - 1.25
   - 1.5
-  - 2.5
-  - 4
+  - 2
   alertThreshold: 25
   chaseThreshold: 100
   updateInterval: 0.1
