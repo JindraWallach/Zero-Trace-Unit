@@ -32,6 +32,7 @@ public class EnemyStateMachine : MonoBehaviour
     public event Action<EnemyState> OnStateChanged;
     public event Action<Vector3> OnPlayerDetected;
     public event Action<Vector3> OnPlayerLost;
+    public event Action<EnemyStateMachine> OnEnemyDestroyed;
 
     // Component references
     private EnemyState currentState;
@@ -172,6 +173,7 @@ public class EnemyStateMachine : MonoBehaviour
             suspicionSystem.OnChaseTriggered -= HandleSuspicionChase;
             suspicionSystem.OnSuspicionCleared -= HandleSuspicionCleared;
         }
+        OnEnemyDestroyed?.Invoke(this);
     }
 
     // === STATE MANAGEMENT ===

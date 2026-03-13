@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// ScriptableObject configuration for enemy suspicion system.
@@ -12,6 +12,12 @@ public class SuspicionConfig : ScriptableObject
     [Tooltip("Base suspicion increase per second when player visible (1 body part)")]
     [Range(5f, 50f)]
     public float baseBuildRate = 15f;
+
+    [Tooltip("Multiplier applied to baseBuildRate while enemy is in Suspicious / investigating state.\n" +
+             "Values < 1 make the bar fill slower when the enemy only heard something.\n" +
+             "Example: 0.4 = builds at 40 % of normal speed while suspicious.")]
+    [Range(0.05f, 1f)]
+    public float suspiciousBuildRateMultiplier = 0.4f;
 
     [Tooltip("Suspicion decrease per second when player hidden")]
     [Range(5f, 30f)]
@@ -118,5 +124,17 @@ public class SuspicionConfig : ScriptableObject
     public float GetEffectiveBuildRate(int visibleParts)
     {
         return baseBuildRate * GetVisibilityMultiplier(visibleParts);
+    }
+
+    /// <summary>
+    /// Reduced build rate used during Suspicious / noise-investigation state.
+    /// </summary>
+    public float GetSuspiciousBuildRate(int visibleParts = 0)
+    {
+        float base_ = visibleParts > 0
+            ? GetEffectiveBuildRate(visibleParts)
+            : baseBuildRate;
+
+        return base_ * suspiciousBuildRateMultiplier;
     }
 }
