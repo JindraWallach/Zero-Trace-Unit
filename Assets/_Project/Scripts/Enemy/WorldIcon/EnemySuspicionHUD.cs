@@ -8,13 +8,14 @@ namespace ZeroTrace.UI.Suspicion
     ///   public event Action<EnemyStateMachine> OnEnemyDestroyed;
     ///   v OnDestroy(): OnEnemyDestroyed?.Invoke(this);
     /// </summary>
+
     public sealed class EnemySuspicionHUD : MonoBehaviour
     {
         [SerializeField] private EnemySuspicionBarView _indicatorPrefab;
         [SerializeField] private SuspicionIndicatorConfig _config;
         [SerializeField] private Camera _overrideCamera;
 
-        private Canvas _canvas;
+        [SerializeField] private Canvas _canvas;
         private Camera _camera;
 
         private readonly Dictionary<EnemyStateMachine, EnemySuspicionBarView> _indicators
@@ -24,7 +25,7 @@ namespace ZeroTrace.UI.Suspicion
 
         private void Awake()
         {
-            _canvas = GetComponent<Canvas>();
+
             _camera = _overrideCamera != null ? _overrideCamera : Camera.main;
 
             if (_config == null)
