@@ -8,7 +8,6 @@ namespace ZeroTrace.UI.Suspicion
     ///   public event Action<EnemyStateMachine> OnEnemyDestroyed;
     ///   v OnDestroy(): OnEnemyDestroyed?.Invoke(this);
     /// </summary>
-    [RequireComponent(typeof(Canvas))]
     public sealed class EnemySuspicionHUD : MonoBehaviour
     {
         [SerializeField] private EnemySuspicionBarView _indicatorPrefab;
