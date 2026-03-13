@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dd78d9ba8445f5448f63d98af7578f5, type: 3}
   m_Name: SuspicionConfig
   m_EditorClassIdentifier: Assembly-CSharp::SuspicionConfig
-  baseBuildRate: 5
+  baseBuildRate: 10
   suspiciousBuildRateMultiplier: 0.2
   decayRate: 10
   decayGracePeriod: 3
-  useExponentialMultiplier: 0
+  useExponentialMultiplier: 1
   manualMultipliers:
   - 1
   - 1.25

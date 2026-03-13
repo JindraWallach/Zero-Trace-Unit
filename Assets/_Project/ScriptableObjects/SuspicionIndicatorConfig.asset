@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: SuspicionIndicatorConfig
   m_EditorClassIdentifier: Assembly-CSharp::ZeroTrace.UI.Suspicion.SuspicionIndicatorConfig
   worldHeightOffset: 2.2
-  indicatorSize: {x: 80, y: 12}
-  colorLow: {r: 1, g: 0.85, b: 0, a: 1}
+  defaultSize: {x: 35, y: 35}
+  scaleMax: 1.5
+  colorLow: {r: 0.93829894, g: 1, b: 0, a: 1}
   colorMedium: {r: 1, g: 0.5, b: 0, a: 1}
-  colorHigh: {r: 1, g: 0.1, b: 0.1, a: 1}
-  fillChangeThreshold: 0.005
+  colorHigh: {r: 1, g: 0, b: 0, a: 1}
+  changeThreshold: 2

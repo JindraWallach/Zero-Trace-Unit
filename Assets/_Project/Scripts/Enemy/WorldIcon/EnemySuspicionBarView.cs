@@ -8,6 +8,7 @@ namespace ZeroTrace.UI.Suspicion
         [SerializeField] private Image _fillImage;
         [SerializeField] private SuspicionIndicatorConfig _config;
 
+        private RectTransform _rt;
         private float _lastSuspicion = -1f;
         private Color _lastColor;
 
@@ -21,8 +22,12 @@ namespace ZeroTrace.UI.Suspicion
 
             _suspicionSystem = system;
             _positioner = positioner;
+            _rt = GetComponent<RectTransform>();
 
-            _fillImage.transform.localScale = new Vector3(_config != null ? _config.scaleDefault : 1f, 1f, 1f);
+            // Nastav výchozí velikost GO, image se nedotýkáme
+            if (_config != null)
+                _rt.sizeDelta = _config.defaultSize;
+
             Hide();
         }
 
@@ -63,15 +68,14 @@ namespace ZeroTrace.UI.Suspicion
 
         private void UpdateVisual(float suspicion)
         {
-            float threshold = _config != null ? _config.changeThreshold : 0.5f;
-            if (Mathf.Abs(suspicion - _lastSuspicion) < threshold) return;
+            if (Mathf.Abs(suspicion - _lastSuspicion) < _config.changeThreshold) return;
             _lastSuspicion = suspicion;
 
-            float t = suspicion / 100f;
-            float scaleX = Mathf.Lerp(_config.scaleMin, _config.scaleMax, t);
-            _fillImage.transform.localScale = new Vector3(scaleX, 1f, 1f);
+            // Škáluj celý GO od 1 do scaleMax podle suspicion
+            float scale = Mathf.Lerp(1f, _config.scaleMax, suspicion / 100f);
+            transform.localScale = Vector3.one * scale;
 
-            Color c = ComputeColor(t);
+            Color c = ComputeColor(suspicion / 100f);
             if (c != _lastColor)
             {
                 _lastColor = c;
@@ -81,7 +85,6 @@ namespace ZeroTrace.UI.Suspicion
 
         private Color ComputeColor(float t)
         {
-            if (_config == null) return Color.yellow;
             if (t < 0.5f)
                 return Color.Lerp(_config.colorLow, _config.colorMedium, t * 2f);
             return Color.Lerp(_config.colorMedium, _config.colorHigh, (t - 0.5f) * 2f);
