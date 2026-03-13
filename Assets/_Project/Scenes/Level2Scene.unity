@@ -54502,9 +54502,10 @@ MonoBehaviour:
   config: {fileID: 11400000, guid: b854f7225edf3824d96735fe0283ff23, type: 2}
   patrolRoute: {fileID: 398963862}
   playerTransform: {fileID: 8290277118261291090}
+  alarmSystem: {fileID: 1931417453}
+  TaserSpawnPoint: {fileID: 714569645}
   currentStateName: 
   currentSuspicionDebug: 0
-  TaserSpawnPoint: {fileID: 714569645}
 --- !u!114 &1108836599
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -89670,9 +89671,10 @@ MonoBehaviour:
   config: {fileID: 11400000, guid: b854f7225edf3824d96735fe0283ff23, type: 2}
   patrolRoute: {fileID: 359512498}
   playerTransform: {fileID: 8290277118261291090}
+  alarmSystem: {fileID: 1931417453}
+  TaserSpawnPoint: {fileID: 1322758717}
   currentStateName: 
   currentSuspicionDebug: 0
-  TaserSpawnPoint: {fileID: 1322758717}
 --- !u!114 &1776655201
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -117666,9 +117668,10 @@ MonoBehaviour:
   config: {fileID: 11400000, guid: b854f7225edf3824d96735fe0283ff23, type: 2}
   patrolRoute: {fileID: 872217610}
   playerTransform: {fileID: 8290277118261291090}
+  alarmSystem: {fileID: 1931417453}
+  TaserSpawnPoint: {fileID: 751691839}
   currentStateName: 
   currentSuspicionDebug: 0
-  TaserSpawnPoint: {fileID: 751691839}
 --- !u!4 &4140324426569007922
 Transform:
   m_ObjectHideFlags: 0

@@ -601,7 +601,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7496567}
   m_Layer: 0
-  m_Name: Waypoint_02
+  m_Name: Waypoint_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3671,7 +3671,7 @@ GameObject:
   m_Component:
   - component: {fileID: 79498919}
   m_Layer: 0
-  m_Name: Waypoint_06
+  m_Name: Waypoint_05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8358,7 +8358,7 @@ GameObject:
   m_Component:
   - component: {fileID: 175075612}
   m_Layer: 0
-  m_Name: Waypoint_05
+  m_Name: Waypoint_04
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18297,13 +18297,13 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1279641187}
   - {fileID: 7496567}
   - {fileID: 1649536811}
   - {fileID: 1585189354}
   - {fileID: 175075612}
   - {fileID: 79498919}
   - {fileID: 1769505821}
+  - {fileID: 1279641187}
   m_Father: {fileID: 1914419171}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &398963862
@@ -38746,7 +38746,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &872217609
 Transform:
   m_ObjectHideFlags: 0
@@ -58954,7 +58954,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1279641187}
   m_Layer: 0
-  m_Name: Waypoint_01
+  m_Name: Waypoint_07
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -74666,7 +74666,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1585189354}
   m_Layer: 0
-  m_Name: Waypoint_04
+  m_Name: Waypoint_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -77178,7 +77178,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1649536811}
   m_Layer: 0
-  m_Name: Waypoint_03
+  m_Name: Waypoint_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -83293,7 +83293,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1769505821}
   m_Layer: 0
-  m_Name: Waypoint_07
+  m_Name: Waypoint_06
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -83565,11 +83565,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyStateMachine
   config: {fileID: 11400000, guid: b854f7225edf3824d96735fe0283ff23, type: 2}
-  patrolRoute: {fileID: 0}
+  patrolRoute: {fileID: 398963862}
   playerTransform: {fileID: 8290277118261291090}
+  alarmSystem: {fileID: 1931417453}
+  TaserSpawnPoint: {fileID: 1322758717}
   currentStateName: 
   currentSuspicionDebug: 0
-  TaserSpawnPoint: {fileID: 1322758717}
 --- !u!114 &1776655201
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -111050,9 +111051,10 @@ MonoBehaviour:
   config: {fileID: 11400000, guid: b854f7225edf3824d96735fe0283ff23, type: 2}
   patrolRoute: {fileID: 872217610}
   playerTransform: {fileID: 8290277118261291090}
+  alarmSystem: {fileID: 1931417453}
+  TaserSpawnPoint: {fileID: 751691839}
   currentStateName: 
   currentSuspicionDebug: 0
-  TaserSpawnPoint: {fileID: 751691839}
 --- !u!4 &4140324426569007922
 Transform:
   m_ObjectHideFlags: 0
