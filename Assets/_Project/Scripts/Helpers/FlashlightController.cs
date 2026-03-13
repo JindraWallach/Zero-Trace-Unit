@@ -1,4 +1,4 @@
-using Synty.AnimationBaseLocomotion.Samples.InputSystem;
+﻿using Synty.AnimationBaseLocomotion.Samples.InputSystem;
 using UnityEngine;
 
 public class FlashlightController : MonoBehaviour, IInitializable
@@ -44,7 +44,10 @@ public class FlashlightController : MonoBehaviour, IInitializable
         _light.enabled = _isOn;
         _renderer.material = _isOn ? _onMat : _offMat;
 
-        noiseEmitter.EmitFlashlightSound(noiseOrigin.position);
+        if (_isOn)
+            noiseEmitter.EmitFlashlightOn(noiseOrigin.position);
+        else
+            noiseEmitter.EmitFlashlightOff(noiseOrigin.position);
         //Debug.Log($"[FlashlightController] Flashlight toggled {_isOn}. Emitted noise: {noiseType}");
     }
 }

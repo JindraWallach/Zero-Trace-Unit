@@ -27,7 +27,7 @@ namespace ZeroTrace.Audio
         [Header("Spatialization")]
         [Range(0f, 1f)] public float spatialBlend = 0f;   // 0 = 2D, 1 = 3D
         public float minDistance = 1f;
-        public float maxDistance = 500f;
+        [Range(0f, 100f)]  public float maxDistance = 20f;
 
         private void OnValidate()
         {

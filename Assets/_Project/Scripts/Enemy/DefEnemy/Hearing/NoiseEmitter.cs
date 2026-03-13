@@ -21,8 +21,10 @@ public class NoiseEmitter : MonoBehaviour
     [SerializeField] private string landSoftSoundId = "land_soft";
     [Tooltip("Zvuk přistání (tvrdé / rychlý pád)")]
     [SerializeField] private string landHardSoundId = "land_hard";
-    [Tooltip("Zvuk přepnutí baterky")]
-    [SerializeField] private string flashlightSoundId = "flashlight_toggle";
+    [Tooltip("Zvuk zapnutí baterky")]
+    [SerializeField] private string flashlightOnSoundId = "flashlight_on";
+    [Tooltip("Zvuk vypnutí baterky")]
+    [SerializeField] private string flashlightOffSoundId = "flashlight_off";
 
     [Header("Debug")]
     [SerializeField] private float timeSinceLastFootstep;
@@ -125,9 +127,24 @@ public class NoiseEmitter : MonoBehaviour
     }
 
     /// <summary>Emit flashlight toggle noise + přehraj zvuk baterky.</summary>
+    /// <summary>Emit flashlight ON noise + zvuk.</summary>
+    public void EmitFlashlightOn(Vector3 playerPos)
+    {
+        NoiseSystem.Instance?.EmitNoise(playerPos, config.flashlightToggleRadius, NoiseType.FlashlightToggle);
+        AudioManager.Instance?.Play(flashlightOnSoundId, playerPos);
+    }
+
+    /// <summary>Emit flashlight OFF noise + zvuk.</summary>
+    public void EmitFlashlightOff(Vector3 playerPos)
+    {
+        NoiseSystem.Instance?.EmitNoise(playerPos, config.flashlightToggleRadius, NoiseType.FlashlightToggle);
+        AudioManager.Instance?.Play(flashlightOffSoundId, playerPos);
+    }
+
+    /// <summary>Emit flashlight toggle noise + přehraj zvuk baterky.</summary>
     public void EmitFlashlightSound(Vector3 playerPos)
     {
         NoiseSystem.Instance?.EmitNoise(playerPos, config.flashlightToggleRadius, NoiseType.FlashlightToggle);
-        AudioManager.Instance?.Play(flashlightSoundId, playerPos);
+        AudioManager.Instance?.Play(flashlightOffSoundId, playerPos);
     }
 }

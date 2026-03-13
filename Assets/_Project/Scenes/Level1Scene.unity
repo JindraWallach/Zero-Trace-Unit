@@ -1993,7 +1993,8 @@ MonoBehaviour:
     done: 0
   - name: 'sky color: 21 71 128'
     done: 0
-  - name: alarm_loop, door_open, door_close, noise emitter on player a lot
+  - name: alarm_loop, door_open, door_close, footstep_walk, footstep_run, land_soft,
+      land_hard
     done: 0
 --- !u!4 &36559939
 Transform:
@@ -111947,10 +111948,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3832505463048361859, guid: 16aca5ccfb663dc4a8943d856bf50a22, type: 3}
-      propertyPath: audioDataAssets.Array.size
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4984039923958786358, guid: 16aca5ccfb663dc4a8943d856bf50a22, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -112285,7 +112282,8 @@ MonoBehaviour:
   runStepSoundId: footstep_run
   landSoftSoundId: land_soft
   landHardSoundId: land_hard
-  flashlightSoundId: flashlight_toggle
+  flashlightOnSoundId: flashlight_on
+  flashlightOffSoundId: flashlight_off
   timeSinceLastFootstep: 0
   isMoving: 0
   isRunning: 0
