@@ -8,7 +8,7 @@ namespace ZeroTrace.UI.Suspicion
         [SerializeField] private Image _fillImage;
         [SerializeField] private SuspicionIndicatorConfig _config;
 
-        private float _lastFill = -1f;
+        private float _lastSuspicion = -1f;
         private Color _lastColor;
 
         private EnemySuspicionSystem _suspicionSystem;
@@ -21,6 +21,8 @@ namespace ZeroTrace.UI.Suspicion
 
             _suspicionSystem = system;
             _positioner = positioner;
+
+            _fillImage.transform.localScale = new Vector3(_config != null ? _config.scaleDefault : 1f, 1f, 1f);
             Hide();
         }
 
@@ -39,7 +41,6 @@ namespace ZeroTrace.UI.Suspicion
 
         private void OnSuspicionChanged(float suspicion)
         {
-            // Zobraz kdykoli enemy vidí hráče — i při suspicion = 0 na začátku
             if (!_suspicionSystem.IsPlayerVisible)
             {
                 Hide();
@@ -47,7 +48,7 @@ namespace ZeroTrace.UI.Suspicion
             }
 
             Show();
-            SetFill(suspicion * 0.01f);
+            UpdateVisual(suspicion);
         }
 
         private void OnSuspicionCleared() => Hide();
@@ -57,14 +58,18 @@ namespace ZeroTrace.UI.Suspicion
         private void Hide()
         {
             gameObject.SetActive(false);
-            _lastFill = -1f;
+            _lastSuspicion = -1f;
         }
 
-        private void SetFill(float t)
+        private void UpdateVisual(float suspicion)
         {
-            float threshold = _config != null ? _config.fillChangeThreshold : 0.005f;
-            if (Mathf.Abs(t - _lastFill) < threshold) return;
-            _lastFill = t;
+            float threshold = _config != null ? _config.changeThreshold : 0.5f;
+            if (Mathf.Abs(suspicion - _lastSuspicion) < threshold) return;
+            _lastSuspicion = suspicion;
+
+            float t = suspicion / 100f;
+            float scaleX = Mathf.Lerp(_config.scaleMin, _config.scaleMax, t);
+            _fillImage.transform.localScale = new Vector3(scaleX, 1f, 1f);
 
             Color c = ComputeColor(t);
             if (c != _lastColor)
@@ -72,7 +77,6 @@ namespace ZeroTrace.UI.Suspicion
                 _lastColor = c;
                 _fillImage.color = c;
             }
-            _fillImage.fillAmount = t;
         }
 
         private Color ComputeColor(float t)
