@@ -41,6 +41,7 @@ namespace ZeroTrace.Audio
         {
             ApplyData();
             _source.Play();
+            Debug.Log($"[PlaySoundCommand] Playing '{Data.id}' with volume {_finalVolume} and pitch {_source.pitch}");
 
             if (!Data.loop)
                 _coroutine = _runner.StartCoroutine(WaitAndRelease());
