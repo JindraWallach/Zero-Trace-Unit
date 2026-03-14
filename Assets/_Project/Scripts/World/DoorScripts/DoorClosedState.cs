@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class DoorClosedState : DoorState
 {
@@ -6,9 +6,8 @@ public class DoorClosedState : DoorState
 
     public override void Enter()
     {
-        machine.Controller.Close();
+        // zvuk a animace už proběhly v DoorClosingState
         machine.Lock.StartAutoLock();
-        // Prompt handled by DoorInteractionMode
     }
 
     public override void Exit()

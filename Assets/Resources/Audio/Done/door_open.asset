@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ZeroTrace.Audio.AudioData
   id: door_open
   category: 2
-  clip: {fileID: 8300000, guid: d51842cd3e645354ebf4cc08b237ca40, type: 3}
+  clip: {fileID: 8300000, guid: 0de7595f67779974da1988ffd3e01a8e, type: 3}
   volume: 1
-  pitchMin: 1
-  pitchMax: 1
+  pitchMin: 1.25
+  pitchMax: 1.25
   loop: 0
   spatialBlend: 1
   minDistance: 1

@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 public class DoorOpenState : DoorState
@@ -9,7 +9,7 @@ public class DoorOpenState : DoorState
 
     public override void Enter()
     {
-        machine.Controller.Open();
+        // zvuk a animace už proběhly v DoorOpeningState
         machine.Controller.SetPromptEnabled(false);
 
         if (machine.Lock.EnableAutoClose)
