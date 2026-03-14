@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5343f7e31ad402d489dd9a8f341b44e2, type: 3}
-  m_Name: door_close
+  m_Name: door_open
   m_EditorClassIdentifier: Assembly-CSharp::ZeroTrace.Audio.AudioData
-  id: door_close
+  id: door_open
   category: 2
-  clip: {fileID: 8300000, guid: 0de7595f67779974da1988ffd3e01a8e, type: 3}
+  clip: {fileID: 8300000, guid: d51842cd3e645354ebf4cc08b237ca40, type: 3}
   volume: 1
   pitchMin: 1
   pitchMax: 1

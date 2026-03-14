@@ -1993,7 +1993,7 @@ MonoBehaviour:
     done: 0
   - name: 'sky color: 21 71 128'
     done: 0
-  - name: door_open, footstep_walk, footstep_run, land_soft, land_hard, clicks
+  - name: footstep_walk, footstep_run, land_soft, land_hard, clicks
     done: 0
 --- !u!4 &36559939
 Transform:
@@ -103836,12 +103836,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9126424233814254475, guid: 3dcceb07bf30f3d4b81feeb75476a1a0, type: 3}
       propertyPath: hideOnPauseObjects.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 9126424233814254475, guid: 3dcceb07bf30f3d4b81feeb75476a1a0, type: 3}
       propertyPath: 'hideOnPauseObjects.Array.data[0]'
       value: 
       objectReference: {fileID: 1787687958}
+    - target: {fileID: 9126424233814254475, guid: 3dcceb07bf30f3d4b81feeb75476a1a0, type: 3}
+      propertyPath: 'hideOnPauseObjects.Array.data[1]'
+      value: 
+      objectReference: {fileID: 682711795}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
