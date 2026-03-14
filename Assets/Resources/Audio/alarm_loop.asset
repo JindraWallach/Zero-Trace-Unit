@@ -14,9 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ZeroTrace.Audio.AudioData
   id: alarm_loop
   category: 0
-  clip: {fileID: 8300000, guid: 4d2d5bb75cbdbc94890b9fa7425e59de, type: 3}
+  clip: {fileID: 8300000, guid: ef4212515ac896b4298142fb64cf22f7, type: 3}
   volume: 1
-  volumeMultiplier: 1
   pitchMin: 1
   pitchMax: 1
   loop: 1

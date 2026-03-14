@@ -101,6 +101,18 @@ namespace ZeroTrace.Audio
             }
         }
 
+        public void PauseAll()
+        {
+            foreach (var cmd in _active)
+                cmd.Pause();
+        }
+
+        public void ResumeAll()
+        {
+            foreach (var cmd in _active)
+                cmd.Resume();
+        }
+
         public void SetCategoryVolume(AudioCategory category, float volume)
         {
             volume = Mathf.Clamp01(volume);

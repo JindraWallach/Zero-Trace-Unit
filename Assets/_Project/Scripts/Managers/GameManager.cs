@@ -2,6 +2,7 @@
 using Synty.AnimationBaseLocomotion.Samples.InputSystem;
 using System;
 using UnityEngine;
+using ZeroTrace.Audio;
 
 /// <summary>
 /// Game state manager (singleton per scene).
@@ -149,6 +150,8 @@ public class GameManager : MonoBehaviour, IInitializable
         SetHideOnPauseObjects(false);
 
         Time.timeScale = 0f;
+        AudioManager.Instance.PauseAll();
+
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
 
@@ -168,6 +171,8 @@ public class GameManager : MonoBehaviour, IInitializable
         SetHideOnPauseObjects(true);
 
         Time.timeScale = 1f;
+        AudioManager.Instance.ResumeAll();
+
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 

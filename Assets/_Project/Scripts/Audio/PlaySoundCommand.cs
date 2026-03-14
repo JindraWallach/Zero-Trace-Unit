@@ -79,5 +79,15 @@ namespace ZeroTrace.Audio
             yield return new WaitForSeconds(duration);
             Release();
         }
+
+        public void Pause()
+        {
+            _source.Pause();
+        }
+
+        public void Resume()
+        {
+            _source.UnPause();
+        }
     }
 }
