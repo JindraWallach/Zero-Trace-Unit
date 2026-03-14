@@ -115,7 +115,7 @@ public class ScreenEdgeDangerHUD : MonoBehaviour
 
     private void SetAlpha(float alpha)
     {
-        Debug.Log("alpha: " + alpha);
+        //Debug.Log("alpha: " + alpha);
         Color c = config.borderColor;
         c.a = alpha;
         borderImage.color = c;
