@@ -1989,7 +1989,7 @@ MonoBehaviour:
     done: 0
   - name: 'sky color: 21 71 128'
     done: 0
-  - name: footstep_walk, footstep_run, land_soft, land_hard
+  - name: footstep_walk, footstep_run, land_soft, land_hard, enemy walk/laser
     done: 0
 --- !u!4 &36559939
 Transform:
