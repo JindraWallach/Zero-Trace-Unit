@@ -57,13 +57,13 @@ public class GlitchController : MonoBehaviour
     private void Start()
     {
         FindGlitchFeature();
-        SubscribeToEvents();
+        SubscribeToEvents(); // OnGameStateChanged se může zavolat hned
 
         if (glitchSettings != null)
         {
             CacheBaseValues();
-            RestoreStateIfNeeded(); // Obnovení presetu po reloadu scény
-            isInitialized = true;
+            RestoreStateIfNeeded(); // isInitialized = false uvnitř
+            isInitialized = true;   // teprve teď povolíme GameState eventy
         }
     }
 
@@ -153,11 +153,13 @@ public class GlitchController : MonoBehaviour
     {
         if (glitchSettings == null) return;
 
-        presetBeforeDeath = glitchSettings.CurrentPreset;
-        wasEnabledBeforeDeath = glitchSettings.enabled;
+        // Vždy chceme po restartu Minimal — neukládáme aktuální stav SO
+        // protože ten může být už přepsaný jiným efektem
+        presetBeforeDeath = GlitchEffectSettings.GlitchPreset.Minimal;
+        wasEnabledBeforeDeath = false; // po restartu glitch vypnutý (normal mode)
         hasStateBeforeDeath = true;
 
-        Debug.Log($"[GlitchController] Saved preset before death: {presetBeforeDeath}, enabled={wasEnabledBeforeDeath}");
+        Debug.Log($"[GlitchController] Saved preset before death: {presetBeforeDeath}");
     }
 
     /// <summary>
@@ -170,10 +172,11 @@ public class GlitchController : MonoBehaviour
         glitchSettings.ApplyPreset(presetBeforeDeath);
         glitchSettings.enabled = wasEnabledBeforeDeath;
 
-        Debug.Log($"[GlitchController] Restored preset after death: {presetBeforeDeath}, enabled={wasEnabledBeforeDeath}");
-
-        // Clear the saved state
         hasStateBeforeDeath = false;
+
+        // Zablokuj přepsání z OnGameStateChanged → Playing
+        isInitialized = false; // Playing event check: if (isInitialized)
+        Debug.Log($"[GlitchController] Restored preset: {presetBeforeDeath}");
     }
 
     // === EVENT HANDLERS ===
