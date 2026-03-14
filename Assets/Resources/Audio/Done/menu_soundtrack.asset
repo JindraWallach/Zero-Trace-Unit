@@ -15,7 +15,7 @@ MonoBehaviour:
   id: menu_soundtrack
   category: 1
   clip: {fileID: 8300000, guid: 95bb5afccea6f7a4a8f9ca9f30ed7c47, type: 3}
-  volume: 0.35
+  volume: 0.3
   pitchMin: 1
   pitchMax: 1
   loop: 1

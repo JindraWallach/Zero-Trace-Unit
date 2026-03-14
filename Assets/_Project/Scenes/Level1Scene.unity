@@ -1983,17 +1983,13 @@ MonoBehaviour:
   items:
   - name: 'Fog: Hex: 7CB1CF'
     done: 0
-  - name: "Zlep\u0161en\xED nestatickeho designu hack tabulky?"
-    done: 0
-  - name: "Hack bude nejsp\xED\u0161e anim + prefab + spojen\xED?"
-    done: 0
   - name: 
     done: 0
   - name: Stale potrebuji fix na multipoint vision u nejakych zdi
     done: 0
   - name: 'sky color: 21 71 128'
     done: 0
-  - name: footstep_walk, footstep_run, land_soft, land_hard, clicks
+  - name: footstep_walk, footstep_run, land_soft, land_hard
     done: 0
 --- !u!4 &36559939
 Transform:
@@ -58655,6 +58651,7 @@ GameObject:
   - component: {fileID: 1274326771}
   - component: {fileID: 1274326770}
   - component: {fileID: 1274326769}
+  - component: {fileID: 1274326772}
   m_Layer: 5
   m_Name: Resume
   m_TagString: Untagged
@@ -58776,6 +58773,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1274326767}
   m_CullTransparentMesh: 1
+--- !u!114 &1274326772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1274326767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c4b821b6d565cb44b2d02c4ca145aa2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonClickSound
 --- !u!1001 &1274459325
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -60886,6 +60895,7 @@ GameObject:
   - component: {fileID: 1317658526}
   - component: {fileID: 1317658525}
   - component: {fileID: 1317658524}
+  - component: {fileID: 1317658527}
   m_Layer: 5
   m_Name: Menu
   m_TagString: Untagged
@@ -61007,6 +61017,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1317658522}
   m_CullTransparentMesh: 1
+--- !u!114 &1317658527
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1317658522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c4b821b6d565cb44b2d02c4ca145aa2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonClickSound
 --- !u!1001 &1317679978
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -68851,6 +68873,7 @@ GameObject:
   - component: {fileID: 1484642075}
   - component: {fileID: 1484642074}
   - component: {fileID: 1484642073}
+  - component: {fileID: 1484642076}
   m_Layer: 5
   m_Name: Menu
   m_TagString: Untagged
@@ -68972,6 +68995,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1484642071}
   m_CullTransparentMesh: 1
+--- !u!114 &1484642076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1484642071}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c4b821b6d565cb44b2d02c4ca145aa2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonClickSound
 --- !u!1001 &1485554201
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -121271,6 +121306,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   deathPreset: 5
+  defaultPreset: 2
   pulseDuration: 0.5
   pulseIntensityMultiplier: 2
   transitionSpeed: 2
