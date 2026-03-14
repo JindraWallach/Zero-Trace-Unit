@@ -23,6 +23,9 @@ public class GlitchController : MonoBehaviour
     [SerializeField] private AnimationCurve deathGlitchCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
     [SerializeField] private GlitchEffectSettings.GlitchPreset deathPreset = GlitchEffectSettings.GlitchPreset.Death;
 
+    [Header("DefaultState")]
+    [SerializeField] private GlitchEffectSettings.GlitchPreset defaultPreset = GlitchEffectSettings.GlitchPreset.Minimal;
+
     [Header("Pulse Glitch Config")]
     [SerializeField] private float pulseDuration = 0.5f;
     [SerializeField] private float pulseIntensityMultiplier = 2f;
@@ -155,7 +158,7 @@ public class GlitchController : MonoBehaviour
 
         // Vždy chceme po restartu Minimal — neukládáme aktuální stav SO
         // protože ten může být už přepsaný jiným efektem
-        presetBeforeDeath = GlitchEffectSettings.GlitchPreset.Minimal;
+        presetBeforeDeath = defaultPreset; // glitchSettings.CurrentPreset;
         wasEnabledBeforeDeath = false; // po restartu glitch vypnutý (normal mode)
         hasStateBeforeDeath = true;
 
@@ -194,7 +197,7 @@ public class GlitchController : MonoBehaviour
             case GameState.Playing:
                 // Restore base settings
                 if (isInitialized)
-                    TransitionToPreset(GlitchEffectSettings.GlitchPreset.Minimal, 0.5f);
+                    TransitionToPreset(defaultPreset, 0.5f);
                 break;
         }
     }
