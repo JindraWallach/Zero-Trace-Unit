@@ -15,7 +15,9 @@ MonoBehaviour:
   id: alarm_loop
   category: 0
   clip: {fileID: 8300000, guid: ef4212515ac896b4298142fb64cf22f7, type: 3}
-  volume: 1
+  clips: []
+  minInterval: 0.1
+  volume: 0.7
   pitchMin: 1
   pitchMax: 1
   loop: 1

@@ -38,7 +38,28 @@ namespace ZeroTrace.Audio
             DontDestroyOnLoad(gameObject);
             Initialize();
 
-            SceneManager.sceneLoaded += OnSceneLoaded;
+            UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnUnitySceneLoaded;
+        }
+
+        private void OnUnitySceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            StopAll();
+
+            if (SceneManager.Instance != null)
+                SceneManager.Instance.OnSceneLoadStarted += OnSceneLoadStarted;
+        }
+
+        private void OnSceneLoadStarted()
+        {
+            StopAll();
+        }
+
+        private void OnDestroy()
+        {
+            UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnUnitySceneLoaded;
+            if (SceneManager.Instance != null)
+                SceneManager.Instance.OnSceneLoadStarted -= OnSceneLoadStarted;
+            StopAll();
         }
 
         private void Initialize()
@@ -60,8 +81,6 @@ namespace ZeroTrace.Audio
 
             Debug.Log($"[AudioManager] Loaded {_dataMap.Count} AudioData from Resources/{ResourcesPath}/");
         }
-
-        private void OnDestroy() => StopAll();
 
         // ── Public API ───────────────────────────────────────────────────────
 
