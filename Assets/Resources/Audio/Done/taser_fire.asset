@@ -17,7 +17,7 @@ MonoBehaviour:
   clip: {fileID: 8300000, guid: 4e8fda3e8af5acc40880aec09a7cea55, type: 3}
   clips: []
   minInterval: 0.1
-  volume: 0.25
+  volume: 0.15
   pitchMin: 1
   pitchMax: 1
   loop: 0
