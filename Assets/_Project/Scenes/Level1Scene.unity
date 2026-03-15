@@ -1989,7 +1989,7 @@ MonoBehaviour:
     done: 0
   - name: 'sky color: 21 71 128'
     done: 0
-  - name: enemy walk/run/laser, camera
+  - name: enemy walk/run, camera
     done: 0
   - name: end anim
     done: 0
@@ -108246,6 +108246,7 @@ MonoBehaviour:
   playerChestBone: {fileID: 240007502259430940}
   lineDuration: 1
   electricImpactDuration: 3
+  taserFireSoundId: taser_fire
 --- !u!1 &2515270873626493865
 GameObject:
   m_ObjectHideFlags: 0

@@ -110597,12 +110597,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9126424233814254475, guid: 3dcceb07bf30f3d4b81feeb75476a1a0, type: 3}
       propertyPath: hideOnPauseObjects.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 9126424233814254475, guid: 3dcceb07bf30f3d4b81feeb75476a1a0, type: 3}
       propertyPath: 'hideOnPauseObjects.Array.data[0]'
       value: 
       objectReference: {fileID: 1787687958}
+    - target: {fileID: 9126424233814254475, guid: 3dcceb07bf30f3d4b81feeb75476a1a0, type: 3}
+      propertyPath: 'hideOnPauseObjects.Array.data[1]'
+      value: 
+      objectReference: {fileID: 682711795}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -118161,6 +118165,7 @@ GameObject:
   - component: {fileID: 771632440130162968}
   - component: {fileID: 8290277118261291091}
   - component: {fileID: 8290277118261291093}
+  - component: {fileID: 8290277118261291094}
   m_Layer: 8
   m_Name: PolygonCharacter
   m_TagString: Player
@@ -118933,8 +118938,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NoiseEmitter
   config: {fileID: 11400000, guid: 115b124c02a033b43ba5ecc7a6ea6911, type: 2}
-  walkStepSoundId: footstep_walk
-  runStepSoundId: footstep_run
   landSoftSoundId: land_soft
   landHardSoundId: land_hard
   flashlightOnSoundId: flashlight_on
@@ -126803,6 +126806,20 @@ MonoBehaviour:
   movementModifier: {fileID: 8290277118261291091}
   debugLog: 1
   appliedClass: {fileID: 0}
+--- !u!114 &8290277118261291094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4389865434754953424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd18f863b41fc994fb887c1d64b3d2ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FootstepSoundEmitter
+  walkSoundId: footstep_walk
+  runSoundId: footstep_run
 --- !u!23 &8342619450023209112
 MeshRenderer:
   m_ObjectHideFlags: 0

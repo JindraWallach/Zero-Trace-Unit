@@ -6354,10 +6354,10 @@ MonoBehaviour:
   - {fileID: 247607531767078872}
   - {fileID: 9118070313387818552}
   - {fileID: 464504969588803251}
-  isAlarmActive: 0
-  timeRemaining: 0
   stackDuration: 30
   stackCap: 60
+  isAlarmActive: 0
+  timeRemaining: 0
 --- !u!1 &1931427393
 GameObject:
   m_ObjectHideFlags: 0
@@ -7991,12 +7991,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9126424233814254475, guid: 3dcceb07bf30f3d4b81feeb75476a1a0, type: 3}
       propertyPath: hideOnPauseObjects.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 9126424233814254475, guid: 3dcceb07bf30f3d4b81feeb75476a1a0, type: 3}
       propertyPath: 'hideOnPauseObjects.Array.data[0]'
       value: 
       objectReference: {fileID: 1787687958}
+    - target: {fileID: 9126424233814254475, guid: 3dcceb07bf30f3d4b81feeb75476a1a0, type: 3}
+      propertyPath: 'hideOnPauseObjects.Array.data[1]'
+      value: 
+      objectReference: {fileID: 682711795}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -9290,9 +9294,8 @@ MonoBehaviour:
   promptFront: {fileID: 4946584031196452857}
   promptBack: {fileID: 6404734810847494371}
   invertSideLogic: 0
-  audioSource: {fileID: 0}
-  openSound: {fileID: 0}
-  closeSound: {fileID: 0}
+  openSoundId: door_open
+  closeSoundId: door_close
   animationDuration: 1.25
 --- !u!33 &614709175805876734
 MeshFilter:
@@ -25922,9 +25925,10 @@ MonoBehaviour:
   config: {fileID: 11400000, guid: b854f7225edf3824d96735fe0283ff23, type: 2}
   patrolRoute: {fileID: 872217610}
   playerTransform: {fileID: 8290277118261291090}
+  alarmSystem: {fileID: 0}
+  TaserSpawnPoint: {fileID: 751691839}
   currentStateName: 
   currentSuspicionDebug: 0
-  TaserSpawnPoint: {fileID: 751691839}
 --- !u!4 &4140324426569007922
 Transform:
   m_ObjectHideFlags: 0
@@ -27318,6 +27322,7 @@ GameObject:
   - component: {fileID: 771632440130162968}
   - component: {fileID: 8290277118261291091}
   - component: {fileID: 8290277118261291093}
+  - component: {fileID: 8290277118261291094}
   m_Layer: 8
   m_Name: PolygonCharacter
   m_TagString: Player
@@ -28792,6 +28797,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NoiseEmitter
   config: {fileID: 11400000, guid: 115b124c02a033b43ba5ecc7a6ea6911, type: 2}
+  landSoftSoundId: land_soft
+  landHardSoundId: land_hard
+  flashlightOnSoundId: flashlight_on
+  flashlightOffSoundId: flashlight_off
   timeSinceLastFootstep: 0
   isMoving: 0
   isRunning: 0
@@ -45402,6 +45411,20 @@ MonoBehaviour:
   movementModifier: {fileID: 8290277118261291091}
   debugLog: 1
   appliedClass: {fileID: 0}
+--- !u!114 &8290277118261291094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4389865434754953424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd18f863b41fc994fb887c1d64b3d2ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FootstepSoundEmitter
+  walkSoundId: footstep_walk
+  runSoundId: footstep_run
 --- !u!1 &8316146297266208179
 GameObject:
   m_ObjectHideFlags: 0
@@ -48175,6 +48198,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   deathPreset: 4
+  defaultPreset: 2
   pulseDuration: 0.5
   pulseIntensityMultiplier: 2
   transitionSpeed: 2
