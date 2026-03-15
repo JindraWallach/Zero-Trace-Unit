@@ -12,13 +12,12 @@ public class FootstepSoundEmitter : MonoBehaviour
     [SerializeField] private string runSoundId = "footstep_run";
 
     // Voláno z Animation Eventu na walk animaci
-    public void OnWalkStep()
+    public void FootstepWalk()  // místo OnWalkStep
     {
         AudioManager.Instance?.Play(walkSoundId, transform.position);
     }
 
-    // Voláno z Animation Eventu na run animaci
-    public void OnRunStep()
+    public void FootstepRun()   // místo OnRunStep
     {
         AudioManager.Instance?.Play(runSoundId, transform.position);
     }
