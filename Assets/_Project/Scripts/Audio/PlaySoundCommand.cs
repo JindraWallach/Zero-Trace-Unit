@@ -62,7 +62,6 @@ namespace ZeroTrace.Audio
 
         private void ApplyData()
         {
-            // Vyber clip - varied nebo single
             _source.clip = (Data.clips != null && Data.clips.Length > 0)
                 ? Data.clips[UnityEngine.Random.Range(0, Data.clips.Length)]
                 : Data.clip;
@@ -79,7 +78,9 @@ namespace ZeroTrace.Audio
 
         private IEnumerator WaitAndRelease()
         {
-            float duration = Data.clip.length / Mathf.Abs(_source.pitch);
+            // clip může být null když se používá clips[] array
+            float clipLength = _source.clip != null ? _source.clip.length : 0f;
+            float duration = clipLength / Mathf.Abs(_source.pitch);
             yield return new WaitForSeconds(duration);
             Release();
         }

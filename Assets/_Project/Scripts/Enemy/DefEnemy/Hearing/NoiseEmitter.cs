@@ -13,10 +13,6 @@ public class NoiseEmitter : MonoBehaviour
     [SerializeField] private NoiseConfig config;
 
     [Header("Audio IDs")]
-    [Tooltip("Zvuk kroků při chůzi")]
-    [SerializeField] private string walkStepSoundId = "footstep_walk";
-    [Tooltip("Zvuk kroků při běhu")]
-    [SerializeField] private string runStepSoundId = "footstep_run";
     [Tooltip("Zvuk přistání (lehké / pomalý pád)")]
     [SerializeField] private string landSoftSoundId = "land_soft";
     [Tooltip("Zvuk přistání (tvrdé / rychlý pád)")]
@@ -80,10 +76,6 @@ public class NoiseEmitter : MonoBehaviour
         NoiseType type = running ? NoiseType.Running : NoiseType.Footsteps;
 
         NoiseSystem.Instance?.EmitNoise(transform.position, radius, type);
-
-        // Zvuk přes AudioManager
-        string soundId = running ? runStepSoundId : walkStepSoundId;
-        AudioManager.Instance?.Play(soundId, transform.position);
     }
 
     /// <summary>

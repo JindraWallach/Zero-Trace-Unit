@@ -16,15 +16,15 @@ MonoBehaviour:
   category: 0
   clip: {fileID: 0}
   clips:
-  - {fileID: 8300000, guid: 34545aebc0c1c884f944fd30838b6bad, type: 3}
-  - {fileID: 8300000, guid: 1ec182185cd29c144b598425f20fc8d8, type: 3}
-  - {fileID: 8300000, guid: 14943f5359b36464380fa5ebd794f542, type: 3}
-  - {fileID: 8300000, guid: 2cc0e1e3b3d0c654cb12048a58ba0504, type: 3}
+  - {fileID: 8300000, guid: 045111cecb783ed44967affcb2bda993, type: 3}
+  - {fileID: 8300000, guid: fb814ad11ce4f164d97c7a619625d7cc, type: 3}
+  - {fileID: 8300000, guid: 669c811566db8d84f941e7b9832ed822, type: 3}
+  - {fileID: 8300000, guid: 0dfac34612e291d4da30e209975b6afb, type: 3}
   minInterval: 0.1
-  volume: 1
-  pitchMin: 1
-  pitchMax: 1
+  volume: 0.6
+  pitchMin: 0.7
+  pitchMax: 0.8
   loop: 0
-  spatialBlend: 0
+  spatialBlend: 1
   minDistance: 1
   maxDistance: 20
