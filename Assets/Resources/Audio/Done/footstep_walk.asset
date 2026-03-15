@@ -15,12 +15,16 @@ MonoBehaviour:
   id: footstep_walk
   category: 0
   clip: {fileID: 0}
-  clips: []
+  clips:
+  - {fileID: 8300000, guid: 6ab0b11af083ce54c827493a560a52ef, type: 3}
+  - {fileID: 8300000, guid: f99e1d27c4cc01944b61264f24cc774f, type: 3}
+  - {fileID: 8300000, guid: 987c130dd1c10e947a8f0f653509de22, type: 3}
+  - {fileID: 8300000, guid: 624f3fa11a460bd41a6321bb4b8e33c2, type: 3}
   minInterval: 0.1
   volume: 1
-  pitchMin: 1
-  pitchMax: 1
+  pitchMin: 0.7
+  pitchMax: 0.8
   loop: 0
-  spatialBlend: 0
+  spatialBlend: 1
   minDistance: 1
   maxDistance: 20

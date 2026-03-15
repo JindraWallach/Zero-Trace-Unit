@@ -4687,7 +4687,7 @@ BlendTree:
   m_Name: Walk_StrafeForwards_BlendTree
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: 1827226128182048838, guid: 190a58a12980995419db837d86e230d8, type: 3}
+    m_Motion: {fileID: 7400000, guid: 2f87dd782e770ec43844284245660228, type: 2}
     m_Threshold: 0
     m_Position: {x: 0, y: 1}
     m_TimeScale: 1
