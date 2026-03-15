@@ -19,6 +19,6 @@ MonoBehaviour:
   pitchMin: 1
   pitchMax: 1
   loop: 1
-  spatialBlend: 1
+  spatialBlend: 0
   minDistance: 1
   maxDistance: 100
