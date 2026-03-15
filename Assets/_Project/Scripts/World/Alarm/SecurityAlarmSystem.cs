@@ -180,7 +180,7 @@ public class SecurityAlarmSystem : MonoBehaviour
         OnAlarmTriggered?.Invoke();
 
         // Audio via AudioManager — loopovaný zvuk, uložíme handle pro pozdější Stop()
-        if (!string.IsNullOrEmpty(config.alarmSoundId))
+        if (alarmSoundHandle == null && !string.IsNullOrEmpty(config.alarmSoundId))
             alarmSoundHandle = AudioManager.Instance?.Play(config.alarmSoundId, alarmPosition);
 
         if (config.enableFlashingLights)
@@ -237,9 +237,11 @@ public class SecurityAlarmSystem : MonoBehaviour
             lightFlashCoroutine = null;
         }
 
-        // Stop audio přes AudioManager handle
-        AudioManager.Instance?.Stop(alarmSoundHandle);
-        alarmSoundHandle = null;
+        if (alarmSoundHandle != null)
+        {
+            AudioManager.Instance?.Stop(alarmSoundHandle);
+            alarmSoundHandle = null;
+        }
 
         RestoreLights();
         OnAlarmEnded?.Invoke();
