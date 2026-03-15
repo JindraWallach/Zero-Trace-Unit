@@ -38,6 +38,8 @@ namespace ZeroTrace.Audio
 
         public void Return(AudioSource source)
         {
+            if (source == null) return;  // přidej toto
+
             source.Stop();
             source.clip = null;
             source.loop = false;

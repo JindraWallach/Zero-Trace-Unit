@@ -54,7 +54,8 @@ namespace ZeroTrace.Audio
                 _runner.StopCoroutine(_coroutine);
                 _coroutine = null;
             }
-            _pool.Return(_source);
+            if (_source != null)  // přidej toto
+                _pool.Return(_source);
             _onComplete?.Invoke(this);
         }
 
