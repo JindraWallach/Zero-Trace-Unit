@@ -14903,6 +14903,8 @@ MonoBehaviour:
   currentStateDebug: 0
   suspicionMeterDebug: 0
   canSeePlayerDebug: 0
+  ambientSoundId: electronic_buzz
+  detectionSoundId: camera_detection
 --- !u!64 &307498868
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -53718,6 +53720,8 @@ MonoBehaviour:
   currentStateDebug: 0
   suspicionMeterDebug: 0
   canSeePlayerDebug: 0
+  ambientSoundId: electronic_buzz
+  detectionSoundId: camera_detection
 --- !u!64 &1097554813
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -54379,6 +54383,7 @@ GameObject:
   - component: {fileID: 1108836598}
   - component: {fileID: 1108836597}
   - component: {fileID: 1108836596}
+  - component: {fileID: 1108836605}
   m_Layer: 9
   m_Name: Enemy_Male_01
   m_TagString: Untagged
@@ -54606,6 +54611,20 @@ CapsuleCollider:
   m_Height: 1.8
   m_Direction: 1
   m_Center: {x: 0, y: 0.93, z: 0}
+--- !u!114 &1108836605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1108836593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd18f863b41fc994fb887c1d64b3d2ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FootstepSoundEmitter
+  walkSoundId: footstep_walk
+  runSoundId: footstep_run
 --- !u!1001 &1111259474
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -58575,6 +58594,8 @@ MonoBehaviour:
   currentStateDebug: 0
   suspicionMeterDebug: 0
   canSeePlayerDebug: 0
+  ambientSoundId: electronic_buzz
+  detectionSoundId: camera_detection
 --- !u!64 &1186470069
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -89579,6 +89600,7 @@ GameObject:
   - component: {fileID: 1776655198}
   - component: {fileID: 1776655197}
   - component: {fileID: 1776655196}
+  - component: {fileID: 1776655206}
   m_Layer: 9
   m_Name: Enemy_Female_02
   m_TagString: Untagged
@@ -89807,6 +89829,20 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1776655206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1776655194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd18f863b41fc994fb887c1d64b3d2ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FootstepSoundEmitter
+  walkSoundId: footstep_walk
+  runSoundId: footstep_run
 --- !u!1001 &1777538531
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -111625,6 +111661,7 @@ GameObject:
   - component: {fileID: 6166137275971465513}
   - component: {fileID: 2202205423317477993}
   - component: {fileID: 6933008180076708231}
+  - component: {fileID: 6933008180076708232}
   m_Layer: 9
   m_Name: Enemy_Female_01
   m_TagString: Untagged
@@ -114970,6 +115007,7 @@ MonoBehaviour:
   playerChestBone: {fileID: 240007502259430940}
   lineDuration: 1
   electricImpactDuration: 3
+  taserFireSoundId: taser_fire
 --- !u!1 &2515270873626493865
 GameObject:
   m_ObjectHideFlags: 0
@@ -123393,6 +123431,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &6933008180076708232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 634517506189399913}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd18f863b41fc994fb887c1d64b3d2ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FootstepSoundEmitter
+  walkSoundId: footstep_walk
+  runSoundId: footstep_run
 --- !u!1 &6939779326598171083
 GameObject:
   m_ObjectHideFlags: 0
@@ -124545,6 +124597,8 @@ MonoBehaviour:
   currentStateDebug: 0
   suspicionMeterDebug: 0
   canSeePlayerDebug: 0
+  ambientSoundId: electronic_buzz
+  detectionSoundId: camera_detection
 --- !u!114 &7338636321747084146
 MonoBehaviour:
   m_ObjectHideFlags: 0

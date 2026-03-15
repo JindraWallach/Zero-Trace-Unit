@@ -9372,6 +9372,7 @@ GameObject:
   - component: {fileID: 6166137275971465513}
   - component: {fileID: 2202205423317477993}
   - component: {fileID: 6933008180076708231}
+  - component: {fileID: 6933008180076708232}
   m_Layer: 9
   m_Name: Enemy_Female_01
   m_TagString: Untagged
@@ -18444,6 +18445,7 @@ MonoBehaviour:
   playerChestBone: {fileID: 240007502259430940}
   lineDuration: 1
   electricImpactDuration: 3
+  taserFireSoundId: taser_fire
 --- !u!1 &2515270873626493865
 GameObject:
   m_ObjectHideFlags: 0
@@ -39700,6 +39702,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &6933008180076708232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 634517506189399913}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd18f863b41fc994fb887c1d64b3d2ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FootstepSoundEmitter
+  walkSoundId: footstep_walk
+  runSoundId: footstep_run
 --- !u!1 &6939779326598171083
 GameObject:
   m_ObjectHideFlags: 0
