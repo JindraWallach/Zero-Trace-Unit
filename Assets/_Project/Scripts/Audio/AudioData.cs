@@ -14,7 +14,11 @@ namespace ZeroTrace.Audio
         public AudioCategory category = AudioCategory.SFX;
 
         [Header("Clip")]
-        public AudioClip clip;
+        public AudioClip clip;                          // fallback / single
+        public AudioClip[] clips;                       // varied - pokud neprázdné, použije se místo clip
+
+        [Header("Cooldown")]
+        [Min(0f)] public float minInterval = 0.1f;     // anti-spam pro kroky
 
         [Header("Volume & Pitch")]
         [Range(0f, 1f)] public float volume = 1f;

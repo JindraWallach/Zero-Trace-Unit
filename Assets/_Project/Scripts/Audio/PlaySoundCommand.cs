@@ -62,11 +62,15 @@ namespace ZeroTrace.Audio
 
         private void ApplyData()
         {
-            _source.clip = Data.clip;
+            // Vyber clip - varied nebo single
+            _source.clip = (Data.clips != null && Data.clips.Length > 0)
+                ? Data.clips[UnityEngine.Random.Range(0, Data.clips.Length)]
+                : Data.clip;
+
             _source.volume = _finalVolume;
             _source.pitch = (Data.pitchMin >= Data.pitchMax)
-                                       ? Data.pitchMin
-                                       : UnityEngine.Random.Range(Data.pitchMin, Data.pitchMax);
+                ? Data.pitchMin
+                : UnityEngine.Random.Range(Data.pitchMin, Data.pitchMax);
             _source.loop = Data.loop;
             _source.spatialBlend = Data.spatialBlend;
             _source.minDistance = Data.minDistance;
