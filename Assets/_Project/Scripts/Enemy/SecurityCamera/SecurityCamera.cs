@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using ZeroTrace.Audio;
 
 /// <summary>
 /// Security camera state machine with gradual detection system.
@@ -24,6 +25,10 @@ public class SecurityCamera : MonoBehaviour
     [SerializeField] private float suspicionMeterDebug;
     [SerializeField] private bool canSeePlayerDebug;
 
+    [Header("Audio IDs")]
+    [SerializeField] private string ambientSoundId = "electronic_buzz";
+    [SerializeField] private string detectionSoundId = "camera_detection";
+
     // Events
     public event Action OnAlertTriggered;
     public event Action<float> OnSuspicionChanged;
@@ -41,6 +46,9 @@ public class SecurityCamera : MonoBehaviour
     // Cached calculations
     private float suspicionBuildRate;
     private float suspicionDecayRate;
+
+    private PlaySoundCommand _ambientCmd;
+    private PlaySoundCommand _detectionCmd;
 
     // Public API
     public CameraState CurrentState => currentState;
@@ -93,6 +101,8 @@ public class SecurityCamera : MonoBehaviour
         // ← PŘIDEJ TOTO
         if (ScreenEdgeDangerHUD.Instance != null)
             ScreenEdgeDangerHUD.Instance.RegisterCamera(this);
+
+        _ambientCmd = AudioManager.Instance?.Play(ambientSoundId, transform.position);
     }
 
     private void OnDestroy()
@@ -103,6 +113,9 @@ public class SecurityCamera : MonoBehaviour
         // ← PŘIDEJ TOTO
         if (ScreenEdgeDangerHUD.Instance != null)
             ScreenEdgeDangerHUD.Instance.UnregisterCamera(this);
+
+        AudioManager.Instance?.Stop(_ambientCmd);
+        AudioManager.Instance?.Stop(_detectionCmd);
     }
 
     private void Update()
@@ -234,6 +247,7 @@ public class SecurityCamera : MonoBehaviour
                 break;
 
             case CameraState.Suspicious:
+                _detectionCmd = AudioManager.Instance?.Play(detectionSoundId, transform.position);
                 break;
 
             case CameraState.Alert:
@@ -251,6 +265,8 @@ public class SecurityCamera : MonoBehaviour
                 break;
 
             case CameraState.Suspicious:
+                AudioManager.Instance?.Stop(_detectionCmd);
+                _detectionCmd = null;
                 break;
 
             case CameraState.Alert:

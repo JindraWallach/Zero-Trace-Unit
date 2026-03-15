@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace ZeroTrace.Audio
 {
@@ -36,6 +37,8 @@ namespace ZeroTrace.Audio
             Instance = this;
             DontDestroyOnLoad(gameObject);
             Initialize();
+
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
         private void Initialize()
