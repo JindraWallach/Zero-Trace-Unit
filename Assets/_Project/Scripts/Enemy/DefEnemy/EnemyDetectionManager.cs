@@ -3,19 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Singleton manager for batch processing enemy vision detection.
-/// Instead of each enemy checking every frame (expensive), we batch checks:
-/// - 6 enemies × 60 fps = 360 checks/sec (BAD)
-/// - 6 enemies ÷ 0.1s interval = 60 checks/sec (GOOD - 6x optimization)
-/// 
-/// Performance:
-/// - Distributes checks across frames (load balancing)
-/// - Configurable interval per enemy (via EnemyConfig)
-/// - No memory allocations (cached lists)
+/// Singleton manager pro batch zpracování enemy vision detekce.
+/// Každý detektor běží ve vlastní coroutině s nastavitelným intervalem.
+///
+/// FIX 2 – Dynamic interval:
+///   SetFastInterval(detector)  → přepne na FAST_INTERVAL (0.05s) pro jeden detektor.
+///   RestoreInterval(detector)  → vrátí na normální interval z SuspicionConfig.
+///   Voláno z EnemyChaseState.Enter / Exit – žádný overhead pro ostatní enemy.
+///
+/// SRP:  Správa detekčních coroutin. Nic jiného.
+/// OOP:  EnemyMultiPointVision nemusí vědět nic o manageru – jen implementuje PerformDetectionCheck().
+/// Perf: WaitForSeconds alokován jednou per detektor per interval-change (ne každý frame).
 /// </summary>
 public class EnemyDetectionManager : MonoBehaviour
 {
     public static EnemyDetectionManager Instance { get; private set; }
+
+    // ── FIX 2: fast interval pro ChaseState ───────────────────────────────────
+    /// <summary>Interval použitý v ChaseState – 20 checků/sekundu.</summary>
+    private const float FAST_INTERVAL = 0.05f;
 
     [Header("Settings")]
     [Tooltip("Global detection interval override (0 = use per-enemy config)")]
@@ -23,185 +29,196 @@ public class EnemyDetectionManager : MonoBehaviour
     [SerializeField] private float globalDetectionInterval = 0f;
 
     [Header("Debug")]
-    [SerializeField] private int registeredDetectors = 0;
-    [SerializeField] private int checksPerSecond = 0;
-    [SerializeField] private bool showDebugStats = false;
+    [SerializeField] private int registeredDetectors;
+    [SerializeField] private int checksPerSecond;
+    [SerializeField] private bool showDebugStats;
 
-    // Registered detectors
-    private readonly List<EnemyMultiPointVision> detectors = new List<EnemyMultiPointVision>();
-    private readonly Dictionary<EnemyMultiPointVision, Coroutine> detectorCoroutines = new Dictionary<EnemyMultiPointVision, Coroutine>();
+    // ── Internal state ────────────────────────────────────────────────────────
+    private readonly List<EnemyMultiPointVision> detectors = new();
+    private readonly Dictionary<EnemyMultiPointVision, Coroutine> detectorCoroutines = new();
+    private readonly Dictionary<EnemyMultiPointVision, float> detectorIntervals = new();
 
-    // Performance tracking
     private int checksThisSecond;
     private float statsTimer;
 
+    // ── Lifecycle ─────────────────────────────────────────────────────────────
+
     private void Awake()
     {
-        // Singleton pattern (no DontDestroyOnLoad - per scene)
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
+        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
     }
 
     private void Update()
     {
-        // Update debug stats
-        if (showDebugStats)
+        if (!showDebugStats) return;
+        statsTimer += Time.deltaTime;
+        if (statsTimer >= 1f)
         {
-            statsTimer += Time.deltaTime;
-            if (statsTimer >= 1f)
-            {
-                checksPerSecond = checksThisSecond;
-                checksThisSecond = 0;
-                statsTimer = 0f;
-            }
+            checksPerSecond = checksThisSecond;
+            checksThisSecond = 0;
+            statsTimer = 0f;
         }
     }
 
-    /// <summary>
-    /// Register a vision detector for batch processing.
-    /// </summary>
+    // ── Registration ──────────────────────────────────────────────────────────
+
     public void RegisterDetector(EnemyMultiPointVision detector)
     {
-        if (detector == null || detectors.Contains(detector))
-            return;
+        if (detector == null || detectors.Contains(detector)) return;
 
         detectors.Add(detector);
         registeredDetectors = detectors.Count;
 
-        // Start detection coroutine for this detector
-        float interval = globalDetectionInterval > 0
-            ? globalDetectionInterval
-            : detector.GetComponent<EnemyStateMachine>().Config.suspicionConfig.visionCheckInterval;
+        float interval = GetNormalInterval(detector);
+        StartDetectorCoroutine(detector, interval);
 
-        Coroutine coroutine = StartCoroutine(DetectionCoroutine(detector, interval));
-        detectorCoroutines[detector] = coroutine;
-
-        Debug.Log($"[DetectionManager] Registered detector: {detector.gameObject.name}, interval: {interval}s", this);
+        if (Application.isEditor)
+            Debug.Log($"[DetectionManager] Registered: {detector.gameObject.name} interval:{interval}s", this);
     }
 
-    /// <summary>
-    /// Unregister a vision detector.
-    /// </summary>
     public void UnregisterDetector(EnemyMultiPointVision detector)
     {
-        if (detector == null || !detectors.Contains(detector))
-            return;
+        if (detector == null || !detectors.Contains(detector)) return;
 
         detectors.Remove(detector);
         registeredDetectors = detectors.Count;
+        StopDetectorCoroutine(detector);
+        detectorIntervals.Remove(detector);
+    }
 
-        // Stop coroutine
-        if (detectorCoroutines.TryGetValue(detector, out Coroutine coroutine))
-        {
-            if (coroutine != null)
-                StopCoroutine(coroutine);
+    // ── FIX 2: Dynamic interval API ───────────────────────────────────────────
 
-            detectorCoroutines.Remove(detector);
-        }
+    /// <summary>
+    /// Přepne detektor na FAST_INTERVAL (0.05s).
+    /// Volat z EnemyChaseState.Enter().
+    /// </summary>
+    public void SetFastInterval(EnemyMultiPointVision detector)
+    {
+        if (detector == null || !detectors.Contains(detector)) return;
 
-        Debug.Log($"[DetectionManager] Unregistered detector: {detector.gameObject.name}", this);
+        // Přepiš jen pokud se interval skutečně mění – zbytečný restart coroutiny stojí
+        float current = detectorIntervals.TryGetValue(detector, out float v) ? v : -1f;
+        if (Mathf.Approximately(current, FAST_INTERVAL)) return;
+
+        RestartDetectorCoroutine(detector, FAST_INTERVAL);
+
+        if (Application.isEditor)
+            Debug.Log($"[DetectionManager] {detector.gameObject.name}: FAST interval ({FAST_INTERVAL}s)", this);
     }
 
     /// <summary>
-    /// Coroutine that runs detection checks at specified interval.
+    /// Vrátí detektor na normální interval z SuspicionConfig.
+    /// Volat z EnemyChaseState.Exit().
     /// </summary>
+    public void RestoreInterval(EnemyMultiPointVision detector)
+    {
+        if (detector == null || !detectors.Contains(detector)) return;
+
+        float normal = GetNormalInterval(detector);
+        float current = detectorIntervals.TryGetValue(detector, out float v) ? v : -1f;
+        if (Mathf.Approximately(current, normal)) return;
+
+        RestartDetectorCoroutine(detector, normal);
+
+        if (Application.isEditor)
+            Debug.Log($"[DetectionManager] {detector.gameObject.name}: restored interval ({normal}s)", this);
+    }
+
+    // ── Force checks ─────────────────────────────────────────────────────────
+
+    public void ForceDetectionCheck(EnemyMultiPointVision detector)
+    {
+        if (detector != null && detectors.Contains(detector))
+            detector.PerformDetectionCheck();
+    }
+
+    public void ForceAllDetectionChecks()
+    {
+        foreach (var d in detectors) d?.PerformDetectionCheck();
+    }
+
+    // ── Pause / Resume ────────────────────────────────────────────────────────
+
+    public void PauseAllDetection()
+    {
+        foreach (var d in detectors) StopDetectorCoroutine(d);
+    }
+
+    public void ResumeAllDetection()
+    {
+        foreach (var d in detectors)
+        {
+            if (d == null) continue;
+            float interval = detectorIntervals.TryGetValue(d, out float v) ? v : GetNormalInterval(d);
+            StartDetectorCoroutine(d, interval);
+        }
+    }
+
+    // ── Query ─────────────────────────────────────────────────────────────────
+
+    public List<EnemyMultiPointVision> GetDetectorsSeeingPlayer()
+    {
+        var result = new List<EnemyMultiPointVision>();
+        foreach (var d in detectors)
+            if (d != null && d.CanSeePlayer) result.Add(d);
+        return result;
+    }
+
+    // ── Private helpers ───────────────────────────────────────────────────────
+
+    private float GetNormalInterval(EnemyMultiPointVision detector)
+    {
+        if (globalDetectionInterval > 0f) return globalDetectionInterval;
+
+        var machine = detector.GetComponent<EnemyStateMachine>();
+        return machine != null
+            ? machine.Config.suspicionConfig.visionCheckInterval
+            : 0.2f;
+    }
+
+    private void StartDetectorCoroutine(EnemyMultiPointVision detector, float interval)
+    {
+        StopDetectorCoroutine(detector);
+
+        Coroutine c = StartCoroutine(DetectionCoroutine(detector, interval));
+        detectorCoroutines[detector] = c;
+        detectorIntervals[detector] = interval;
+    }
+
+    private void StopDetectorCoroutine(EnemyMultiPointVision detector)
+    {
+        if (!detectorCoroutines.TryGetValue(detector, out Coroutine c)) return;
+        if (c != null) StopCoroutine(c);
+        detectorCoroutines.Remove(detector);
+    }
+
+    private void RestartDetectorCoroutine(EnemyMultiPointVision detector, float interval)
+    {
+        StartDetectorCoroutine(detector, interval);
+    }
+
     private IEnumerator DetectionCoroutine(EnemyMultiPointVision detector, float interval)
     {
-        // Stagger initial checks to distribute load
+        // Stagger initial check – rozloží zátěž po framech
         yield return new WaitForSeconds(Random.Range(0f, interval));
 
-        WaitForSeconds wait = new WaitForSeconds(interval);
+        var wait = new WaitForSeconds(interval);
 
         while (detector != null)
         {
-            // Perform detection check
             detector.PerformDetectionCheck();
 
-            // Track stats
-            if (showDebugStats)
-                checksThisSecond++;
+            if (showDebugStats) checksThisSecond++;
 
             yield return wait;
         }
     }
 
-    /// <summary>
-    /// Force immediate detection check for specific detector (emergency check).
-    /// </summary>
-    public void ForceDetectionCheck(EnemyMultiPointVision detector)
-    {
-        if (detector == null || !detectors.Contains(detector))
-            return;
-
-        detector.PerformDetectionCheck();
-    }
-
-    /// <summary>
-    /// Force detection check for all registered detectors.
-    /// </summary>
-    public void ForceAllDetectionChecks()
-    {
-        foreach (var detector in detectors)
-        {
-            if (detector != null)
-                detector.PerformDetectionCheck();
-        }
-    }
-
-    /// <summary>
-    /// Pause all detection (e.g., during cutscenes/puzzles).
-    /// </summary>
-    public void PauseAllDetection()
-    {
-        foreach (var kvp in detectorCoroutines)
-        {
-            if (kvp.Value != null)
-                StopCoroutine(kvp.Value);
-        }
-    }
-
-    /// <summary>
-    /// Resume all detection after pause.
-    /// </summary>
-    public void ResumeAllDetection()
-    {
-        foreach (var detector in detectors)
-        {
-            if (detector == null) continue;
-
-            float interval = globalDetectionInterval > 0
-                ? globalDetectionInterval
-                : detector.GetComponent<EnemyStateMachine>().Config.suspicionConfig.visionCheckInterval;
-
-            Coroutine coroutine = StartCoroutine(DetectionCoroutine(detector, interval));
-            detectorCoroutines[detector] = coroutine;
-        }
-    }
-
-    /// <summary>
-    /// Get all detectors that can see player right now.
-    /// </summary>
-    public List<EnemyMultiPointVision> GetDetectorsSeingPlayer()
-    {
-        List<EnemyMultiPointVision> result = new List<EnemyMultiPointVision>();
-
-        foreach (var detector in detectors)
-        {
-            if (detector != null && detector.CanSeePlayer)
-                result.Add(detector);
-        }
-
-        return result;
-    }
-
     private void OnDestroy()
     {
-        // Cleanup
         detectors.Clear();
         detectorCoroutines.Clear();
+        detectorIntervals.Clear();
     }
 }

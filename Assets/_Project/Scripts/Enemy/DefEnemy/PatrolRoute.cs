@@ -105,11 +105,29 @@ public class PatrolRoute : MonoBehaviour
     /// </summary>
     public Vector3 GetFacingDirection(int index)
     {
-        if (faceMovementDirection || waypointTransforms == null || waypointCount == 0)
+        if (waypointTransforms == null || waypointCount == 0)
             return Vector3.forward;
 
         index = Mathf.Clamp(index, 0, waypointCount - 1);
-        return waypointTransforms[index].forward;
+
+        if (faceMovementDirection)
+        {
+            // Koukej směrem k dalšímu waypointu (použije se při pohybu i idle)
+            int nextIndex;
+            GetWaypoint(index, out nextIndex);
+
+            Vector3 currentPos = waypointTransforms[index].position;
+            Vector3 nextPos = waypointTransforms[nextIndex].position;
+            Vector3 dir = (nextPos - currentPos).normalized;
+
+            dir.y = 0f;
+            return dir == Vector3.zero ? waypointTransforms[index].forward : dir;
+        }
+        else
+        {
+            // Koukej dle ručně nastavené rotace Transform waypointu
+            return waypointTransforms[index].forward;
+        }
     }
 
     /// <summary>

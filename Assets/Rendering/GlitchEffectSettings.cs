@@ -85,12 +85,19 @@ public class GlitchEffectSettings : ScriptableObject
         }
     }
 
-    /// <summary>
-    /// Apply preset values without switching back to Custom.
-    /// </summary>
+    private void OnValidate()
+    {
+        if (isApplyingPreset) return;
+
+        if (currentPreset != lastAppliedPreset && currentPreset != GlitchPreset.Custom)
+        {
+            ApplyPreset(currentPreset);
+        }
+        // Smaž celý blok "if (!ValuesMatchPreset)" — nikdy nedáme Custom
+    }
+
     public void ApplyPreset(GlitchPreset preset)
     {
-        // Prevent OnValidate from triggering during preset application
         isApplyingPreset = true;
         lastAppliedPreset = preset;
         currentPreset = preset;
@@ -98,162 +105,48 @@ public class GlitchEffectSettings : ScriptableObject
         switch (preset)
         {
             case GlitchPreset.None:
-                intensity = 0f;
-                timeScale = 0f;
-                colorShift = 0f;
-                blockSize = 20f;
-                scanlineIntensity = 0f;
-                inversionIntensity = 0f;
-                verticalShift = 0f;
-                noiseFrequency = 0f;
-                enabled = false;
+                intensity = 0f; timeScale = 0f; colorShift = 0f; blockSize = 20f;
+                scanlineIntensity = 0f; inversionIntensity = 0f; verticalShift = 0f;
+                noiseFrequency = 0f; enabled = false;
                 break;
             case GlitchPreset.Minimal:
-                intensity = 0.003f;
-                timeScale = 0.2f;
-                colorShift = 0.001f;
-                blockSize = 0f;
-                scanlineIntensity = 0.1f;
-                inversionIntensity = 0f;
-                verticalShift = 0f;
-                noiseFrequency = 0.5f;
+                intensity = 0.003f; timeScale = 0.2f; colorShift = 0.001f; blockSize = 0f;
+                scanlineIntensity = 0.1f; inversionIntensity = 0f; verticalShift = 0f;
+                noiseFrequency = 0.5f; enabled = true;
                 break;
-
             case GlitchPreset.VerySubtle:
-                intensity = 0.006f;
-                timeScale = 0.3f;
-                colorShift = 0.002f;
-                blockSize = 0f;
-                scanlineIntensity = 0.2f;
-                inversionIntensity = 0.05f;
-                verticalShift = 0f;
-                noiseFrequency = 0.8f;
+                intensity = 0.006f; timeScale = 0.3f; colorShift = 0.002f; blockSize = 0f;
+                scanlineIntensity = 0.2f; inversionIntensity = 0.05f; verticalShift = 0f;
+                noiseFrequency = 0.8f; enabled = true;
                 break;
-
             case GlitchPreset.Subtle:
-                intensity = 0.01f;
-                timeScale = 0.5f;
-                colorShift = 0.003f;
-                blockSize = 0f;
-                scanlineIntensity = 0.3f;
-                inversionIntensity = 0.1f;
-                verticalShift = 0f;
-                noiseFrequency = 1f;
+                intensity = 0.01f; timeScale = 0.5f; colorShift = 0.003f; blockSize = 0f;
+                scanlineIntensity = 0.3f; inversionIntensity = 0.1f; verticalShift = 0f;
+                noiseFrequency = 1f; enabled = true;
                 break;
-
             case GlitchPreset.Medium:
-                intensity = 0.03f;
-                timeScale = 1f;
-                colorShift = 0.008f;
-                blockSize = 0f;
-                scanlineIntensity = 0.5f;
-                inversionIntensity = 0.3f;
-                verticalShift = 0.01f;
-                noiseFrequency = 1f;
+                intensity = 0.03f; timeScale = 1f; colorShift = 0.008f; blockSize = 0f;
+                scanlineIntensity = 0.5f; inversionIntensity = 0.3f; verticalShift = 0.01f;
+                noiseFrequency = 1f; enabled = true;
                 break;
-
             case GlitchPreset.Extreme:
-                intensity = 0.08f;
-                timeScale = 3f;
-                colorShift = 0.02f;
-                blockSize = 0f;
-                scanlineIntensity = 0.8f;
-                inversionIntensity = 0.6f;
-                verticalShift = 0.05f;
-                noiseFrequency = 2f;
+                intensity = 0.08f; timeScale = 3f; colorShift = 0.02f; blockSize = 0f;
+                scanlineIntensity = 0.8f; inversionIntensity = 0.6f; verticalShift = 0.05f;
+                noiseFrequency = 2f; enabled = true;
                 break;
-
             case GlitchPreset.Static:
-                intensity = 0.02f;
-                timeScale = 0f; // Frozen glitch
-                colorShift = 0.005f;
-                blockSize = 0f;
-                scanlineIntensity = 0.4f;
-                inversionIntensity = 0.2f;
-                verticalShift = 0f;
-                noiseFrequency = 1f;
+                intensity = 0.02f; timeScale = 0f; colorShift = 0.005f; blockSize = 0f;
+                scanlineIntensity = 0.4f; inversionIntensity = 0.2f; verticalShift = 0f;
+                noiseFrequency = 1f; enabled = true;
                 break;
-
             case GlitchPreset.Death:
-                intensity = 0.1f;
-                timeScale = 2f;
-                colorShift = 0.05f; // Jen Death má velký colorShift
-                blockSize = 0f;
-                scanlineIntensity = 0.9f;
-                inversionIntensity = 0.8f;
-                verticalShift = 0.08f;
-                noiseFrequency = 3f;
-                break;
-
-            case GlitchPreset.Custom:
-                // Don't change values for Custom preset
+                intensity = 0.1f; timeScale = 2f; colorShift = 0.05f; blockSize = 0f;
+                scanlineIntensity = 0.9f; inversionIntensity = 0.8f; verticalShift = 0.08f;
+                noiseFrequency = 3f; enabled = true;
                 break;
         }
 
         isApplyingPreset = false;
-
-#if UNITY_EDITOR
-        // Mark asset as dirty to save changes
-        UnityEditor.EditorUtility.SetDirty(this);
-#endif
-    }
-
-    /// <summary>
-    /// Check if current values match the selected preset.
-    /// If not, switch to Custom.
-    /// </summary>
-    private bool ValuesMatchPreset(GlitchPreset preset)
-    {
-        // Custom always matches
-        if (preset == GlitchPreset.Custom)
-            return true;
-
-        // Create temp settings to compare
-        var temp = CreateInstance<GlitchEffectSettings>();
-        temp.ApplyPreset(preset);
-
-        const float tolerance = 0.001f;
-
-        bool matches =
-            Mathf.Abs(intensity - temp.intensity) < tolerance &&
-            Mathf.Abs(timeScale - temp.timeScale) < tolerance &&
-            Mathf.Abs(colorShift - temp.colorShift) < tolerance &&
-            Mathf.Abs(blockSize - temp.blockSize) < tolerance &&
-            Mathf.Abs(scanlineIntensity - temp.scanlineIntensity) < tolerance &&
-            Mathf.Abs(inversionIntensity - temp.inversionIntensity) < tolerance &&
-            Mathf.Abs(verticalShift - temp.verticalShift) < tolerance &&
-            Mathf.Abs(noiseFrequency - temp.noiseFrequency) < tolerance;
-
-        DestroyImmediate(temp);
-        return matches;
-    }
-
-    private void OnValidate()
-    {
-        // Skip validation during preset application
-        if (isApplyingPreset)
-            return;
-
-        // If user changed preset dropdown, apply it
-        if (currentPreset != lastAppliedPreset && currentPreset != GlitchPreset.Custom)
-        {
-            ApplyPreset(currentPreset);
-            return;
-        }
-
-        // If user manually changed values, check if they still match preset
-        if (currentPreset != GlitchPreset.Custom)
-        {
-            if (!ValuesMatchPreset(currentPreset))
-            {
-                // Values changed manually, switch to Custom
-                currentPreset = GlitchPreset.Custom;
-                lastAppliedPreset = GlitchPreset.Custom;
-#if UNITY_EDITOR
-                UnityEditor.EditorUtility.SetDirty(this);
-#endif
-            }
-        }
     }
 
     /// <summary>

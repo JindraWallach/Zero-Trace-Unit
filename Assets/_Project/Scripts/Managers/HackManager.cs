@@ -1,4 +1,5 @@
-﻿using Synty.AnimationBaseLocomotion.Samples;
+﻿// Scripts/Managers/HackManager.cs
+using Synty.AnimationBaseLocomotion.Samples;
 using Synty.AnimationBaseLocomotion.Samples.InputSystem;
 using System;
 using System.Collections.Generic;
@@ -9,31 +10,41 @@ using UnityEngine;
 /// - Registers all IHackTarget objects
 /// - Spawns puzzles via PuzzleFactory
 /// - Handles success/fail callbacks
+///
+/// Raises OnAnyHackSucceeded(targetID) on every successful puzzle –
+/// TutorialHackListener subscribes to this to drive tutorial phases
+/// without any direct coupling to the tutorial system.
 /// </summary>
 public class HackManager : MonoBehaviour
 {
     public static HackManager Instance { get; private set; }
 
+    // ── Static event – zero coupling, safe in non-tutorial scenes ──────────
+    /// <summary>
+    /// Fired after every successful hack puzzle, with the target's TargetID.
+    /// Only TutorialHackListener subscribes; in non-tutorial scenes nobody
+    /// subscribes and the invocation is a no-op.
+    /// </summary>
+    public static event Action<string> OnAnyHackSucceeded;
+
     [Header("Puzzle System")]
     [SerializeField] private Transform puzzleSpawnParent;
     [SerializeField] private PuzzleFactory puzzleFactory;
 
-    private SampleCameraController cameraController;
     private readonly Dictionary<string, IHackTarget> registeredTargets = new();
     private PuzzleBase activePuzzle;
+    private IHackTarget activeTarget;
+
+    // ──────────────────────────────────────────────────────────────────────
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
+        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
     }
 
-    // === Registration ===
+    // ── Registration ───────────────────────────────────────────────────────
+
     public void RegisterTarget(IHackTarget target)
     {
         if (target == null || string.IsNullOrEmpty(target.TargetID)) return;
@@ -52,13 +63,11 @@ public class HackManager : MonoBehaviour
 
     public void CancelActivePuzzle()
     {
-        if (activePuzzle != null)
-        {
-            activePuzzle.CancelPuzzle();
-        }
+        activePuzzle?.CancelPuzzle();
     }
 
-    // === Hack Request ===
+    // ── Hack Request ───────────────────────────────────────────────────────
+
     public bool RequestHack(IHackTarget target, Action onSuccess, Action onFail, Action onCancel = null)
     {
         if (activePuzzle != null)
@@ -73,7 +82,6 @@ public class HackManager : MonoBehaviour
             return false;
         }
 
-        // Spawn puzzle
         var puzzlePrefab = puzzleFactory.GetPuzzlePrefab(target);
         if (puzzlePrefab == null)
         {
@@ -91,7 +99,9 @@ public class HackManager : MonoBehaviour
             return false;
         }
 
-        // Setup callbacks
+        // Track which target is currently being hacked
+        activeTarget = target;
+
         activePuzzle.OnSuccess += () => HandlePuzzleSuccess(onSuccess);
         activePuzzle.OnFail += () => HandlePuzzleFail(onFail);
         activePuzzle.OnCancel += () => HandlePuzzleCancel(onCancel);
@@ -104,25 +114,33 @@ public class HackManager : MonoBehaviour
         return true;
     }
 
+    // ── Private ────────────────────────────────────────────────────────────
+
     private void HandlePuzzleSuccess(Action callback)
     {
         Debug.Log("[HackManager] Puzzle SUCCESS");
+
+        // Capture before CleanupPuzzle clears activeTarget
+        string succeededID = activeTarget?.TargetID ?? string.Empty;
+
         CleanupPuzzle();
 
         GameManager.Instance?.ExitPuzzleMode();
         UIManager.Instance?.ExitHackMode();
 
         callback?.Invoke();
+
+        // Notify tutorial system (no-op in non-tutorial scenes)
+        if (!string.IsNullOrEmpty(succeededID))
+            OnAnyHackSucceeded?.Invoke(succeededID);
     }
 
     private void HandlePuzzleFail(Action callback)
     {
         Debug.Log("[HackManager] Puzzle FAIL");
         CleanupPuzzle();
-
         GameManager.Instance?.ExitPuzzleMode();
         UIManager.Instance?.ExitHackMode();
-
         callback?.Invoke();
     }
 
@@ -130,10 +148,8 @@ public class HackManager : MonoBehaviour
     {
         Debug.Log("[HackManager] Puzzle CANCELLED");
         CleanupPuzzle();
-
         GameManager.Instance?.ExitPuzzleMode();
         UIManager.Instance?.ExitHackMode();
-
         callback?.Invoke();
     }
 
@@ -144,5 +160,6 @@ public class HackManager : MonoBehaviour
             Destroy(activePuzzle.gameObject);
             activePuzzle = null;
         }
+        activeTarget = null;
     }
 }

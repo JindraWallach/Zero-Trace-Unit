@@ -13,23 +13,9 @@ MonoBehaviour:
   m_Name: vInspector Data
   m_EditorClassIdentifier: VInspector::VInspector.VInspectorData
   bookmarks:
-  - _obj: {fileID: 102900000, guid: 223db587197b08446b261af28a0744b6, type: 3}
+  - _obj: {fileID: 102900000, guid: 9253f80fc2f07b2419779996f230ba6b, type: 3}
     globalId:
-      globalObjectIdString: GlobalObjectId_V1-1-223db587197b08446b261af28a0744b6-102900000-0
-    isSceneGameObject: 0
-    isAsset: 1
-    _typeString: UnityEditor.SceneAsset, UnityEditor.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - _obj: {fileID: 102900000, guid: 60bc4c0d7fa81944290d3eaf8d44a851, type: 3}
-    globalId:
-      globalObjectIdString: GlobalObjectId_V1-1-60bc4c0d7fa81944290d3eaf8d44a851-102900000-0
-    isSceneGameObject: 0
-    isAsset: 1
-    _typeString: UnityEditor.SceneAsset, UnityEditor.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - _obj: {fileID: 102900000, guid: 72ab2cf903e120b4bac1bc3c5d1ec58a, type: 3}
-    globalId:
-      globalObjectIdString: GlobalObjectId_V1-1-72ab2cf903e120b4bac1bc3c5d1ec58a-102900000-0
+      globalObjectIdString: GlobalObjectId_V1-1-9253f80fc2f07b2419779996f230ba6b-102900000-0
     isSceneGameObject: 0
     isAsset: 1
     _typeString: UnityEditor.SceneAsset, UnityEditor.CoreModule, Version=0.0.0.0,
@@ -41,27 +27,34 @@ MonoBehaviour:
     isAsset: 1
     _typeString: UnityEditor.SceneAsset, UnityEditor.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - _obj: {fileID: 102900000, guid: 9253f80fc2f07b2419779996f230ba6b, type: 3}
+  - _obj: {fileID: 102900000, guid: 34740e2b5e9f0234ab8cb1568a76093c, type: 3}
     globalId:
-      globalObjectIdString: GlobalObjectId_V1-1-9253f80fc2f07b2419779996f230ba6b-102900000-0
+      globalObjectIdString: GlobalObjectId_V1-1-34740e2b5e9f0234ab8cb1568a76093c-102900000-0
     isSceneGameObject: 0
     isAsset: 1
     _typeString: UnityEditor.SceneAsset, UnityEditor.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - _obj: {fileID: 102900000, guid: baa9a1c212b5aea4c813f0b84bcc7707, type: 3}
+  - _obj: {fileID: 102900000, guid: 2a2aa6c9de457ba499d8907a2e64ecfa, type: 3}
     globalId:
-      globalObjectIdString: GlobalObjectId_V1-1-baa9a1c212b5aea4c813f0b84bcc7707-102900000-0
+      globalObjectIdString: GlobalObjectId_V1-1-2a2aa6c9de457ba499d8907a2e64ecfa-102900000-0
     isSceneGameObject: 0
     isAsset: 1
     _typeString: UnityEditor.SceneAsset, UnityEditor.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - _obj: {fileID: 102900000, guid: 24ac7a82bb9dfdb43a785bae85ff6691, type: 3}
+  - _obj: {fileID: 11400000, guid: d2fe4db226e607b428eafdaa2b161286, type: 2}
     globalId:
-      globalObjectIdString: GlobalObjectId_V1-1-24ac7a82bb9dfdb43a785bae85ff6691-102900000-0
+      globalObjectIdString: GlobalObjectId_V1-3-d2fe4db226e607b428eafdaa2b161286-11400000-0
     isSceneGameObject: 0
     isAsset: 1
-    _typeString: UnityEditor.SceneAsset, UnityEditor.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+    _typeString: ZeroTrace.UI.Suspicion.SuspicionIndicatorConfig, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - _obj: {fileID: 11400000, guid: 1f72b5b3dec1f994ca46fc38a3fa662c, type: 2}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-3-1f72b5b3dec1f994ca46fc38a3fa662c-11400000-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: MissionSystemConfig, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
   - _obj: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     globalId:
       globalObjectIdString: GlobalObjectId_V1-1-052faaac586de48259a63d0c4782560b-17502115434096073164-0
@@ -132,24 +125,44 @@ MonoBehaviour:
     isAsset: 1
     _typeString: GlitchEffectSettings, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  - _obj: {fileID: 9100000, guid: 3dcbb7ff605184746be82d748741383f, type: 2}
+  - _obj: {fileID: 11400000, guid: 608d4b2d007491c45b683fd8ea50aa61, type: 2}
     globalId:
-      globalObjectIdString: GlobalObjectId_V1-3-3dcbb7ff605184746be82d748741383f-9100000-0
+      globalObjectIdString: GlobalObjectId_V1-3-608d4b2d007491c45b683fd8ea50aa61-11400000-0
     isSceneGameObject: 0
     isAsset: 1
-    _typeString: UnityEditor.Animations.AnimatorController, UnityEditor.CoreModule,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  - _obj: {fileID: 1543695114780030, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+    _typeString: PlayerClassConfig, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - _obj: {fileID: 11400000, guid: 578dda5f79abdb44abeb844ebd34b7c8, type: 2}
     globalId:
-      globalObjectIdString: GlobalObjectId_V1-1-ceddc97abfdd06647918f15b13cfac6c-1543695114780030-0
+      globalObjectIdString: GlobalObjectId_V1-3-578dda5f79abdb44abeb844ebd34b7c8-11400000-0
     isSceneGameObject: 0
     isAsset: 1
-    _typeString: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - _obj: {fileID: 11400000, guid: f288ae1f4751b564a96ac7587541f7a2, type: 2}
+    _typeString: PlayerClassConfig, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - _obj: {fileID: 11400000, guid: 1f72b5b3dec1f994ca46fc38a3fa662c, type: 2}
     globalId:
-      globalObjectIdString: GlobalObjectId_V1-3-f288ae1f4751b564a96ac7587541f7a2-11400000-0
+      globalObjectIdString: GlobalObjectId_V1-3-1f72b5b3dec1f994ca46fc38a3fa662c-11400000-0
     isSceneGameObject: 0
     isAsset: 1
-    _typeString: UnityEngine.Rendering.Universal.UniversalRendererData, Unity.RenderPipelines.Universal.Runtime,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    _typeString: MissionSystemConfig, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - _obj: {fileID: 11400000, guid: 51c1e62fc4ace6a4d995c5d021064c1f, type: 2}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-3-51c1e62fc4ace6a4d995c5d021064c1f-11400000-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: BaseStats, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  - _obj: {fileID: 11400000, guid: 1f72b5b3dec1f994ca46fc38a3fa662c, type: 2}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-3-1f72b5b3dec1f994ca46fc38a3fa662c-11400000-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: MissionSystemConfig, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - _obj: {fileID: 11400000, guid: a2cb4bb3ca2f21144956436ccd75dffb, type: 2}
+    globalId:
+      globalObjectIdString: GlobalObjectId_V1-3-a2cb4bb3ca2f21144956436ccd75dffb-11400000-0
+    isSceneGameObject: 0
+    isAsset: 1
+    _typeString: ScreenEdgeDangerConfig, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null

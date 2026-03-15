@@ -43,7 +43,7 @@ public class SecurityCameraConfig : ScriptableObject
     public float alertCooldown = 10f;
 
     [Header("Debug")]
-    [Tooltip("Show vision cone in Scene view")]
+    [Tooltip("Show vision cone in Scene view")] 
     public bool debugVision = true;
 
     [Tooltip("Show state transitions in console")]

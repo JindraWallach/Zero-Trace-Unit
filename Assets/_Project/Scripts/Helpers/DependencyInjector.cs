@@ -10,6 +10,7 @@ public class DependencyInjector : MonoBehaviour
     [Header("Services")]
     [SerializeField] private InputReader inputReader;
     [SerializeField] private SampleCameraController cameraController;
+    [SerializeField] private SecurityAlarmSystem alarmSystem;
 
     [Header("Player Components")]
     [SerializeField] private Transform playerPosition;
@@ -21,6 +22,8 @@ public class DependencyInjector : MonoBehaviour
     public InputReader InputReader => inputReader;
     public SampleCameraController CameraController => cameraController;
     public Transform PlayerPosition => playerPosition;
+
+    public SecurityAlarmSystem AlarmSystem => alarmSystem;
 
     private void Start()
     {

@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5343f7e31ad402d489dd9a8f341b44e2, type: 3}
+  m_Name: footstep_run
+  m_EditorClassIdentifier: Assembly-CSharp::ZeroTrace.Audio.AudioData
+  id: footstep_run
+  category: 0
+  clip: {fileID: 0}
+  clips:
+  - {fileID: 8300000, guid: 045111cecb783ed44967affcb2bda993, type: 3}
+  - {fileID: 8300000, guid: fb814ad11ce4f164d97c7a619625d7cc, type: 3}
+  - {fileID: 8300000, guid: 669c811566db8d84f941e7b9832ed822, type: 3}
+  - {fileID: 8300000, guid: 0dfac34612e291d4da30e209975b6afb, type: 3}
+  minInterval: 0.1
+  volume: 0.6
+  pitchMin: 0.7
+  pitchMax: 0.8
+  loop: 0
+  spatialBlend: 1
+  minDistance: 1
+  maxDistance: 20

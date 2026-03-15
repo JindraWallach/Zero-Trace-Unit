@@ -1,13 +1,19 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ZeroTrace.Audio;
 
 /// <summary>
 /// Security alarm system triggered by failed hacking attempts.
 /// Handles visual effects and enemy alerting.
 /// SRP: Only manages alarm state and effects.
 /// Performance: Coroutine-based, no Update().
+/// Audio přes AudioManager — žádný vlastní AudioSource/AudioClip.
+///
+/// Rozšíření pro ServerCore:
+///   TriggerAlarm()          – stackuje čas (max stackCap), pokud alarm již běží
+///   TriggerPermanentAlarm() – alarm bez konce, nelze zastavit (ServerCore hack success)
 /// </summary>
 public class SecurityAlarmSystem : MonoBehaviour
 {
@@ -17,6 +23,12 @@ public class SecurityAlarmSystem : MonoBehaviour
     [Header("Scene References")]
     [Tooltip("Lights to flash during alarm (optional, auto-finds if empty)")]
     [SerializeField] private Light[] roomLights;
+
+    [Header("Stack Settings")]
+    [Tooltip("Kolik sekund přidá každý další fail hack k běžícímu alarmu")]
+    [SerializeField] private float stackDuration = 30f;
+    [Tooltip("Maximální celkový čas alarmu při stackování (seconds)")]
+    [SerializeField] private float stackCap = 60f;
 
     [Header("Debug")]
     [SerializeField] private bool isAlarmActive;
@@ -28,13 +40,19 @@ public class SecurityAlarmSystem : MonoBehaviour
 
     // State
     private bool alarmActive;
+    private bool alarmPermanent;       // true = nekonečný alarm (ServerCore hack success)
+    private float alarmTimeRemaining;   // aktuální zbývající čas (pro stack logiku)
     private Coroutine alarmCoroutine;
     private Coroutine lightFlashCoroutine;
-    private AudioSource audioSource;
 
-    // Cache
-    private Dictionary<Light, Color> originalLightColors = new Dictionary<Light, Color>();
-    private Dictionary<Light, float> originalLightIntensities = new Dictionary<Light, float>();
+    // AudioManager handle — uložíme abychom mohli zastavit loopovaný zvuk
+    private PlaySoundCommand alarmSoundHandle;
+
+    // Light cache
+    private readonly Dictionary<Light, Color> originalLightColors = new();
+    private readonly Dictionary<Light, float> originalLightIntensities = new();
+
+    // ── Lifecycle ────────────────────────────────────────────────────────────
 
     private void Awake()
     {
@@ -45,16 +63,6 @@ public class SecurityAlarmSystem : MonoBehaviour
             return;
         }
 
-        // Setup audio source
-        if (config.alarmSound != null)
-        {
-            audioSource = gameObject.AddComponent<AudioSource>();
-            audioSource.clip = config.alarmSound;
-            audioSource.volume = config.alarmVolume;
-            audioSource.loop = true;
-            audioSource.playOnAwake = false;
-        }
-
         // Auto-find lights if not assigned
         if (roomLights == null || roomLights.Length == 0)
         {
@@ -63,44 +71,96 @@ public class SecurityAlarmSystem : MonoBehaviour
                 Debug.Log($"[SecurityAlarmSystem] Auto-found {roomLights.Length} lights", this);
         }
 
-        // Cache original light settings
         CacheLightSettings();
     }
 
+    // ── Public API ───────────────────────────────────────────────────────────
+
     /// <summary>
-    /// Trigger alarm at specific position (door location).
+    /// Trigger alarm at specific position.
+    /// Pokud alarm již běží: přidá stackDuration (max stackCap).
+    /// Pokud alarm neběží: spustí nový alarm se stackDuration.
+    /// Permanentní alarm (TriggerPermanentAlarm) nelze přepsat.
     /// </summary>
     public void TriggerAlarm(Vector3 alarmPosition)
     {
-        if (alarmActive)
+        // Permanentní alarm – ignoruj další volání
+        if (alarmPermanent)
         {
             if (config.debugLog)
-                Debug.LogWarning("[SecurityAlarmSystem] Alarm already active!", this);
+                Debug.Log("[SecurityAlarmSystem] Permanent alarm active – stack ignored.", this);
+            return;
+        }
+
+        if (alarmActive)
+        {
+            // Stack: přidej čas, max stackCap
+            float added = Mathf.Min(stackDuration, stackCap - alarmTimeRemaining);
+            if (added > 0f)
+            {
+                alarmTimeRemaining += added;
+                if (config.debugLog)
+                    Debug.Log($"[SecurityAlarmSystem] Alarm stacked +{added:F0}s → {alarmTimeRemaining:F0}s remaining (cap {stackCap}s)", this);
+            }
+            else if (config.debugLog)
+            {
+                Debug.Log($"[SecurityAlarmSystem] Alarm already at stack cap ({stackCap}s).", this);
+            }
             return;
         }
 
         if (config.debugLog)
-            Debug.Log($"[SecurityAlarmSystem] ALARM TRIGGERED at {alarmPosition}", this);
+            Debug.Log($"[SecurityAlarmSystem] ALARM TRIGGERED at {alarmPosition} for {stackDuration}s", this);
 
-        alarmActive = true;
-        OnAlarmTriggered?.Invoke();
-
-        // Start alarm effects
+        StartAlarmEffects(alarmPosition);
         alarmCoroutine = StartCoroutine(AlarmSequence(alarmPosition));
+    }
 
-        if (config.enableFlashingLights)
-            lightFlashCoroutine = StartCoroutine(FlashLightsCoroutine());
+    /// <summary>
+    /// Spustí permanentní alarm bez časového limitu – nelze zastavit.
+    /// Voláno při úspěšném hacknutí ServerCore.
+    /// </summary>
+    public void TriggerPermanentAlarm(Vector3 alarmPosition)
+    {
+        alarmPermanent = true;
 
-        if (audioSource != null)
-            audioSource.Play();
+        if (config.debugLog)
+            Debug.Log("[SecurityAlarmSystem] PERMANENT ALARM triggered (ServerCore hacked).", this);
+
+        if (alarmActive)
+        {
+            // Alarm již běží – jen nastav permanent flag, efekty pokračují
+            // Zastav původní coroutine která by alarm ukončila
+            if (alarmCoroutine != null)
+            {
+                StopCoroutine(alarmCoroutine);
+                alarmCoroutine = null;
+            }
+            timeRemaining = float.PositiveInfinity;
+            isAlarmActive = true;
+            AlertNearbyEnemies(alarmPosition);
+            return;
+        }
+
+        // Alarm ještě neběžel – spusť efekty bez časovače
+        StartAlarmEffects(alarmPosition);
+        alarmCoroutine = StartCoroutine(PermanentAlarmSequence(alarmPosition));
     }
 
     /// <summary>
     /// Manually stop alarm (if needed for gameplay).
+    /// Permanentní alarm (ServerCore hack success) nelze zastavit.
     /// </summary>
     public void StopAlarm()
     {
         if (!alarmActive) return;
+
+        if (alarmPermanent)
+        {
+            if (config.debugLog)
+                Debug.LogWarning("[SecurityAlarmSystem] Cannot stop permanent alarm!", this);
+            return;
+        }
 
         if (config.debugLog)
             Debug.Log("[SecurityAlarmSystem] Alarm stopped manually", this);
@@ -108,20 +168,35 @@ public class SecurityAlarmSystem : MonoBehaviour
         StopAllAlarmEffects();
     }
 
-    // === ALARM LOGIC ===
+    // ── Alarm logic ──────────────────────────────────────────────────────────
+
+    /// <summary>Společný start pro TriggerAlarm i TriggerPermanentAlarm.</summary>
+    private void StartAlarmEffects(Vector3 alarmPosition)
+    {
+        alarmActive = true;
+        alarmTimeRemaining = stackDuration;
+        isAlarmActive = true;
+
+        OnAlarmTriggered?.Invoke();
+
+        // Audio via AudioManager — loopovaný zvuk, uložíme handle pro pozdější Stop()
+        if (alarmSoundHandle == null && !string.IsNullOrEmpty(config.alarmSoundId))
+            alarmSoundHandle = AudioManager.Instance?.Play(config.alarmSoundId, alarmPosition);
+
+        if (config.enableFlashingLights)
+            lightFlashCoroutine = StartCoroutine(FlashLightsCoroutine());
+    }
 
     private IEnumerator AlarmSequence(Vector3 alarmPosition)
     {
-        float elapsed = 0f;
-
         // Alert nearby enemies
         AlertNearbyEnemies(alarmPosition);
 
-        // Run alarm for duration
-        while (elapsed < config.alarmDuration)
+        // Run alarm – alarmTimeRemaining může být stackován z venku
+        while (alarmTimeRemaining > 0f)
         {
-            timeRemaining = config.alarmDuration - elapsed;
-            elapsed += Time.deltaTime;
+            timeRemaining = alarmTimeRemaining;
+            alarmTimeRemaining -= Time.deltaTime;
             yield return null;
         }
 
@@ -129,10 +204,24 @@ public class SecurityAlarmSystem : MonoBehaviour
         StopAllAlarmEffects();
     }
 
+    /// <summary>
+    /// Permanentní alarm – pouze alertuje nepřátele, vizuální efekty běží dokud alarmActive.
+    /// Žádný časovač – FlashLightsCoroutine se ukončí sama přes alarmActive flag.
+    /// </summary>
+    private IEnumerator PermanentAlarmSequence(Vector3 alarmPosition)
+    {
+        AlertNearbyEnemies(alarmPosition);
+        timeRemaining = float.PositiveInfinity;
+        // Nic dalšího – efekty řídí FlashLightsCoroutine přes alarmActive
+        yield break;
+    }
+
     private void StopAllAlarmEffects()
     {
         alarmActive = false;
+        alarmPermanent = false;
         isAlarmActive = false;
+        alarmTimeRemaining = 0f;
         timeRemaining = 0f;
 
         // Stop coroutines
@@ -148,20 +237,20 @@ public class SecurityAlarmSystem : MonoBehaviour
             lightFlashCoroutine = null;
         }
 
-        // Stop audio
-        if (audioSource != null)
-            audioSource.Stop();
+        if (alarmSoundHandle != null)
+        {
+            AudioManager.Instance?.Stop(alarmSoundHandle);
+            alarmSoundHandle = null;
+        }
 
-        // Restore lights
         RestoreLights();
-
         OnAlarmEnded?.Invoke();
 
         if (config.debugLog)
             Debug.Log("[SecurityAlarmSystem] Alarm ended", this);
     }
 
-    // === ENEMY ALERTING ===
+    // ── Enemy alerting ───────────────────────────────────────────────────────
 
     private void AlertNearbyEnemies(Vector3 alarmPosition)
     {
@@ -208,7 +297,7 @@ public class SecurityAlarmSystem : MonoBehaviour
             Debug.Log($"[SecurityAlarmSystem] Alerted enemy: {enemy.name}", enemy);
     }
 
-    // === VISUAL EFFECTS ===
+    // ── Visual effects ───────────────────────────────────────────────────────
 
     private void CacheLightSettings()
     {
@@ -230,7 +319,6 @@ public class SecurityAlarmSystem : MonoBehaviour
 
         while (alarmActive)
         {
-            // Toggle lights
             foreach (var light in roomLights)
             {
                 if (light == null) continue;
@@ -265,7 +353,7 @@ public class SecurityAlarmSystem : MonoBehaviour
         }
     }
 
-    // === DEBUG ===
+    // ── Debug ────────────────────────────────────────────────────────────────
 
     private void OnDrawGizmosSelected()
     {

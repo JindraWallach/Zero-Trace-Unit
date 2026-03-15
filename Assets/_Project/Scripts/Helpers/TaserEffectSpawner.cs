@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using ZeroTrace.Audio;
 
 /// <summary>
 /// Spawns taser visual effects (trail + electric impact).
@@ -19,6 +20,9 @@ public class TaserEffectSpawner : MonoBehaviour, IInitializable
     [SerializeField] private float lineDuration = 0.3f;
     [SerializeField] private float electricImpactDuration = 1f;
 
+    [Header("Audio IDs")]
+    [SerializeField] private string taserFireSoundId = "taser_fire";
+
     private Transform playerRootTransform;
 
     public void Initialize(DependencyInjector dependencyInjector)
@@ -37,6 +41,8 @@ public class TaserEffectSpawner : MonoBehaviour, IInitializable
     /// </summary>
     public void SpawnTaserEffect(Vector3 EnemyTaserPos, Vector3 initialPlayerChestPosition)
     {
+        AudioManager.Instance?.Play(taserFireSoundId, EnemyTaserPos);
+
         // Use chest bone if assigned, otherwise fallback to root with offset
         Transform lineTarget = playerChestBone != null ? playerChestBone : playerRootTransform;
 

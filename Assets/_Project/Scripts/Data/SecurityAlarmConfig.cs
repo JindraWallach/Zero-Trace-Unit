@@ -35,13 +35,9 @@ public class SecurityAlarmConfig : ScriptableObject
     [Tooltip("Enemies outside radius enter this state")]
     public bool distantEnemiesKeepPatrolling = true;
 
-    [Header("Audio (Optional)")]
-    [Tooltip("Alarm sound clip")]
-    public AudioClip alarmSound;
-
-    [Tooltip("Alarm sound volume")]
-    [Range(0f, 1f)]
-    public float alarmVolume = 0.7f;
+    [Header("Audio IDs")]
+    [Tooltip("AudioData id pro zvuk alarmu (loopovaný)")]
+    public string alarmSoundId = "alarm_loop";
 
     [Header("Debug")]
     [Tooltip("Show alarm radius in Scene view")]

@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 016742ef1cb58004bbffc6685d61cdc8, type: 3}
+  m_Name: TutorialMissionData
+  m_EditorClassIdentifier: Assembly-CSharp::MissionDataSO
+  objectives:
+  - {fileID: 11400000, guid: 60682b1c81b623d43a5dbcc097db9587, type: 2}
+  - {fileID: 11400000, guid: a87a01aca31f9c94c8c7f51baa426d70, type: 2}
+  - {fileID: 11400000, guid: c66bc6247dd6f10419f0dea1438a52f1, type: 2}
+  - {fileID: 11400000, guid: 71d8620e176120f4bac5c13a6d9e7dc6, type: 2}
+  - {fileID: 11400000, guid: 45193d66474c7c14980e3d649d3ef98d, type: 2}
+  - {fileID: 11400000, guid: b6477e924f2631d48a989be1cbeb1429, type: 2}

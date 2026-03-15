@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using ZeroTrace.Audio;
 
 /// <summary>
 /// Lock timing puzzle: align rotating symbols with center zone.
@@ -389,7 +390,7 @@ public class LockTimingPuzzle : PuzzleBase
     private void OnCorrectInput()
     {
         Debug.Log($"[LockTimingPuzzle] ✓ Correct! Column {activeColumnIndex + 1} unlocked!");
-
+        AudioManager.Instance?.Play("correct", transform.position);
         StopRotation();
 
         // Mark column as completed and turn its border GREEN

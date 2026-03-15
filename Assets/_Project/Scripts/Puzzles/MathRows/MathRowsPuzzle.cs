@@ -2,6 +2,7 @@ using Synty.AnimationBaseLocomotion.Samples.InputSystem;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using ZeroTrace.Audio;
 
 /// <summary>
 /// Math puzzle: solve expressions to unlock.
@@ -85,6 +86,7 @@ public class MathRowsPuzzle : PuzzleBase
         {
             solved[index] = true;
             cells[index].MarkSolved();
+            AudioManager.Instance?.Play("correct", transform.position);
             CheckAllSolved();
         }
         else

@@ -1,8 +1,9 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// ScriptableObject configuration for enemy AI behavior.
 /// Single source of truth for all enemy settings.
+/// SRP: Data container only – no logic.
 /// Create via: Assets > Create > Zero Trace > Enemy Config
 /// </summary>
 [CreateAssetMenu(fileName = "EnemyConfig", menuName = "Zero Trace/Enemy Config")]
@@ -16,7 +17,7 @@ public class EnemyConfig : ScriptableObject
     public SuspicionConfig suspicionConfig;
 
     [Header("Vision Settings")]
-    [Tooltip("Field of view angle in degrees (60-120 recommended)")]
+    [Tooltip("Field of view angle in degrees (60–120 recommended)")]
     [Range(30f, 180f)]
     public float visionAngle = 90f;
 
@@ -26,6 +27,14 @@ public class EnemyConfig : ScriptableObject
 
     [Tooltip("Layer mask for vision raycasts (obstacles that block vision)")]
     public LayerMask visionObstacleMask;
+
+    // ── FIX 1: Proximity Detection ───────────────────────────────────────────
+    [Header("Proximity Detection (360°)")]
+    [Tooltip("Pokud je hráč blíže než tato vzdálenost, enemy ho detekuje okamžitě " +
+             "bez ohledu na FOV, směr ani překážky. Řeší obcházení zezadu. " +
+             "Hodnota 0 = vypnuto.")]
+    [Range(0f, 5f)]
+    public float proximityRadius = 2.0f;
 
     [Header("Movement Settings")]
     [Tooltip("Patrol walking speed")]
@@ -100,16 +109,12 @@ public class EnemyConfig : ScriptableObject
 
     private void OnValidate()
     {
-        // Ensure logical values
         if (chaseSpeed <= patrolSpeed)
-        {
             Debug.LogWarning($"[EnemyConfig] Chase speed ({chaseSpeed}) should be > patrol speed ({patrolSpeed})");
-        }
 
-        // Warn if suspicion enabled but config missing
         if (enableSuspicionSystem && suspicionConfig == null)
-        {
-            Debug.LogWarning($"[EnemyConfig] Suspicion system enabled but SuspicionConfig not assigned!", this);
-        }
+            Debug.LogWarning("[EnemyConfig] Suspicion system enabled but SuspicionConfig not assigned!", this);
+
+        proximityRadius = Mathf.Max(0f, proximityRadius);
     }
 }

@@ -3,90 +3,95 @@ using System.Collections;
 using UnityEngine;
 
 /// <summary>
-/// Multi-point detection system (4 raycasts instead of 1).
-/// Checks head, torso, left hand, right hand separately.
-/// Returns visibility score (0-4) for suspicion calculation.
-/// FIXED: Přidány gizmos z EnemyVisionDetector + opravená detekce.
+/// Multi-point detection system (4 raycasts + 360° proximity fallback).
+///
+/// FIX 1 – Proximity Detection:
+///   Před standardním FOV checkem zkontroluje vzdálenost hráče.
+///   Pokud je blíže než EnemyConfig.proximityRadius, suspicion okamžitě na 100 %
+///   bez ohledu na FOV, směr pohledu ani překážky. Eliminuje obcházení zezadu.
+///
+/// SRP:  Detekuje viditelnost. Nic víc.
+/// OOP:  Závisí na EnemySuspicionSystem přes interface zápis (SetPlayerVisible / AddSuspicion).
+/// Perf: Checks řízeny EnemyDetectionManagerem (coroutiny s nastavitelným intervalem).
 /// </summary>
 public class EnemyMultiPointVision : MonoBehaviour
 {
     [Header("Manual Setup (Required)")]
-    [Tooltip("Player body points - assign manually (4 transforms: Head, Torso, LeftHand, RightHand)")]
+    [Tooltip("Player body points – assign 4 transforms: Head, Torso, LeftHand, RightHand")]
     [SerializeField] private Transform[] playerBodyPoints = new Transform[4];
 
-    // Events
-    public event Action<int> OnVisibilityChanged; // 0-4 visible points
-    public event Action<Vector3> OnPlayerSpotted; // First detection
-    public event Action<Vector3> OnPlayerLostSight; // Lost all points
+    // ── Events ────────────────────────────────────────────────────────────────
+    public event Action<int> OnVisibilityChanged; // 0–4 visible points
+    public event Action<Vector3> OnPlayerSpotted;
+    public event Action<Vector3> OnPlayerLostSight;
 
-    // References (set by EnemyStateMachine)
+    // ── Private references ───────────────────────────────────────────────────
     private Transform eyePosition;
     private Transform playerTransform;
     private EnemySuspicionSystem suspicionSystem;
     private EnemyConfig config;
     private SuspicionConfig suspicionConfig;
 
-    // State
-    private int visiblePointsCount = 0;
+    // ── State ────────────────────────────────────────────────────────────────
+    private int visiblePointsCount;
     private bool[] pointVisibility = new bool[4];
     private bool canSeePlayer;
     private bool wasVisible;
 
     private Coroutine visionCheckCoroutine;
 
-    // Debug visualization data
-    private Vector3[] lastRayStarts = new Vector3[4];
-    private Vector3[] lastRayDirections = new Vector3[4];
-    private bool[] lastRaycastHits = new bool[4];
-    private RaycastHit[] lastHitInfo = new RaycastHit[4];
-    private float[] lastAngles = new float[4];
-    private float[] lastDistances = new float[4];
+    // ── Debug visualisation data ─────────────────────────────────────────────
+    private readonly Vector3[] lastRayStarts = new Vector3[4];
+    private readonly Vector3[] lastRayDirections = new Vector3[4];
+    private readonly bool[] lastRaycastHits = new bool[4];
+    private readonly RaycastHit[] lastHitInfo = new RaycastHit[4];
+    private readonly float[] lastAngles = new float[4];
+    private readonly float[] lastDistances = new float[4];
 
-    private void OnDestroy()
-    {
-        // Unregister from manager
-        EnemyDetectionManager.Instance?.UnregisterDetector(this);
-    }
-
-    // Public API
+    // ── Public API ────────────────────────────────────────────────────────────
     public int VisiblePoints => visiblePointsCount;
     public bool CanSeePlayer => canSeePlayer;
 
-    // Compatibility wrapper for legacy manager call
-    public void PerformDetectionCheck()
+    /// <summary>Called by EnemyDetectionManager – compatibility wrapper.</summary>
+    public void PerformDetectionCheck() => PerformVisionCheck();
+
+    // ── Lifecycle ─────────────────────────────────────────────────────────────
+
+    private void OnDestroy()
     {
-        PerformVisionCheck();
+        EnemyDetectionManager.Instance?.UnregisterDetector(this);
     }
 
-    public void Initialize(EnemyStateMachine machine, EnemyConfig enemyConfig, SuspicionConfig susConfig, Transform player)
+    public void Initialize(EnemyStateMachine machine, EnemyConfig enemyConfig,
+                           SuspicionConfig susConfig, Transform player)
     {
         config = enemyConfig;
         suspicionConfig = susConfig;
         playerTransform = player;
         suspicionSystem = machine.GetComponent<EnemySuspicionSystem>();
 
-        // Find or create eye position
+        // Eye position – find child nebo vytvoř
         eyePosition = transform.Find("EyePosition");
         if (eyePosition == null)
         {
-            GameObject eyeObj = new GameObject("EyePosition");
+            var eyeObj = new GameObject("EyePosition");
             eyeObj.transform.SetParent(transform);
-            eyeObj.transform.localPosition = new Vector3(0, 1.6f, 0);
+            eyeObj.transform.localPosition = new Vector3(0f, 1.6f, 0f);
             eyePosition = eyeObj.transform;
         }
 
-        // Validate setup
         if (!ValidateSetup())
         {
-            Debug.LogError($"[EnemyMultiPointVision] {gameObject.name} setup invalid!", this);
+            Debug.LogError($"[EnemyMultiPointVision] {gameObject.name}: setup invalid – disabling.", this);
             enabled = false;
             return;
         }
 
-        // Register with detection manager for batch processing
+        // Registrace do batch detection manageru
         EnemyDetectionManager.Instance?.RegisterDetector(this);
 
-        Debug.Log($"[EnemyMultiPointVision] {gameObject.name} initialized. Eye at {eyePosition.position}, Player: {playerTransform.name}", this);
+        if (config.debugStates)
+            Debug.Log($"[EnemyMultiPointVision] {gameObject.name} initialized.", this);
     }
 
     private void OnEnable()
@@ -100,34 +105,32 @@ public class EnemyMultiPointVision : MonoBehaviour
         StopVisionChecks();
     }
 
-    // === VISION CHECK LOGIC ===
+    // ── Vision check loop ────────────────────────────────────────────────────
 
     private void StartVisionChecks()
     {
         StopVisionChecks();
         visionCheckCoroutine = StartCoroutine(VisionCheckCoroutine());
-        Debug.Log($"[EnemyMultiPointVision] {gameObject.name} started vision checks (interval: {suspicionConfig.visionCheckInterval}s)", this);
     }
 
     private void StopVisionChecks()
     {
-        if (visionCheckCoroutine != null)
-        {
-            StopCoroutine(visionCheckCoroutine);
-            visionCheckCoroutine = null;
-        }
+        if (visionCheckCoroutine == null) return;
+        StopCoroutine(visionCheckCoroutine);
+        visionCheckCoroutine = null;
     }
 
     private IEnumerator VisionCheckCoroutine()
     {
         var wait = new WaitForSeconds(suspicionConfig.visionCheckInterval);
-
         while (true)
         {
             PerformVisionCheck();
             yield return wait;
         }
     }
+
+    // ── Core detection ────────────────────────────────────────────────────────
 
     private void PerformVisionCheck()
     {
@@ -137,10 +140,22 @@ public class EnemyMultiPointVision : MonoBehaviour
             return;
         }
 
-        // Reset counters
+        // ── FIX 1: Proximity 360° detection ──────────────────────────────────
+        // Pokud je hráč do proximityRadius, okamžitá detekce – žádný FOV, žádný raycast.
+        // Brání obcházení zezadu nebo skrze malé mezery.
+        if (config.proximityRadius > 0f)
+        {
+            float dist = Vector3.Distance(transform.position, playerTransform.position);
+            if (dist <= config.proximityRadius)
+            {
+                HandleProximityDetection();
+                return;
+            }
+        }
+
+        // ── Standard multi-point FOV detection ───────────────────────────────
         visiblePointsCount = 0;
 
-        // Check each body point
         for (int i = 0; i < 4; i++)
         {
             if (playerBodyPoints[i] == null)
@@ -150,308 +165,207 @@ public class EnemyMultiPointVision : MonoBehaviour
                 continue;
             }
 
-            bool visible = CheckPointVisibility(i, playerBodyPoints[i].position);
-            pointVisibility[i] = visible;
-
-            if (visible)
-                visiblePointsCount++;
+            pointVisibility[i] = CheckPointVisibility(i, playerBodyPoints[i].position);
+            if (pointVisibility[i]) visiblePointsCount++;
         }
 
-        // Update overall visibility
         bool nowVisible = visiblePointsCount > 0;
-
-        // Fire events for state changes
-        if (nowVisible && !wasVisible)
-        {
-            OnPlayerSpotted?.Invoke(playerTransform.position);
-            Debug.Log($"[EnemyMultiPointVision] {gameObject.name} SPOTTED player! Visible parts: {visiblePointsCount}/4", this);
-        }
-        else if (!nowVisible && wasVisible)
-        {
-            OnPlayerLostSight?.Invoke(playerTransform.position);
-            Debug.Log($"[EnemyMultiPointVision] {gameObject.name} LOST sight of player", this);
-        }
+        FireVisibilityEvents(nowVisible);
 
         canSeePlayer = nowVisible;
         wasVisible = nowVisible;
 
-        // Update suspicion system
-        if (suspicionSystem != null)
-        {
-            suspicionSystem.SetPlayerVisible(canSeePlayer, visiblePointsCount);
-            Debug.Log($"[EnemyMultiPointVision] {gameObject.name} -> SuspicionSystem.SetPlayerVisible called. Visible={canSeePlayer}, Parts={visiblePointsCount}", this);
-        }
-        else
-        {
-            Debug.LogWarning($"[EnemyMultiPointVision] {gameObject.name} suspicionSystem is NULL when trying to update suspicion", this);
-        }
-
-        // Fire visibility changed event
+        suspicionSystem?.SetPlayerVisible(canSeePlayer, visiblePointsCount);
         OnVisibilityChanged?.Invoke(visiblePointsCount);
 
         if (config.debugStates)
+            Debug.Log($"[EnemyMultiPointVision] {gameObject.name}: {visiblePointsCount}/4 visible, CanSee={canSeePlayer}", this);
+    }
+
+    /// <summary>
+    /// Okamžitá detekce z blízkosti – suspicion na 100 %, fire events.
+    /// </summary>
+    private void HandleProximityDetection()
+    {
+        // Naplň suspicion okamžitě
+        suspicionSystem?.AddSuspicion(100f);
+
+        bool wasVisibleBefore = canSeePlayer;
+        canSeePlayer = true;
+        visiblePointsCount = 4; // Symbolicky – "vidí všechno"
+
+        if (!wasVisibleBefore)
+            OnPlayerSpotted?.Invoke(playerTransform.position);
+
+        wasVisible = true;
+        OnVisibilityChanged?.Invoke(4);
+
+        if (config.debugStates)
         {
-            Debug.Log($"[EnemyMultiPointVision] {gameObject.name} Vision check: {visiblePointsCount}/4 parts visible. CanSee: {canSeePlayer}", this);
+            float d = Vector3.Distance(transform.position, playerTransform.position);
+            Debug.Log($"[EnemyMultiPointVision] {gameObject.name}: PROXIMITY DETECTED at {d:F2}m (radius {config.proximityRadius}m)", this);
         }
     }
 
-    private bool CheckPointVisibility(int pointIndex, Vector3 targetPoint)
+    /// <summary>Fires OnPlayerSpotted / OnPlayerLostSight based on state change.</summary>
+    private void FireVisibilityEvents(bool nowVisible)
     {
-        Vector3 directionToPoint = (targetPoint - eyePosition.position).normalized;
-        float distanceToPoint = Vector3.Distance(eyePosition.position, targetPoint);
+        if (nowVisible && !wasVisible)
+            OnPlayerSpotted?.Invoke(playerTransform.position);
+        else if (!nowVisible && wasVisible)
+            OnPlayerLostSight?.Invoke(playerTransform.position);
+    }
 
-        // Store for debug
-        lastRayDirections[pointIndex] = directionToPoint;
-        lastDistances[pointIndex] = distanceToPoint;
+    private bool CheckPointVisibility(int idx, Vector3 targetPoint)
+    {
+        Vector3 dir = (targetPoint - eyePosition.position).normalized;
+        float dist = Vector3.Distance(eyePosition.position, targetPoint);
 
-        // Check 1: Range (from EnemyConfig)
-        if (distanceToPoint > config.visionRange)
+        lastRayDirections[idx] = dir;
+        lastDistances[idx] = dist;
+
+        // 1. Range
+        if (dist > config.visionRange)
         {
-            lastRaycastHits[pointIndex] = false;
+            lastRaycastHits[idx] = false;
             return false;
         }
 
-        // Check 2: FOV angle (from EnemyConfig)
-        float angleToPoint = Vector3.Angle(transform.forward, directionToPoint);
-        lastAngles[pointIndex] = angleToPoint;
-
-        if (angleToPoint > config.visionAngle * 0.5f)
+        // 2. FOV angle
+        float angle = Vector3.Angle(transform.forward, dir);
+        lastAngles[idx] = angle;
+        if (angle > config.visionAngle * 0.5f)
         {
-            lastRaycastHits[pointIndex] = false;
+            lastRaycastHits[idx] = false;
             return false;
         }
 
-        // Check 3: Raycast (obstacles) - LayerMask from EnemyConfig
-        Vector3 rayStart = eyePosition.position + directionToPoint * 0.1f;
-        float rayDistance = distanceToPoint - 0.1f;
+        // 3. Obstacle raycast
+        Vector3 rayStart = eyePosition.position + dir * 0.1f;
+        float rayDist = dist - 0.1f;
+        lastRayStarts[idx] = rayStart;
 
-        lastRayStarts[pointIndex] = rayStart;
-
-        // Raycast na překážky - pokud něco trefí = blokuje výhled
-        bool hitObstacle = Physics.Raycast(
-            rayStart,
-            directionToPoint,
-            out RaycastHit hit,
-            rayDistance,
-            config.visionObstacleMask
-        );
-
-        lastRaycastHits[pointIndex] = hitObstacle;
+        bool hitObstacle = Physics.Raycast(rayStart, dir,
+                                           out RaycastHit hit, rayDist,
+                                           config.visionObstacleMask);
+        lastRaycastHits[idx] = hitObstacle;
 
         if (hitObstacle)
         {
-            lastHitInfo[pointIndex] = hit;
-
+            lastHitInfo[idx] = hit;
             if (config.debugStates)
-            {
-                Debug.Log($"[EnemyMultiPointVision] Point {pointIndex}: BLOCKED by {hit.collider.name} " +
-                         $"(Layer: {LayerMask.LayerToName(hit.collider.gameObject.layer)}, Dist: {hit.distance:F2}m)", this);
-            }
-
-            return false; // Překážka = NEVIDÍ
-        }
-
-        // Žádná překážka neblokuje + je v range + je v FOV = VIDÍ
-        if (config.debugStates)
-        {
-            Debug.Log($"[EnemyMultiPointVision] Point {pointIndex}: CLEAR LINE OF SIGHT (no obstacles)", this);
+                Debug.Log($"[EnemyMultiPointVision] Point {idx}: BLOCKED by {hit.collider.name}", this);
+            return false;
         }
 
         return true;
     }
 
-    // === VALIDATION ===-
+    // ── Validation ────────────────────────────────────────────────────────────
 
     private bool ValidateSetup()
     {
-        bool valid = true;
+        bool ok = true;
+        if (eyePosition == null) { Debug.LogError("[MPVision] Eye position not set!"); ok = false; }
+        if (playerTransform == null) { Debug.LogError("[MPVision] Player transform not set!"); ok = false; }
+        if (config == null) { Debug.LogError("[MPVision] EnemyConfig not set!"); ok = false; }
+        if (suspicionConfig == null) { Debug.LogError("[MPVision] SuspicionConfig not set!"); ok = false; }
 
-        if (eyePosition == null)
-        {
-            Debug.LogError("[EnemyMultiPointVision] Eye position not set!");
-            valid = false;
-        }
-
-        if (playerTransform == null)
-        {
-            Debug.LogError("[EnemyMultiPointVision] Player transform not set!");
-            valid = false;
-        }
-
-        if (config == null)
-        {
-            Debug.LogError("[EnemyMultiPointVision] EnemyConfig not set!");
-            valid = false;
-        }
-
-        if (suspicionConfig == null)
-        {
-            Debug.LogError("[EnemyMultiPointVision] SuspicionConfig not set!");
-            valid = false;
-        }
-
-        int validPoints = 0;
-        for (int i = 0; i < playerBodyPoints.Length; i++)
-        {
-            if (playerBodyPoints[i] != null)
-                validPoints++;
-        }
-
-        if (validPoints == 0)
-        {
-            Debug.LogError("[EnemyMultiPointVision] No player body points assigned! Assign 4 transforms manually in Inspector.");
-        }
-        else if (validPoints < 4)
-        {
-            Debug.LogWarning($"[EnemyMultiPointVision] Only {validPoints}/4 body points assigned. Detection may be less accurate.");
-        }
-
-        return valid;
+        int valid = 0;
+        foreach (var p in playerBodyPoints) if (p != null) valid++;
+        if (valid == 0) Debug.LogError("[MPVision] No player body points assigned!");
+        else if (valid < 4) Debug.LogWarning($"[MPVision] Only {valid}/4 body points assigned.");
+        return ok;
     }
 
-    // === GIZMOS (PŘENESENO Z EnemyVisionDetector) ===
+    // ── Gizmos ────────────────────────────────────────────────────────────────
 
-    private void OnDrawGizmosSelected()
-    {
-        if (config != null && config.debugVision)
-        {
-            DrawVisionGizmos();
-        }
-    }
+    private void OnDrawGizmos() { if (config?.debugVision == true) DrawGizmos(); }
+    private void OnDrawGizmosSelected() { if (config?.debugVision == true) DrawGizmos(); }
 
-    private void OnDrawGizmos()
+    private void DrawGizmos()
     {
-        if (config != null && config.debugVision)
-        {
-            DrawVisionGizmos();
-        }
-    }
-
-    private void DrawVisionGizmos()
-    {
-        if (eyePosition == null || config == null)
-            return;
+        if (eyePosition == null || config == null) return;
 
         float halfAngle = config.visionAngle * 0.5f;
         float range = config.visionRange;
 
-        // === 1. Eye Position ===
+        // Proximity sphere
+        if (config.proximityRadius > 0f)
+        {
+            Gizmos.color = new Color(1f, 0.5f, 0f, 0.25f);
+            Gizmos.DrawWireSphere(transform.position, config.proximityRadius);
+        }
+
+        // Eye
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(eyePosition.position, 0.15f);
 
-        // === 2. Forward Direction (BLUE) ===
+        // Forward
         Gizmos.color = Color.blue;
         Gizmos.DrawRay(eyePosition.position, transform.forward * range);
-        // Draw arrow head for forward
-        Vector3 forwardEnd = eyePosition.position + transform.forward * range;
-        Vector3 arrowRight = Quaternion.Euler(0, 20, 0) * -transform.forward * 0.5f;
-        Vector3 arrowLeft = Quaternion.Euler(0, -20, 0) * -transform.forward * 0.5f;
-        Gizmos.DrawLine(forwardEnd, forwardEnd + arrowRight);
-        Gizmos.DrawLine(forwardEnd, forwardEnd + arrowLeft);
 
-        // === 3. Vision Cone Edges (YELLOW or RED) ===
-        Vector3 forward = transform.forward;
-        Vector3 rightEdge = Quaternion.Euler(0, halfAngle, 0) * forward * range;
-        Vector3 leftEdge = Quaternion.Euler(0, -halfAngle, 0) * forward * range;
+        // FOV cone edges
+        Vector3 fwd = transform.forward;
+        Vector3 rightEdge = Quaternion.Euler(0, halfAngle, 0) * fwd * range;
+        Vector3 leftEdge = Quaternion.Euler(0, -halfAngle, 0) * fwd * range;
 
         Gizmos.color = canSeePlayer ? Color.red : Color.yellow;
         Gizmos.DrawLine(eyePosition.position, eyePosition.position + rightEdge);
         Gizmos.DrawLine(eyePosition.position, eyePosition.position + leftEdge);
 
-        // Draw arc
-        Vector3 prevPoint = eyePosition.position + rightEdge;
+        Vector3 prev = eyePosition.position + rightEdge;
         for (int i = 1; i <= 20; i++)
         {
-            float angle = Mathf.Lerp(-halfAngle, halfAngle, i / 20f);
-            Vector3 direction = Quaternion.Euler(0, angle, 0) * forward;
-            Vector3 point = eyePosition.position + direction * range;
-            Gizmos.DrawLine(prevPoint, point);
-            prevPoint = point;
+            float a = Mathf.Lerp(-halfAngle, halfAngle, i / 20f);
+            Vector3 pt = eyePosition.position + Quaternion.Euler(0, a, 0) * fwd * range;
+            Gizmos.DrawLine(prev, pt);
+            prev = pt;
         }
 
-        // === 4. Multi-Point Raycasts (4 body parts) ===
-        if (playerTransform != null)
+        // Raycasts to body parts
+        if (playerTransform == null) return;
+
+        for (int i = 0; i < 4; i++)
         {
-            for (int i = 0; i < 4; i++)
+            if (playerBodyPoints[i] == null) continue;
+            Vector3 tgt = playerBodyPoints[i].position;
+
+            Gizmos.color = pointVisibility[i] ? Color.green : new Color(1f, 0f, 1f, 0.3f);
+            Gizmos.DrawLine(eyePosition.position, tgt);
+
+            Gizmos.color = pointVisibility[i] ? Color.green : Color.red;
+            Gizmos.DrawWireSphere(tgt, 0.15f);
+
+            if (lastRayStarts[i] != Vector3.zero)
             {
-                if (playerBodyPoints[i] == null)
-                    continue;
-
-                Vector3 targetPos = playerBodyPoints[i].position;
-                bool isVisible = pointVisibility[i];
-
-                // Draw line to body part
-                Gizmos.color = isVisible ? Color.green : new Color(1f, 0f, 1f, 0.3f); // Green if visible, transparent magenta if not
-                Gizmos.DrawLine(eyePosition.position, targetPos);
-
-                // Draw body part marker
-                Gizmos.color = isVisible ? Color.green : Color.red;
-                Gizmos.DrawWireSphere(targetPos, 0.15f);
-
-                // Draw raycast visualization
-                if (lastRayStarts[i] != Vector3.zero)
+                if (lastRaycastHits[i])
                 {
-                    if (lastRaycastHits[i])
-                    {
-                        // Hit something
-                        Vector3 hitPoint = lastHitInfo[i].point;
-
-                        Gizmos.color = Color.red;
-                        Gizmos.DrawLine(lastRayStarts[i], hitPoint);
-                        Gizmos.DrawWireSphere(hitPoint, 0.08f);
-
-                        // Normal
-                        Gizmos.color = Color.yellow;
-                        Gizmos.DrawLine(hitPoint, hitPoint + lastHitInfo[i].normal * 0.3f);
-
-#if UNITY_EDITOR
-                        // Label
-                        UnityEditor.Handles.Label(
-                            hitPoint + Vector3.up * 0.2f,
-                            $"Part{i}: BLOCKED\n{lastHitInfo[i].collider.name}",
-                            new GUIStyle()
-                            {
-                                normal = new GUIStyleState() { textColor = Color.red },
-                                fontSize = 10,
-                                fontStyle = FontStyle.Bold
-                            }
-                        );
-#endif
-                    }
-                    else
-                    {
-                        // Clear line
-                        Gizmos.color = Color.green;
-                        Gizmos.DrawLine(lastRayStarts[i], targetPos);
-                    }
-
-                    // Raycast start point
-                    Gizmos.color = Color.cyan;
-                    Gizmos.DrawWireSphere(lastRayStarts[i], 0.06f);
+                    Gizmos.color = Color.red;
+                    Gizmos.DrawLine(lastRayStarts[i], lastHitInfo[i].point);
+                    Gizmos.DrawWireSphere(lastHitInfo[i].point, 0.08f);
+                }
+                else
+                {
+                    Gizmos.color = Color.green;
+                    Gizmos.DrawLine(lastRayStarts[i], tgt);
                 }
             }
-
-            // === 5. Overall status label ===
-#if UNITY_EDITOR
-            Vector3 labelPos = eyePosition.position + Vector3.up * 0.5f;
-            string statusText = $"MULTI-POINT VISION\n" +
-                               $"Visible: {visiblePointsCount}/4 parts\n" +
-                               $"CanSee: {(canSeePlayer ? "YES" : "NO")}\n" +
-                               $"Range: {config.visionRange:F1}m\n" +
-                               $"FOV: {config.visionAngle:F0}°";
-
-            UnityEditor.Handles.Label(
-                labelPos,
-                statusText,
-                new GUIStyle()
-                {
-                    normal = new GUIStyleState() { textColor = canSeePlayer ? Color.green : Color.yellow },
-                    fontSize = 10,
-                    fontStyle = FontStyle.Bold,
-                    alignment = TextAnchor.MiddleLeft
-                }
-            );
-#endif
         }
+
+#if UNITY_EDITOR
+        UnityEditor.Handles.Label(
+            eyePosition.position + Vector3.up * 0.5f,
+            $"Visible: {visiblePointsCount}/4  CanSee: {canSeePlayer}\n" +
+            $"FOV: {config.visionAngle:F0}°  Range: {config.visionRange:F1}m\n" +
+            $"Proximity: {config.proximityRadius:F1}m",
+            new GUIStyle
+            {
+                normal = new GUIStyleState { textColor = canSeePlayer ? Color.green : Color.yellow },
+                fontSize = 10,
+                fontStyle = FontStyle.Bold
+            }
+        );
+#endif
     }
 }

@@ -1,6 +1,7 @@
 using Synty.AnimationBaseLocomotion.Samples.InputSystem;
 using System;
 using UnityEngine;
+using ZeroTrace.Audio;
 
 public enum PlayerMode { Normal, Hack }
 
@@ -16,11 +17,14 @@ public class PlayerModeController : MonoBehaviour, IInitializable
     [Header("Settings")]
     [SerializeField] private PlayerMode startMode = PlayerMode.Normal;
 
+    [SerializeField] private float _modeCooldown = 0.5f;
+
     public event Action<PlayerMode> OnModeChanged;
     public PlayerMode CurrentMode { get; private set; }
 
     private InputReader inputReader;
     private ToolController toolController;
+    private float _lastModeChangeTime = -999f;
 
     private void Awake()
     {
@@ -58,6 +62,9 @@ public class PlayerModeController : MonoBehaviour, IInitializable
 
     private void ToggleMode()
     {
+        if (Time.time - _lastModeChangeTime < _modeCooldown) return;
+        _lastModeChangeTime = Time.time;
+
         var newMode = CurrentMode == PlayerMode.Normal ? PlayerMode.Hack : PlayerMode.Normal;
         SetMode(newMode);
     }
@@ -85,6 +92,8 @@ public class PlayerModeController : MonoBehaviour, IInitializable
 
         OnModeChanged?.Invoke(mode);
         Debug.Log($"[PlayerModeController] Mode: {mode}");
+
+        AudioManager.Instance?.Play("change", transform.position);
     }
 
     /// <summary>
